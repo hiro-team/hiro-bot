@@ -93,7 +93,7 @@ class Database extends PDO
                 "money" => 0,
                 "register_time" => time()
             ]);
-            echo $query->errorCode() . PHP_EOL;
+            print_r($query->errorInfo());
         }
     }
 
