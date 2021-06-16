@@ -27,7 +27,7 @@ class Database extends PDO
                                 string $pass,
                                 string $charset = "utf8"){
         try {
-            parent::__construct("mysql:host=" . $host . ";dbname=" . $dbname . ";charset=" . $charset, $user, $pass);
+            parent::__construct("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $pass);
         }catch(PDOException $e)
         {
             echo $e . PHP_EOL;
