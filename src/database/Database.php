@@ -57,7 +57,6 @@ class Database extends PDO
         if($this->getUser($user_id))
         {
             $user = $this->getUser($user_id);
-            print_r($user);
             return $user['money'];
         }else {
             return false;

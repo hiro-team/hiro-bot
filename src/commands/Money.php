@@ -44,7 +44,7 @@ class Money
         $client->registerCommand('money', function($msg, $args)
         {
             $user_money = $this->database->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
-            if(is_numeric($user_money))
+            if(!is_numeric($user_money))
             {
                 echo "money is empty" . PHP_EOL;
                 if(!$this->database->addUser([
