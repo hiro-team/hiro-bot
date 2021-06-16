@@ -46,7 +46,7 @@ class Money
             $user_money = $this->database->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
             if(!$user_money)
             {
-                if(!this->database->addUser([
+                if(!$this->database->addUser([
                     "discord_id" => $msg->author->id
                 ]))
                 {
