@@ -63,7 +63,7 @@ class Money
                 }
             }
             setlocale(LC_MONETARY, 'en_US');
-            $user_money = number_format($user_money);
+            $user_money = number_format($user_money, ',', '.');
             $embed = new Embed($this->discord);
             $embed->setTitle("Your money: $".$user_money);
             $embed->setTimestamp();
