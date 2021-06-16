@@ -88,12 +88,14 @@ class Database extends PDO
             return false;
         }else {
             $query = $this->prepare("INSERT INTO users SET discord_id = :discord_id, money = :money, register_time = :register_time");
-            $query->execute([
+            if($query->execute([
                 "discord_id" => $data['discord_id'],
                 "money" => 0,
                 "register_time" => time()
-            ]);
-            return true;
+            ]))
+                return true;
+            else
+                return false;
         }
     }
 
