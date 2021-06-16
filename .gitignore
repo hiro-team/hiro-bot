@@ -3,3 +3,4 @@
 .env*
 .nohup*
 composer.lock
+db-settings.*

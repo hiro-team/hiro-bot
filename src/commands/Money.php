@@ -39,7 +39,7 @@ class Money
     {
         $this->category = "economy";
         $this->discord = $client;
-        include_once('../../db-settings.inc');
+        include_once('./db-settings.inc');
         $this->database = new Database($db_host, $db_dbname, $db_user, $db_pass);
         $client->registerCommand('money', function($msg, $args)
         {
