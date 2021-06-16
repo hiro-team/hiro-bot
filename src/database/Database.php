@@ -43,7 +43,7 @@ class Database extends PDO
         $query = $this->prepare("SELECT * FROM users WHERE id = ?");
         $query->execute([$user_id]);
         if($query->rowCount())
-            return $query->fetch(PDO::FETCH_CLASS);
+            return $query->fetch(PDO::FETCH_ASSOC);
         else
             return false;
     }
@@ -57,7 +57,7 @@ class Database extends PDO
         if($this->getUser($user_id))
         {
             $user = $this->getUser($user_id);
-            return $user->money;
+            return $user['money'];
         }else {
             return false;
         }
@@ -71,7 +71,7 @@ class Database extends PDO
     {
         if($this->getUser($discord_id))
         {
-            return $this->getUser($discord_id)->id;
+            return $this->getUser($discord_id)['id'];
         }else
         {
             return false;

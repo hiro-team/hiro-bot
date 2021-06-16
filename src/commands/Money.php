@@ -58,7 +58,7 @@ class Money
                     return;
                 }else
                 {
-                    echo "User cant added" . PHP_EOL;
+                    echo "User added" . PHP_EOL;
                     $user_money = 0;
                 }
             }
