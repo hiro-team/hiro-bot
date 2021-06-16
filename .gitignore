@@ -1,0 +1,5 @@
+/vendor/
+.env
+.env*
+.nohup*
+composer.lock
