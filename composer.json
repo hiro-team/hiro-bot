@@ -1,0 +1,27 @@
+{
+    "name": "bariscodefx/hiro-bot",
+    "description": "A discord bot written in PHP",
+    "authors": [
+        {
+            "name": "bariscodefx",
+            "email": "barisoa029@yandex.com"
+        },
+        {
+            "name": "CYB3R73",
+            "email": "lesterazat733@gmail.com"
+        }
+    ],
+    "license": "apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "hiro\\": "src/"
+        }
+    },
+    "require": {
+        "team-reflex/discord-php": "^5.1",
+        "vlucas/phpdotenv": "^5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
