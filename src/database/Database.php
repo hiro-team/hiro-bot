@@ -69,9 +69,11 @@ class Database extends PDO
      */
     public function getUserIdByDiscordId(int $discord_id)
     {
-        if($this->getUser($discord_id))
+        $query = $this->prepare("SELECT * FROM users WHERE discord_id = ?");
+        $query->execute([$discord_id]);
+        if($query->rowCount())
         {
-            return $this->getUser($discord_id)['id'];
+            return $query->fetch(PDO::FETCH_ASSOC)['id'];
         }else
         {
             return false;
