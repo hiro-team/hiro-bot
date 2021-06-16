@@ -43,7 +43,7 @@ class Money
         $this->database = new Database($db_host, $db_dbname, $db_user, $db_pass);
         $client->registerCommand('money', function($msg, $args)
         {
-            $user_money = $this->database->->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
+            $user_money = $this->database->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
             if(!$user_money)
             {
                 if(!this->database->addUser([
