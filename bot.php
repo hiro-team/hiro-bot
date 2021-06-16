@@ -3,6 +3,7 @@
 include __DIR__ . '/vendor/autoload.php';
 
 use Discord\DiscordCommandClient;
+use Discord\Parts\User\Activity;
 use hiro\CommandLoader;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -16,9 +17,9 @@ $bot->on('ready', function($discord) {
     echo "Bot is ready!", PHP_EOL;
     $commandLoader = new CommandLoader($discord);
     
-    $act = $discord->factory(\Discord\Parts\User\Activity::class, [
-        "name" => "discord.gg/6b2SEN8m",
-        "type" => \Discord\Parts\User\Activity::TYPE_WATCHING
+    $act = $discord->factory(Activity::class, [
+        "name" => "FreeBSD 12 ・ discord.gg/6b2SEN8m",
+        "type" => Activity::TYPE_WATCHING
     ]);
     $discord->updatePresence($act, false, 'online');
 });
