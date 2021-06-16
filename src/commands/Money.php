@@ -46,7 +46,7 @@ class Money
             $user_money = $this->database->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
             if(!$user_money)
             {
-                echo "money is empty";
+                echo "money is empty" . PHP_EOL;
                 if(!$this->database->addUser([
                     "discord_id" => $msg->author->id
                 ]))
@@ -54,11 +54,11 @@ class Money
                     $embed = new Embed($this->discord);
                     $embed->setTitle('You are couldnt added to database.');
                     $msg->channel->sendEmbed($embed);
-                    echo "cant added";
+                    echo "cant added" . PHP_EOL;
                     return;
                 }else
                 {
-                    echo "User cant added";
+                    echo "User cant added" . PHP_EOL;
                     $user_money = 0;
                 }
             }
