@@ -1,5 +1,5 @@
 # Hiro016 Discord Bot
-[![Build Status](https://github.com/bariscodefxy/hiro-bot/actions/workflows/php.yml/badge.svg?branch=master)](https://github.com/bariscodefxy/hiro-bot/actions/workflows/php.yml) [![Discord Status](https://img.shields.io/discord/812096967714930710)](https://discord.gg/HBtf7buzv9)
+[![Discord Status](https://img.shields.io/discord/812096967714930710)](https://discord.gg/HBtf7buzv9)
 [![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/bariscodefxy/hiro-bot/releases/latest)
 
 A discord bot written in PHP
