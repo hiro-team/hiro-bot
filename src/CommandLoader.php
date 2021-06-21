@@ -23,11 +23,30 @@ class CommandLoader
      * CommandLoader $version
      */
     protected $version = "1.1";
+    
+    /**
+     * Commands Directory
+     */
+    protected $dir = "";
 
     /**
     * CommandLoader Constructor
     */
     public function __construct(DiscordCommandClient $client) {
+        $this->dir = __DIR__ . "/commands";
+        $this->loadAllCommands($client);
+    }
+    
+    public function loadCommand(DiscordCommandClient $client, string $commandName)
+    {
+        
+    }
+    
+    /**
+     * Loads all commands
+     */
+    public function loadAllCommands(DiscordCommandClient $client)
+    {
         $dir = __DIR__ . '/commands';
         $this->clearConsole();
         $this->loaderInfo();

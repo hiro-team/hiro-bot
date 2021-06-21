@@ -18,7 +18,7 @@ $bot->on('ready', function($discord) {
     $commandLoader = new CommandLoader($discord);
     
     $act = $discord->factory(Activity::class, [
-        "name" => "Ubuntu 18.04・discord.gg/6b2SEN8m",
+        "name" => "Ubuntu 18.04・https://mobilpara.net/discord",
         "type" => Activity::TYPE_WATCHING
     ]);
     $discord->updatePresence($act, false, 'online');

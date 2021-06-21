@@ -1,6 +1,6 @@
 /vendor/
 .env
 .env*
-.nohup*
+nohup*
 composer.lock
 db-settings.*

@@ -27,11 +27,6 @@ class Money
     private $discord;
 
     /**
-     * @var Database
-     */
-    private $database;
-
-    /**
      * Money constructor.
      * @param DiscordCommandClient $client
      */
@@ -39,15 +34,15 @@ class Money
     {
         $this->category = "economy";
         $this->discord = $client;
-        include_once('./db-settings.inc');
-        $this->database = new Database($db_host, $db_dbname, $db_user, $db_pass);
         $client->registerCommand('money', function($msg, $args)
         {
-            $user_money = $this->database->getUserMoney($this->database->getUserIdByDiscordId($msg->author->id));
+            include __DIR__ . '/../../db-settings.inc';
+            $database = new Database($db_host, $db_dbname, $db_user, $db_pass);
+            $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
             if(!is_numeric($user_money))
             {
                 echo "money is empty" . PHP_EOL;
-                if(!$this->database->addUser([
+                if(!$database->addUser([
                     "discord_id" => $msg->author->id
                 ]))
                 {
@@ -69,6 +64,7 @@ class Money
             $embed->setTimestamp();
             $embed->setColor('#ff0000');
             $msg->channel->sendEmbed($embed);
+            $database = NULL;
         }, [
             "aliases" => [
                 "cash"
