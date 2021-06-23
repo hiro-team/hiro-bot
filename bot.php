@@ -6,8 +6,9 @@ use Discord\DiscordCommandClient;
 use Discord\Parts\User\Activity;
 use hiro\CommandLoader;
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// If you arent using Heroku you should delete // symbols
+//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+//$dotenv->load();
 $bot = new DiscordCommandClient([
     'token' => $_ENV['TOKEN'],
     'prefix' => 'hiro!',
