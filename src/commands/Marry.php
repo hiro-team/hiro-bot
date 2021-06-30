@@ -8,7 +8,7 @@ use Discord\Parts\Embed\Embed;
 /**
  * Marry command class
  */
-class Marry
+clacss Marry
 {
     
     /**
