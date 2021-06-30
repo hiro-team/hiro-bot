@@ -1,0 +1,16 @@
+env:
+  global:
+    - LANG:tr_TR.UTF-8
+
+language: php
+
+php:
+    - 7.3
+    - 7.4
+
+before_script:
+    - phpenv rehash
+    - composer install
+
+script:
+    - find ./src/ -name "*.php" -exec php -l {} \;
