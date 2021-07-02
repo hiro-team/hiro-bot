@@ -30,7 +30,7 @@ class Kick
         $this->category = "mod";
         $client->registerCommand('kick', function($msg, $args)
         {
-            
+            $msg->channel->sendMessage("This feature is not available for now!");
         }, [
             "aliases" => [],
             "description" => "Kicks user"
