@@ -18,11 +18,11 @@ $bot->on('ready', function($discord) {
     echo "Bot is ready!", PHP_EOL;
     $commandLoader = new CommandLoader($discord);
     
-    $act = $discord->factory(Activity::class, [
-        "name" => "-> https://mobilpara.net/",
+    /*$act = $discord->factory(Activity::class, [
+        "name" => "",
         "type" => Activity::TYPE_WATCHING
     ]);
-    $discord->updatePresence($act, false, 'online');
+    $discord->updatePresence($act, false, 'online');*/
 });
 
 $bot->run();
