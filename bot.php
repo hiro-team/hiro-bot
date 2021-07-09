@@ -19,7 +19,7 @@ $bot->on('ready', function($discord) {
     $commandLoader = new CommandLoader($discord);
     
     $act = $discord->factory(Activity::class, [
-        "name" => explode(' ', php_uname())[0] . " • https://mobilpara.net/discord",
+        "name" => "-> https://mobilpara.net/",
         "type" => Activity::TYPE_WATCHING
     ]);
     $discord->updatePresence($act, false, 'online');
