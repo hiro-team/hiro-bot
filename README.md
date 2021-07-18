@@ -4,6 +4,10 @@
 
 A discord bot written in PHP
 
+|Project Name|Author|Current Version|Minimum PHP Version|
+|--|--|--|--|
+|Hiro Bot|bariscodefx|1.0.0|7.3+|
+
 # For Contributors
 Pull Requests Only New Cool Commands and Bug Fixes!!!
 
