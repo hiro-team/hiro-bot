@@ -36,6 +36,15 @@ class Ban
                 if($user)
                 {
                     $banner = $msg->author->user;
+                    if($banner->id == $user->id)
+                    {
+                        $embed = new Embed($this->discord);
+                        $embed->setColor('#ff0000');
+                        $embed->setDescription("You cant ban yourself");
+                        $embed->setTimestamp();
+                        $msg->channel->sendEmbed($embed);
+                        return;
+                    }
                     $msg->channel->guild->members[$user->id]->ban(null, null);
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
