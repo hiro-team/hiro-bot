@@ -105,4 +105,31 @@ class Database extends PDO
         }
     }
 
+    public function getLastDailyForUser(int $userid)
+   {
+       $query = $this->prepare('SELECT last_daily FROM users WHERE id = :id');
+       $query->execute([
+           "id" => $userid
+       ]);
+       return $query->fetch()[0];
+   }
+
+   public function daily(int $userid)
+   {
+       $query = $this->prepare('SELECT money FROM users WHERE id = :id');
+       $query->execute([
+           "id" => $userid
+       ]);
+       $usermoney = $query->fetch()[0];
+       $daily = 3;
+       $query = $this->prepare('UPDATE users SET money = :money, last_daily = :last_daily WHERE id = :id');
+       $exec = $query->execute(["money" => $usermoney + $daily, "last_daily" => time(), "id" => $userid]);
+       if($exec)
+       {
+           return 3;
+       }else {
+           return false;
+       }
+   }
+
 }
