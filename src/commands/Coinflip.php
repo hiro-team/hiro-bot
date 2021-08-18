@@ -55,7 +55,7 @@ class Coinflip
             "aliases" => [
                 "cf"
             ],
-            "description" => "Displays commands"
+            "description" => "An economy game"
         ]);
     }
     
