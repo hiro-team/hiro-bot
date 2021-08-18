@@ -28,7 +28,7 @@ class Waifu
     {
         $this->discord = $client;
         $this->category = "fun";
-        $client->registerCommand('Waifu', function($msg, $args)
+        $client->registerCommand('waifu', function($msg, $args)
         {
             $user = $msg->mentions->first();
             if(!$user) $user = $msg->author->user;
@@ -40,7 +40,7 @@ class Waifu
             $msg->channel->sendEmbed($embed);
         }, [
             "aliases" => [
-                "waifu"
+                
             ],
             "description" => "How much u are waifu"
         ]);
