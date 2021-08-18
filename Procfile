@@ -1,1 +1,0 @@
-bot: php ./bot.php
