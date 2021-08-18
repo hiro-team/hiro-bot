@@ -1,5 +1,3 @@
-
-  
 <?php
 
 namespace hiro\commands;
