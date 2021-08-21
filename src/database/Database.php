@@ -134,7 +134,7 @@ class Database extends PDO
    
    public function setUserMoney(int $user_id, int $money)
    {
-	   $query = $this->prepare('UPDATE FROM users SET money = :money WHERE id = :id');
+	   $query = $this->prepare('UPDATE users SET money = :money WHERE id = :id');
 	   return $query->execute([
 			"money" => $money,
 			"id" => $user_id
