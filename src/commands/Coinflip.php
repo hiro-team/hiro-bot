@@ -41,19 +41,24 @@ class Coinflip
                 $embed->setColor('#ff0000');
                 $embed->setDescription('You should type payment amount.');
             }else {
-				if($args[0] <= 0 || $args[0] > )
-                $payamount = $args[0];
-                $rand = rand(0, 1);
-				$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
-                $embed->setColor('#ffffff');
-                if($rand)
-                {
-                    $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                    $embed->setDescription("You win " . $payamount * 2);
-                }else {
-					$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
-                    $embed->setDescription("You lose " . $payamount);
-                }
+				if($args[0] <= 0 || $args[0] > $usermoney)
+				{
+					$embed ->setDescription("You should do give true value.");
+					$embed->setColor('#ff0000');
+				}else {
+					$payamount = $args[0];
+					$rand = rand(0, 1);
+					$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+					$embed->setColor('#ffffff');
+					if($rand)
+					{
+						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
+						$embed->setDescription("You win " . $payamount * 2);
+					}else {
+						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
+						$embed->setDescription("You lose " . $payamount);
+					}
+				}
             }
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
