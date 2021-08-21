@@ -68,7 +68,7 @@ class Daily
             if($daily)
             {
                 $embed = new Embed($this->discord);
-                $embed->setTitle("You Gained $" . $daily);
+                $embed->setTitle("You Gained $" . number_format($daily, 2,',', '.'););
                 $embed->setTimestamp();
                 $embed->setColor('#ff0000');
                 $msg->channel->sendEmbed($embed);
