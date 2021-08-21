@@ -2,3 +2,5 @@
 .env
 .env*
 nohup*
+composer.phar
+/.idea/
