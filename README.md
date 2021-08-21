@@ -35,7 +35,7 @@ Done
 ## Heroku
 Fork this project and sign in on Heroku then create new
 Heroku project then select your repository on your project
-then select heroku/php module, make new env named TOKEN and
+then select heroku/php module, make new environment named TOKEN and
 put your token there from Heroku Settings.
 Done!
 
