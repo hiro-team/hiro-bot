@@ -36,6 +36,7 @@ class Coinflip
 			include __DIR__ . '/../../db-settings.inc';
 			$database = new Database($db_host, $db_dbname, $db_user, $db_pass);
             $embed = new Embed($this->discord);
+			$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
             if(!$args[0] || !is_numeric($args[0]))
             {
                 $embed->setColor('#ff0000');
@@ -48,7 +49,6 @@ class Coinflip
 				}else {
 					$payamount = $args[0];
 					$rand = rand(0, 1);
-					$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
 					$embed->setColor('#ffffff');
 					if($rand)
 					{
