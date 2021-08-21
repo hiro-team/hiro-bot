@@ -131,5 +131,14 @@ class Database extends PDO
            return false;
        }
    }
+   
+   public function setUserMoney(int $userid, int $money)
+   {
+	   $query = $this->prepare('UPDATE FROM users SET money = :money WHERE id = :id');
+	   return $query->execute([
+			"money" => $money,
+			"id" => $user_id
+	   ]);
+   }
 
 }
