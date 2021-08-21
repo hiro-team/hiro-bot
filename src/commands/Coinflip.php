@@ -37,6 +37,23 @@ class Coinflip
 			$database = new Database($db_host, $db_dbname, $db_user, $db_pass);
             $embed = new Embed($this->discord);
 			$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+			if(!is_numeric($usermoney))
+            {
+                echo "money is empty" . PHP_EOL;
+                if(!$database->addUser([
+                    "discord_id" => $msg->author->id
+                ]))
+                {
+                    $embed->setTitle('You are couldnt added to database.');
+                    $msg->channel->sendEmbed($embed);
+                    echo "cant added" . PHP_EOL;
+                    return;
+                }else
+                {
+                    echo "User added" . PHP_EOL;
+                    $usermoney = 0;
+                }
+            }
             if(!$args[0] || !is_numeric($args[0]))
             {
                 $embed->setColor('#ff0000');
