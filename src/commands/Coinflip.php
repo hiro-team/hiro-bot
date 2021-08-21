@@ -69,7 +69,7 @@ class Coinflip
 					$embed->setColor('#ff0000');
 				}else if( $args[0] > $usermoney )
 				{
-					$embed->setDescription("Your money is enough.");
+					$embed->setDescription("Your money isn't enough.");
 					$embed->setColor('#ff0000');
 				}else {
 					$payamount = $args[0];
