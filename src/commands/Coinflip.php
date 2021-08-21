@@ -42,21 +42,31 @@ class Coinflip
                 $embed->setColor('#ff0000');
                 $embed->setDescription('You should type payment amount.');
             }else {
-				if($args[0] <= 0 || $args[0] > $usermoney)
+				if( $args[0] <= 0 )
 				{
-					$embed ->setDescription("You should do give true value.");
+					$embed->setDescription("You should give a value greater than zero.");
+					$embed->setColor('#ff0000');
+				}else if( $args[0] > 50000 )
+				{
+					$embed->setDescription("You should give a value min than 50.000.");
+					$embed->setColor('#ff0000');
+				}else if( $args[0] > $usermoney )
+				{
+					$embed->setDescription("Your money is enough.");
 					$embed->setColor('#ff0000');
 				}else {
 					$payamount = $args[0];
 					$rand = rand(0, 1);
-					$embed->setColor('#ffffff');
+					
 					if($rand)
 					{
 						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
 						$embed->setDescription("You win " . $payamount * 2);
+						$embed->setColor('#7CFC00');
 					}else {
 						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
 						$embed->setDescription("You lose " . $payamount);
+						$embed->setColor('#ff0000');
 					}
 				}
             }
