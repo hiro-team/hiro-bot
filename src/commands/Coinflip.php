@@ -75,13 +75,16 @@ class Coinflip
 					$payamount = $args[0];
 					$rand = rand(0, 1);
 					
+					// delete user money from payamount
+					$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
+					$usermoney = $usermoney - $payamount;
+					
 					if($rand)
 					{
 						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
 						$embed->setDescription("You win " . $payamount * 2);
 						$embed->setColor('#7CFC00');
 					}else {
-						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
 						$embed->setDescription("You lose " . $payamount);
 						$embed->setColor('#ff0000');
 					}
