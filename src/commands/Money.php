@@ -62,7 +62,7 @@ class Money
             $embed = new Embed($this->discord);
             $embed->setTitle("Your money: $".$user_money);
             $embed->setTimestamp();
-            $embed->setColor('#ff0000');
+            $embed->setColor('#7CFC00');
             $msg->channel->sendEmbed($embed);
             $database = NULL;
         }, [

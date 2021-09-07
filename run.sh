@@ -1,0 +1,1 @@
+screen -S hiro-bot php ./bot.php

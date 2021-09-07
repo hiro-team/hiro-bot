@@ -2,4 +2,6 @@
 .env
 .env*
 nohup*
-db-settings.*
+composer.phar
+/.idea/
+phpDocumentor.php
