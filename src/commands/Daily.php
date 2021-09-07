@@ -70,7 +70,7 @@ class Daily
                 $embed = new Embed($this->discord);
                 $embed->setTitle("You Gained $" . number_format($daily, 2,',', '.') );
                 $embed->setTimestamp();
-                $embed->setColor('#ff0000');
+                $embed->setColor('#7CFC00');
                 $msg->channel->sendEmbed($embed);
             }else {
                 $msg->channel->sendMessage('Cant give daily');
