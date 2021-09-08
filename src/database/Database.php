@@ -126,7 +126,7 @@ class Database extends PDO
        $exec = $query->execute(["money" => $usermoney + $daily, "last_daily" => time(), "id" => $userid]);
        if($exec)
        {
-           return 3;
+           return $daily;
        }else {
            return false;
        }
