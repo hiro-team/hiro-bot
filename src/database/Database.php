@@ -121,7 +121,7 @@ class Database extends PDO
            "id" => $userid
        ]);
        $usermoney = $query->fetch()[0];
-       $daily = 3;
+       $daily = 500;
        $query = $this->prepare('UPDATE users SET money = :money, last_daily = :last_daily WHERE id = :id');
        $exec = $query->execute(["money" => $usermoney + $daily, "last_daily" => time(), "id" => $userid]);
        if($exec)
