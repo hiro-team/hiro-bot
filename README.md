@@ -5,6 +5,8 @@
 
 A discord bot written in PHP
 
+[![Discord Bots](https://top.gg/api/widget/846488841299951646.svg)](https://top.gg/bot/846488841299951646)
+
 |Project Name|Author|Current Version|Minimum PHP Version|
 |--|--|--|--|
 |Hiro Bot|bariscodefx, CYB3R73|1.0.0|7.3+|
