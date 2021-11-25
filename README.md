@@ -1,14 +1,9 @@
-# IMPORTANT
-## WE ARE NOT DEVELOPING THIS RIGHT NOW. WE HAVE BREAK LONG TIME.
-
 # Hiro016 Discord Bot
 [![Discord Status](https://img.shields.io/discord/812096967714930710)](https://discord.gg/HBtf7buzv9)
 [![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/bariscodefxy/hiro-bot/releases/latest)
-[![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=846488841299951646&permissions=8&scope=bot)
+[![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=907706093923356742&permissions=8&scope=bot)
 
 A discord bot written in PHP
-
-[![Discord Bots](https://top.gg/api/widget/846488841299951646.svg)](https://top.gg/bot/846488841299951646)
 
 |Project Name|Author|Current Version|Minimum PHP Version|
 |--|--|--|--|
