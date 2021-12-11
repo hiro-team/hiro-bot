@@ -36,6 +36,8 @@ class Ban
                 if($user)
                 {
                     $banner = $msg->author->user;
+                    $rp_men = $msg->channel->guild->members[$user->id]->roles->first()->position;
+                    $rp_self = $msg->author->roles->first()->position;
                     if($banner->id == $user->id)
                     {
                         $embed = new Embed($this->discord);
@@ -44,13 +46,24 @@ class Ban
                         $embed->setTimestamp();
                         $msg->channel->sendEmbed($embed);
                         return;
-                    }
-                    $msg->channel->guild->members[$user->id]->ban(null, null);
-                    $embed = new Embed($this->discord);
-                    $embed->setColor('#ff0000');
-                    $embed->setDescription("$user banned by $banner.");
-                    $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    }else {
+                        if( $rp_self < $rp_men )
+                        {
+                            $embed = new Embed($this->discord);
+                            $embed->setColor('#ff0000');
+                            $embed->setDescription("Your role position too low!");
+                            $embed->setTimestamp();
+                            $msg->channel->sendEmbed($embed);
+                            return;
+                         }else {
+                             $msg->channel->guild->members[$user->id]->ban(null, null);
+                             $embed = new Embed($this->discord);
+                             $embed->setColor('#ff0000');
+                             $embed->setDescription("$user banned by $banner.");
+                             $embed->setTimestamp();
+                             $msg->channel->sendEmbed($embed);
+                         }
+                     }
                 }else {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
@@ -79,3 +92,29 @@ class Ban
     }
     
 }
+
+
+
+
+
+
+        
+       
+            
+            
+
+            
+
+            
+                
+            
+
+        
+    
+    
+
+    
+
+    
+    
+
