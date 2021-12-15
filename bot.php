@@ -17,11 +17,11 @@ $bot->on('ready', function($discord) {
     echo "Bot is ready!", PHP_EOL;
     $commandLoader = new CommandLoader($discord);
     
-    /*$act = $discord->factory(Activity::class, [
-        "name" => "",
+    $act = $discord->factory(Activity::class, [
+        "name" => "Hiro Abandoned | hiro!help👾 hiro!money🤑 hiro!hug🥵 hiro!ban😈 hiro!slap🤬 v1.0.0",
         "type" => Activity::TYPE_WATCHING
     ]);
-    $discord->updatePresence($act, false, 'online');*/
+    $discord->updatePresence($act, false, 'idle');
 });
 
 $bot->run();
