@@ -1,13 +1,13 @@
 # Hiro016 Discord Bot
 [![Discord Status](https://img.shields.io/discord/812096967714930710)](https://discord.gg/HBtf7buzv9)
-[![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/bariscodefxy/hiro-bot/releases/latest)
+[![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/hiro-team/hiro-bot/releases/latest)
 [![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=907706093923356742&permissions=8&scope=bot)
 
 A discord bot written in PHP
 
 |Project Name|Author|Current Version|Minimum PHP Version|
 |--|--|--|--|
-|Hiro Bot|bariscodefx, CYB3R73|1.0.0|7.3+|
+|Hiro Bot|Hiro Team|1.0.0|7.3+|
 
 # For Contributors
 Pull Requests Only New Cool Commands and Bug Fixes!!!
@@ -17,7 +17,7 @@ Pull Requests Only New Cool Commands and Bug Fixes!!!
 ### Install Bot
 #### Clone Repository to your PC/VPS
 ```
-git clone https://github.com/bariscodefxy/hiro-bot.git
+git clone https://github.com/hiro-team/hiro-bot.git
 ```
 #### Manual Download
 - Download from Code button
