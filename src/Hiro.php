@@ -21,7 +21,8 @@
 namespace hiro;
 
 use Discord\Discord;
+use hiro\interfaces\HiroInterface;
 
-class Hiro extends Discord {
+class Hiro extends Discord implements HiroInterface {
 
 }
