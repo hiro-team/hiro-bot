@@ -1,1 +1,1 @@
-screen -S hiro-bot php ./bot.php
+php run.php
