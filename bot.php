@@ -11,6 +11,8 @@ $dotenv->load();
 $bot = new DiscordCommandClient([
     'token' => $_ENV['TOKEN'],
     'prefix' => 'hiro!',
+    'shardId' => 0,
+    'shardCount' => 5,
 ]);
 
 $bot->on('ready', function($discord) {
