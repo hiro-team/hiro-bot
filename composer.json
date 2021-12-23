@@ -11,6 +11,9 @@
             "email": "lesterazat733@gmail.com"
         }
     ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    },
     "type": "project",
     "license": "apache-2.0",
     "autoload": {
