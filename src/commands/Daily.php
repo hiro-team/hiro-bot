@@ -26,12 +26,14 @@ use Discord\Parts\Embed\Field;
 use Dotenv\Dotenv;
 use hiro\CommandLoader;
 use hiro\database\Database;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\CommandInterface;
 
 /**
  * Class Daily
  * @package hiro\commands
  */
-class Daily
+class Daily implements CommandInterface
 {
 
     /**
@@ -40,15 +42,15 @@ class Daily
     private $category;
 
     /**
-     * @var DiscordCommandClient
+     * @var HiroInterface
      */
     private $discord;
 
     /**
      * Money constructor.
-     * @param DiscordCommandClient $client
+     * @param HiroInterface $client
      */
-    public function __construct(DiscordCommandClient $client)
+    public function __construct(HiroInterface $client)
     {
         $this->category = "economy";
         $this->discord = $client;

@@ -22,11 +22,13 @@ namespace hiro\commands;
 
 use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\CommandInterface;
 
 /**
  * Slap command class
  */
-class Slap
+class Slap implements CommandInterface
 {
     
     /**
@@ -42,7 +44,7 @@ class Slap
     /**
      * __construct
      */
-    public function __construct(DiscordCommandClient $client)
+    public function __construct(HiroInterface $client)
     {
         $this->discord = $client;
         $this->category = "fun";
