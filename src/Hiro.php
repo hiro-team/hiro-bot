@@ -61,6 +61,8 @@ class Hiro extends Discord implements HiroInterface
 
         $discordOptions = array_merge($this->commandClientOptions['discordOptions'], [
             'token' => $this->commandClientOptions['token'],
+            'shardId' => $this->commandClientOptions['shardId'],
+            'shardCount' => $this->commandClientOptions['shardCount']
         ]);
 
         parent::__construct($discordOptions);
@@ -425,6 +427,8 @@ class Hiro extends Discord implements HiroInterface
                 'defaultHelpCommand',
                 'discordOptions',
                 'caseInsensitiveCommands',
+                'shardId',
+                'shardCount'
             ])
             ->setDefaults([
                 'prefix' => '@mention ',
@@ -434,6 +438,8 @@ class Hiro extends Discord implements HiroInterface
                 'defaultHelpCommand' => true,
                 'discordOptions' => [],
                 'caseInsensitiveCommands' => false,
+                'shardId' => 0,
+                'shardCount' => 1
             ]);
 
         $options = $resolver->resolve($options);

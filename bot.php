@@ -36,7 +36,9 @@ $shard_id = $ArgumentParser->getShardId();
 $shard_count = $ArgumentParser->getShardCount();
 $bot = new Hiro([
     'token' => $_ENV['TOKEN'],
-    'prefix' => "hiro!"
+    'prefix' => "hiro!",
+    'shardId' => $shard_id,
+    'shardCount' => $shard_count
 ]);
 
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
