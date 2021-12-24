@@ -20,7 +20,7 @@
 
 namespace hiro;
 
-use Discord\DiscordCommandClient;
+use hiro\interfaces\HiroInterface;
 
 /**
 * CommandLoader
@@ -46,12 +46,12 @@ class CommandLoader
     /**
     * CommandLoader Constructor
     */
-    public function __construct(DiscordCommandClient $client) {
+    public function __construct(HiroInterface $client) {
         $this->dir = __DIR__ . "/commands";
         $this->loadAllCommands($client);
     }
     
-    public function loadCommand(DiscordCommandClient $client, string $commandName)
+    public function loadCommand(HiroInterface $client, string $commandName)
     {
         
     }
@@ -59,7 +59,7 @@ class CommandLoader
     /**
      * Loads all commands
      */
-    public function loadAllCommands(DiscordCommandClient $client)
+    public function loadAllCommands(HiroInterface $client)
     {
         $dir = __DIR__ . '/commands';
         $this->clearConsole();

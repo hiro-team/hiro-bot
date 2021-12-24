@@ -36,26 +36,13 @@ $shard_id = $ArgumentParser->getShardId();
 $shard_count = $ArgumentParser->getShardCount();
 $bot = new Hiro([
     'token' => $_ENV['TOKEN'],
-    'shardId' => $shard_id,
-    'shardCount' => $shard_count
+    'prefix' => "hiro!"
 ]);
-$prefix = "hiro!";
 
-$bot->on('ready', function($discord) use ($shard_id, $shard_count, $prefix) {
+$bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     echo "Bot is ready!", PHP_EOL;
     
-    $discord->on(Event::MESSAGE_CREATE, function(Message $message, HiroInterface $discord) use ($prefix) {
-        if($discord->id == $message->author->id)
-            return;
-
-        if(!preg_match("/$prefix([A-Za-z0-9-_]+)/", strtolower($message->content)))
-            return;
-
-        $command = @explode($prefix, strtolower($message->content))[1];
-        if(!$command)
-            return;
-        $message->reply($command);
-    } );
+    $commandLoader = new CommandLoader($discord);
 
     $act = $discord->factory(Activity::class, [
         "name" => "Shard $shard_id of $shard_count | Hiro Developing...",
