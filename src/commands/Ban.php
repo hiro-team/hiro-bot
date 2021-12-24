@@ -50,14 +50,14 @@ class Ban implements CommandInterface
         $this->category = "mod";
         $client->registerCommand('ban', function($msg, $args)
         {
-            if($msg->author->getPermissions()['ban_members'])
+            if(@$msg->author->getPermissions()['ban_members'])
             {
-                $user = $msg->mentions->first();
+                $user = @$msg->mentions->first();
                 if($user)
                 {
                     $banner = $msg->author->user;
-                    $rp_men = $msg->channel->guild->members[$user->id]->roles->first()->position;
-                    $rp_self = $msg->author->roles->first()->position;
+                    $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
+                    $roles_self = max($this->rolePositionsMap($msg->author->roles));
                     if($banner->id == $user->id)
                     {
                         $embed = new Embed($this->discord);
@@ -67,7 +67,7 @@ class Ban implements CommandInterface
                         $msg->channel->sendEmbed($embed);
                         return;
                     }else {
-                        if( $rp_self < $rp_men )
+                        if( $roles_self < $roles_men )
                         {
                             $embed = new Embed($this->discord);
                             $embed->setColor('#ff0000');
@@ -105,6 +105,17 @@ class Ban implements CommandInterface
             "description" => "Bans user"
         ]);
     }
+
+    protected function rolePositionsMap($rolesCollision)
+    {
+        $rolesArray = $rolesCollision->toArray();
+        $new = [];
+        foreach($rolesArray as $role)
+        {
+            $new[] = $role->position;
+        }
+        return $new;
+    }
     
     public function __get(string $name)
     {
@@ -112,29 +123,3 @@ class Ban implements CommandInterface
     }
     
 }
-
-
-
-
-
-
-        
-       
-            
-            
-
-            
-
-            
-                
-            
-
-        
-    
-    
-
-    
-
-    
-    
-
