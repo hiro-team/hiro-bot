@@ -24,11 +24,13 @@ use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Embed\Field;
 use hiro\CommandLoader;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\ExtendedCommandInterface;
 
 /**
  * Help command class
  */
-class Help
+class Help implements ExtendedCommandInterface
 {
     
     /**
@@ -49,7 +51,7 @@ class Help
     /**
      * __construct
      */
-    public function __construct(DiscordCommandClient $client, CommandLoader $loader)
+    public function __construct(HiroInterface $client, CommandLoader $loader)
     {
         $this->loader = $loader;
         $this->category = "bot";

@@ -23,13 +23,14 @@ namespace hiro\commands;
 use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Embed\Field;
-use hiro\CommandLoader;
 use hiro\database\Database;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\CommandInterface;
 
 /**
  * Coinflip command class
  */
-class Coinflip
+class Coinflip implements CommandInterface
 {
     
     /**
@@ -45,7 +46,7 @@ class Coinflip
     /**
      * __construct
      */
-    public function __construct(DiscordCommandClient $client, CommandLoader $loader)
+    public function __construct(HiroInterface $client)
     {
         $this->category = "economy";
         $this->discord = $client;

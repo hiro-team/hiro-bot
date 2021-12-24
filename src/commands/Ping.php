@@ -22,11 +22,13 @@ namespace hiro\commands;
 
 use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\CommandInterface;
 
 /**
  * Ping command class
  */
-class Ping
+class Ping implements CommandInterface
 {
     
     /**
@@ -42,7 +44,7 @@ class Ping
     /**
      * __construct
      */
-    public function __construct(DiscordCommandClient $client)
+    public function __construct(HiroInterface $client)
     {
         $this->discord = $client;
         $this->category = "bot";

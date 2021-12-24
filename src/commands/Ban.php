@@ -22,11 +22,13 @@ namespace hiro\commands;
 
 use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
+use hiro\interfaces\HiroInterface;
+use hiro\interfaces\CommandInterface;
 
 /**
  * Ban command class
  */
-class Ban
+class Ban implements CommandInterface
 {
     
     /**
@@ -42,7 +44,7 @@ class Ban
     /**
      * __construct
      */
-    public function __construct(DiscordCommandClient $client)
+    public function __construct(HiroInterface $client)
     {
         $this->discord = $client;
         $this->category = "mod";
