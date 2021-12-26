@@ -1,5 +1,5 @@
 # Hiro016 Discord Bot
-[![Discord Status](https://img.shields.io/discord/812096967714930710)](https://discord.gg/vQYkNKnF7R)
+[![Discord Status](https://img.shields.io/discord/912090741516419153)](https://discord.gg/vQYkNKnF7R)
 [![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/hiro-team/hiro-bot/releases/latest)
 [![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=907706093923356742&permissions=8&scope=bot)
 
