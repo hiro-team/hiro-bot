@@ -98,8 +98,11 @@ class Hiro extends Discord implements HiroInterface
                         $command = $this->commands[$this->aliases[$command]];
                     } else {
                         // Command doesn't exist.
+                        $message->react('⛔');
+                        $message->reply("Command not found for **$command**");
                         return;
                     }
+                    $message->react('✅');
 
                     $result = $command->handle($message, $args);
 
