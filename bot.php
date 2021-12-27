@@ -39,7 +39,8 @@ $bot = new Hiro([
     'token' => $_ENV['TOKEN'],
     'prefix' => "hiro!",
     'shardId' => $shard_id,
-    'shardCount' => $shard_count
+    'shardCount' => $shard_count,
+    'caseInsensitiveCommands' => true
 ]);
 
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
