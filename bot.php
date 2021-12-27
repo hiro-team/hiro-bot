@@ -27,6 +27,7 @@ use Discord\WebSockets\Event;
 use Discord\Parts\Channel\Message;
 use hiro\ArgumentParser;
 use hiro\interfaces\HiroInterface;
+use hiro\PresenceManager;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -46,11 +47,15 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     
     $commandLoader = new CommandLoader($discord);
 
-    $act = $discord->factory(Activity::class, [
-        "name" => "Shard $shard_id of $shard_count | Hiro Developing...",
-        "type" => Activity::TYPE_WATCHING
-    ]);
-    $discord->updatePresence($act, false, 'idle');
+    $presenceManager = new PresenceManager($discord);
+    $presenceManager->setLoopTime(60.0)
+    ->setPresenceType(Activity::TYPE_WATCHING)
+    ->setPresences([
+        sizeof($discord->guilds) . " guilds",
+        "Hello Dolly!",
+        "Hiro Best DiscordPHP Bot"
+    ])
+    ->startThread();
 });
 
 $bot->run();
