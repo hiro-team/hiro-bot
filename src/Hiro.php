@@ -226,8 +226,8 @@ class Hiro extends Discord implements HiroInterface
     protected function checkForPrefix(string $content): ?string
     {
         foreach ($this->commandClientOptions['prefixes'] as $prefix) {
-            if (substr($content, 0, strlen($prefix)) == strtolower($prefix)) {
-                return substr($content, strlen($prefix));
+            if (substr(strtolower($content), 0, strlen($prefix)) == strtolower($prefix)) {
+                return substr(strtolower($content), strlen($prefix));
             }
         }
 
