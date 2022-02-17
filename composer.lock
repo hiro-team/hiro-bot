@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "discord-php/http",
-            "version": "v9.0.9",
+            "version": "v9.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/discord-php/DiscordPHP-Http.git",
-                "reference": "a01b62ba4ab1051eb227077a432b0614d563611a"
+                "reference": "5d58a017152295c5769adad7510ec6d88bf2f60f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/discord-php/DiscordPHP-Http/zipball/a01b62ba4ab1051eb227077a432b0614d563611a",
-                "reference": "a01b62ba4ab1051eb227077a432b0614d563611a",
+                "url": "https://api.github.com/repos/discord-php/DiscordPHP-Http/zipball/5d58a017152295c5769adad7510ec6d88bf2f60f",
+                "reference": "5d58a017152295c5769adad7510ec6d88bf2f60f",
                 "shasum": ""
             },
             "require": {
@@ -49,9 +49,9 @@
             "description": "Handles HTTP requests to Discord servers",
             "support": {
                 "issues": "https://github.com/discord-php/DiscordPHP-Http/issues",
-                "source": "https://github.com/discord-php/DiscordPHP-Http/tree/v9.0.9"
+                "source": "https://github.com/discord-php/DiscordPHP-Http/tree/v9.0.10"
             },
-            "time": "2022-01-23T16:29:30+00:00"
+            "time": "2022-02-16T15:10:31+00:00"
         },
         {
             "name": "discord/interactions",
@@ -1622,12 +1622,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "React\\Promise\\Stream\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "React\\Promise\\Stream\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2631,16 +2631,16 @@
         },
         {
             "name": "team-reflex/discord-php",
-            "version": "v7.0.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/discord-php/DiscordPHP.git",
-                "reference": "02b35ac6508b0ec97930760d4888e6cc53909388"
+                "reference": "924870544ddd1adbd7e1493161fe7e870bef028d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/02b35ac6508b0ec97930760d4888e6cc53909388",
-                "reference": "02b35ac6508b0ec97930760d4888e6cc53909388",
+                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/924870544ddd1adbd7e1493161fe7e870bef028d",
+                "reference": "924870544ddd1adbd7e1493161fe7e870bef028d",
                 "shasum": ""
             },
             "require": {
@@ -2695,9 +2695,9 @@
             "description": "An unofficial API to interact with the voice and text service Discord.",
             "support": {
                 "issues": "https://github.com/discord-php/DiscordPHP/issues",
-                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.1"
+                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.2"
             },
-            "time": "2022-02-14T05:21:58+00:00"
+            "time": "2022-02-16T16:53:59+00:00"
         },
         {
             "name": "trafficcophp/bytebuffer",
