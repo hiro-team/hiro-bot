@@ -530,16 +530,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.56.0",
+            "version": "2.57.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "626ec8cbb724cd3c3400c3ed8f730545b744e3f4"
+                "reference": "4a54375c21eea4811dbd1149fe6b246517554e78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/626ec8cbb724cd3c3400c3ed8f730545b744e3f4",
-                "reference": "626ec8cbb724cd3c3400c3ed8f730545b744e3f4",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4a54375c21eea4811dbd1149fe6b246517554e78",
+                "reference": "4a54375c21eea4811dbd1149fe6b246517554e78",
                 "shasum": ""
             },
             "require": {
@@ -622,7 +622,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-21T17:08:38+00:00"
+            "time": "2022-02-13T18:13:33+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -926,12 +926,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Ratchet\\Client\\": "src"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "Ratchet\\Client\\": "src"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2631,16 +2631,16 @@
         },
         {
             "name": "team-reflex/discord-php",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/discord-php/DiscordPHP.git",
-                "reference": "924870544ddd1adbd7e1493161fe7e870bef028d"
+                "reference": "397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/924870544ddd1adbd7e1493161fe7e870bef028d",
-                "reference": "924870544ddd1adbd7e1493161fe7e870bef028d",
+                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6",
+                "reference": "397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6",
                 "shasum": ""
             },
             "require": {
@@ -2695,9 +2695,9 @@
             "description": "An unofficial API to interact with the voice and text service Discord.",
             "support": {
                 "issues": "https://github.com/discord-php/DiscordPHP/issues",
-                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.2"
+                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.3"
             },
-            "time": "2022-02-16T16:53:59+00:00"
+            "time": "2022-02-24T12:20:14+00:00"
         },
         {
             "name": "trafficcophp/bytebuffer",
