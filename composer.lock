@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6db7a576ec2918065fbf4ee245007ab1",
+    "content-hash": "1f66932c8acdce8176f92249ee07d2fe",
     "packages": [
         {
             "name": "discord-php/http",
@@ -2456,16 +2456,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.4.3",
+            "version": "v5.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "a9dd7403232c61e87e27fb306bbcd1627f245d70"
+                "reference": "7e4d52d39e5d86f3f04bef46fa29a1091786bc73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/a9dd7403232c61e87e27fb306bbcd1627f245d70",
-                "reference": "a9dd7403232c61e87e27fb306bbcd1627f245d70",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/7e4d52d39e5d86f3f04bef46fa29a1091786bc73",
+                "reference": "7e4d52d39e5d86f3f04bef46fa29a1091786bc73",
                 "shasum": ""
             },
             "require": {
@@ -2533,7 +2533,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v5.4.3"
+                "source": "https://github.com/symfony/translation/tree/v5.4.5"
             },
             "funding": [
                 {
@@ -2549,7 +2549,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-07T00:28:17+00:00"
+            "time": "2022-02-09T15:49:12+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -2631,16 +2631,16 @@
         },
         {
             "name": "team-reflex/discord-php",
-            "version": "v7.0.3",
+            "version": "v7.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/discord-php/DiscordPHP.git",
-                "reference": "397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6"
+                "reference": "97d6ebba19ab8dd12e4e4e2ef778dd3c7c14f8aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6",
-                "reference": "397c5226b16c6e1d6aa44efdb9ae4bf4c89065c6",
+                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/97d6ebba19ab8dd12e4e4e2ef778dd3c7c14f8aa",
+                "reference": "97d6ebba19ab8dd12e4e4e2ef778dd3c7c14f8aa",
                 "shasum": ""
             },
             "require": {
@@ -2695,9 +2695,9 @@
             "description": "An unofficial API to interact with the voice and text service Discord.",
             "support": {
                 "issues": "https://github.com/discord-php/DiscordPHP/issues",
-                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.3"
+                "source": "https://github.com/discord-php/DiscordPHP/tree/v7.0.4"
             },
-            "time": "2022-02-24T12:20:14+00:00"
+            "time": "2022-03-03T06:45:16+00:00"
         },
         {
             "name": "trafficcophp/bytebuffer",
