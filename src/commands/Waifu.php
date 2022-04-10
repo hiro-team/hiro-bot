@@ -60,7 +60,7 @@ class Waifu implements CommandInterface
             $msg->channel->sendEmbed($embed);
         }, [
             "aliases" => [
-                
+                "wfu"
             ],
             "description" => "How much u are waifu"
         ]);
