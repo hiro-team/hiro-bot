@@ -23,7 +23,7 @@ git clone https://github.com/hiro-team/hiro-bot.git
 - Download from Code button
 - Extract to anywhere
 #### Setup
-- Install PHP7.3 or more
+- Install PHP 8 or more
 - Install Composer
 - Make file with name `.env`
 - Put your token from Discord Developer Portal 
