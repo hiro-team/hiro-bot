@@ -56,15 +56,19 @@ class Daily implements CommandInterface
         $this->discord = $client;
         $client->registerCommand('daily', function($msg, $args)
         {
-            include __DIR__ . '/../../db-settings.inc';
-            $database = new Database($db_host, $db_dbname, $db_user, $db_pass);
+            $database = new Database();
+            if(!$database->isConnected)
+            {
+                $msg->channel->sendMessage("Couldn't connect to database.");
+                return;
+            }
             $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
-	    $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
-	    if(time() - $last_daily < 86400)
-	   {
-		$msg->channel->sendMessage('You must wait 24 hours.');
-		return;
-	    }
+    	    $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
+    	    if(time() - $last_daily < 86400)
+            {
+        		$msg->channel->sendMessage('You must wait 24 hours.');
+        		return;
+    	    }
             if(!is_numeric($user_money))
             {
                 echo "money is empty" . PHP_EOL;

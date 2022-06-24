@@ -56,14 +56,20 @@ class Money implements CommandInterface
         $this->discord = $client;
         $client->registerCommand('money', function($msg, $args)
         {
-            include __DIR__ . '/../../db-settings.inc';
-            $database = new Database($db_host, $db_dbname, $db_user, $db_pass);
-            $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+            $database = new Database();
+            if(!$database->isConnected)
+            {
+                $msg->channel->sendMessage("Couldn't connect to database.");
+                return;
+            }
+            $user = $msg->mentions->first();
+            if(!$user) $user = $msg->author->user;
+            $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
             if(!is_numeric($user_money))
             {
                 echo "money is empty" . PHP_EOL;
                 if(!$database->addUser([
-                    "discord_id" => $msg->author->id
+                    "discord_id" => $user->id
                 ]))
                 {
                     $embed = new Embed($this->discord);
@@ -80,7 +86,7 @@ class Money implements CommandInterface
             setlocale(LC_MONETARY, 'en_US');
             $user_money = number_format($user_money, 2,',', '.');
             $embed = new Embed($this->discord);
-            $embed->setTitle("Your money: $".$user_money);
+            $embed->setTitle("Money: $".$user_money);
             $embed->setTimestamp();
             $embed->setColor('#7CFC00');
             $msg->channel->sendEmbed($embed);

@@ -30,25 +30,23 @@ use PDOException;
 class Database extends PDO
 {
 
+    public bool $isConnected = false;
+
     /**
      * Database constructor.
-     * @param string $host
-     * @param string $dbname
-     * @param string $user
-     * @param string $pass
-     * @param string|string $charset
      */
-    public function __construct(string $host,
-                                string $dbname,
-                                string $user,
-                                string $pass,
-                                string $charset = "utf8"){
+    public function __construct(){
+        if(!file_exists(dirname(__DIR__, 2) . "/db-settings.inc")) return false;
+        include dirname(__DIR__, 2) . "/db-settings.inc";
+        if(!isset($db_user) || !isset($db_pass) || !isset($db_host) || !isset($db_dbname)) return false;
         try {
-            parent::__construct("mysql:host=$host;dbname=$dbname;charset=$charset", $user, $pass);
+            parent::__construct("mysql:host=$db_host;dbname=$db_dbname;charset=utf8", $db_user, $db_pass);
         }catch(PDOException $e)
         {
             echo $e . PHP_EOL;
+            return false;
         }
+        $this->isConnected = true;
     }
 
     /**
@@ -149,13 +147,24 @@ class Database extends PDO
        }
    }
    
-   public function setUserMoney(int $user_id, int $money)
+  public function setUserMoney(int $user_id, int $money)
+    {
+  	   $query = $this->prepare('UPDATE users SET money = :money WHERE id = :id');
+  	   return $query->execute([
+  			"money" => $money,
+  			"id" => $user_id
+  	   ]);
+   }
+
+   public function pay(int $user1, int $user2, int $payamount)
    {
-	   $query = $this->prepare('UPDATE users SET money = :money WHERE id = :id');
-	   return $query->execute([
-			"money" => $money,
-			"id" => $user_id
-	   ]);
+        $user1_money = $this->getUserMoney($user1);
+        $user2_money = $this->getUserMoney($user2);
+        if($payamount > $user1_money) return false;
+        if($payamount < 1) return false;
+        if(!$this->setUserMoney($user1, $user1_money - $payamount)) return false;
+        if(!$this->setUserMoney($user2, $user2_money + $payamount)) return false;
+        return true;
    }
 
 }

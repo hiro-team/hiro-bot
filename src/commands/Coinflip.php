@@ -52,8 +52,12 @@ class Coinflip implements CommandInterface
         $this->discord = $client;
         $client->registerCommand('coinflip', function($msg, $args)
         {
-			include __DIR__ . '/../../db-settings.inc';
-			$database = new Database($db_host, $db_dbname, $db_user, $db_pass);
+			$database = new Database();
+            if(!$database->isConnected)
+            {
+                $msg->channel->sendMessage("Couldn't connect to database.");
+                return;
+            }
             $embed = new Embed($this->discord);
 			$usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
 			if(!is_numeric($usermoney))
@@ -82,29 +86,28 @@ class Coinflip implements CommandInterface
 				{
 					$embed->setDescription("You should give a value greater than zero.");
 					$embed->setColor('#ff0000');
-				}else if( $args[0] > 50000 )
-				{
-					$embed->setDescription("You should give a value min than 50.000.");
-					$embed->setColor('#ff0000');
 				}else if( $args[0] > $usermoney )
 				{
 					$embed->setDescription("Your money isn't enough.");
 					$embed->setColor('#ff0000');
 				}else {
 					$payamount = $args[0];
-					$rand = rand(0, 1);
+					$rand = rand(0, 5);
 					
 					// delete user money from payamount
 					$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
 					$usermoney = $usermoney - $payamount;
 					
-					if($rand)
+                    setlocale(LC_MONETARY, 'en_US');
+					if(!$rand)
 					{
 						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-						$embed->setDescription("You win " . $payamount * 2);
+                        $embed->setTitle("You Won!");
+						$embed->setDescription("$ " . number_format($payamount * 2, 2,',', '.'));
 						$embed->setColor('#7CFC00');
 					}else {
-						$embed->setDescription("You lose " . $payamount);
+                        $embed->setTitle("You Lose!");
+						$embed->setDescription("$ " . number_format($payamount, 2,',', '.'));
 						$embed->setColor('#ff0000');
 					}
 				}
