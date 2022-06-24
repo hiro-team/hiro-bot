@@ -28,6 +28,7 @@ use Discord\Parts\Channel\Message;
 use hiro\ArgumentParser;
 use hiro\interfaces\HiroInterface;
 use hiro\PresenceManager;
+use Discord\WebSockets\Intents;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -40,7 +41,9 @@ $bot = new Hiro([
     'prefix' => "hiro!",
     'shardId' => $shard_id,
     'shardCount' => $shard_count,
-    'caseInsensitiveCommands' => true
+    'caseInsensitiveCommands' => true,
+    'loadAllMembers' => true,
+    'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS
 ]);
 
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
@@ -52,11 +55,18 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $presenceManager->setLoopTime(60.0)
     ->setPresenceType(Activity::TYPE_WATCHING)
     ->setPresences([
-        sizeof($discord->guilds) . " guilds",
-        "Hello Dolly!",
-        "Hiro Best DiscordPHP Bot"
+        sizeof($discord->guilds) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
     ])
     ->startThread();
+
+    /** fix discord guild count */
+    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord, $shard_id, $shard_count)
+    {
+        $presenceManager->setPresences([
+            sizeof($discord->guilds) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
+        ]);
+    });
+
 });
 
 $bot->run();
