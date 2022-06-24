@@ -24,6 +24,7 @@ use Discord\Discord;
 use hiro\interfaces\HiroInterface;
 use hiro\CommandClient\Command;
 use Discord\Parts\Embed\Embed;
+use Discord\WebSockets\Intents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Hiro extends Discord implements HiroInterface
@@ -62,7 +63,9 @@ class Hiro extends Discord implements HiroInterface
         $discordOptions = array_merge($this->commandClientOptions['discordOptions'], [
             'token' => $this->commandClientOptions['token'],
             'shardId' => $this->commandClientOptions['shardId'],
-            'shardCount' => $this->commandClientOptions['shardCount']
+            'shardCount' => $this->commandClientOptions['shardCount'],
+            'loadAllMembers' => $this->commandClientOptions['loadAllMembers'],
+            'intents' => $this->commandClientOptions['intents']
         ]);
 
         parent::__construct($discordOptions);
@@ -431,7 +434,9 @@ class Hiro extends Discord implements HiroInterface
                 'discordOptions',
                 'caseInsensitiveCommands',
                 'shardId',
-                'shardCount'
+                'shardCount',
+                'loadAllMembers',
+                'intents'
             ])
             ->setDefaults([
                 'prefix' => '@mention ',
@@ -442,7 +447,9 @@ class Hiro extends Discord implements HiroInterface
                 'discordOptions' => [],
                 'caseInsensitiveCommands' => false,
                 'shardId' => 0,
-                'shardCount' => 1
+                'shardCount' => 1,
+                'loadAllMembers' => false,
+                'intents' => Intents::getDefaultIntents()
             ]);
 
         $options = $resolver->resolve($options);
