@@ -56,6 +56,15 @@ class Ban implements CommandInterface
                 if($user)
                 {
                     $banner = $msg->author->user;
+                    if(!isset($msg->channel->guild->members[$user->id])) 
+                    {
+                        $embed = new Embed($this->discord);
+                        $embed->setColor('#ff0000');
+                        $embed->setDescription("User couldn't found.");
+                        $embed->setTimestamp();
+                        $msg->channel->sendEmbed($embed);
+                        return;
+                    }
                     $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
                     $roles_self = max($this->rolePositionsMap($msg->author->roles));
                     if($banner->id == $user->id)
