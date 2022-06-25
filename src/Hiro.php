@@ -488,6 +488,27 @@ class Hiro extends Discord implements HiroInterface
     }
 
     /**
+     * formatNumber
+     * 
+     * @param  int    $number 
+     * @return int|string
+     */
+    public function formatNumber(int $number)
+    {
+        if($number >= 1000)
+        {
+            return $number / 1000 . "k";
+        }else if($number >= 1000000)
+        {
+            return $number / 1000000 . "m";
+        }else if($number >= 1000000000){
+            return $number / 1000000000 . "t";
+        }else {
+            return $number;
+        }
+    }
+
+    /**
      * Handles dynamic get calls to the command client.
      *
      * @param string $name Variable name.
