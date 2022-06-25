@@ -111,7 +111,8 @@ class Pay implements CommandInterface
             $msg->channel->sendEmbed($embed);
             return;
         }, [
-            "description" => "Send your money to anybody."
+            "description" => "Send your money to anybody.",
+            "cooldown" => 10 * 1000
         ]);
     }
     

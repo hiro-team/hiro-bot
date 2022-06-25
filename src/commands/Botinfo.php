@@ -74,7 +74,8 @@ class Botinfo implements ExtendedCommandInterface
             $msg->channel->sendEmbed($embed);
         },
         [
-            "description" => "Shows bot's info"
+            "description" => "Shows bot's info",
+            "cooldown" => 10 * 1000
         ]);
     }
 

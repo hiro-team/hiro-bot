@@ -100,7 +100,8 @@ class Clear implements CommandInterface
             "aliases" => [
                 "purge"
             ],
-            "description" => "Clears messages"
+            "description" => "Clears messages",
+            "cooldown" => 10 * 1000
         ]);
     }
     

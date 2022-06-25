@@ -95,7 +95,8 @@ class Money implements CommandInterface
             "aliases" => [
                 "cash"
             ],
-            "description" => "Displays your money."
+            "description" => "Displays your money.",
+            "cooldown" => 10 * 1000
         ]);
     }
 

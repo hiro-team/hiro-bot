@@ -118,7 +118,8 @@ class Coinflip implements CommandInterface
             "aliases" => [
                 "cf"
             ],
-            "description" => "An economy game"
+            "description" => "An economy game",
+            "cooldown" => 10 * 1000
         ]);
     }
     

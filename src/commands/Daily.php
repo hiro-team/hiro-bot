@@ -104,7 +104,8 @@ class Daily implements CommandInterface
             "aliases" => [
                 
             ],
-            "description" => "Daily moneys."
+            "description" => "Daily moneys.",
+            "cooldown" => 10 * 1000
         ]);
     }
 
