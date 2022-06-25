@@ -115,9 +115,9 @@ class Slots implements CommandInterface
                     }
                 }
                 $choosed = [
-                    $items[random_int(0, sizeof($items) - 2)],
-                    $items[random_int(0, sizeof($items) - 1)],
-                    $items[random_int(0, sizeof($items) - 2)]
+                    $rand_emotes[0],
+                    $rand_emotes[1],
+                    $rand_emotes[2]
                 ];
             }
 			$msg->reply("Slot is spinning... <a:loading:990300992287424553> \n<a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008>")->then(function($msg) use ($chance, $choosed, $payamount)
