@@ -65,7 +65,7 @@ class Help implements ExtendedCommandInterface
             $embed->setColor("#ff0000");
             $embed->setTitle("Help");
             $embed->setDescription("Displaying all commands of the bot");
-            $embed->setImage("https://i.pinimg.com/originals/50/34/93/503493fb0f30c1f84880bdf98b543e97.gif");
+            $embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
             foreach($this->loader->categories as $category)
             {
                 if(array_search($category, $this->loader->categories) == "author") continue;
