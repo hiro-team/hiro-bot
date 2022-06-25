@@ -52,8 +52,8 @@ class Ping implements CommandInterface
         {
             $embed = new Embed($this->discord);
             $embed->setTitle("Pong");
-            $diff = $msg->timestamp->floatDiffInRealSeconds();
-            $embed->setDescription("Your ping took ".$diff."s to arrive.");
+            $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
+            $embed->setDescription("Your ping took ".$diff."ms to arrive.");
             $embed->setColor("#ffffff");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
