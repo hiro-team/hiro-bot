@@ -24,12 +24,13 @@ use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Embed\Field;
 use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
+use hiro\interfaces\ExtendedCommandInterface;
+use hiro\CommandLoader;
 
 /**
  * Botinfo command class
  */
-class Botinfo implements CommandInterface
+class Botinfo implements ExtendedCommandInterface
 {
     
     /**
@@ -41,14 +42,20 @@ class Botinfo implements CommandInterface
      * $client
      */
     private $discord;
+
+    /**
+     * $loader
+     */
+    private $loader;
     
     /**
      * __construct
      */
-    public function __construct(HiroInterface $client)
+    public function __construct(HiroInterface $client, CommandLoader $loader)
     {
         $this->discord = $client;
         $this->category = "bot";
+        $this->loader = $loader;
         $client->registerCommand('botinfo', function($msg, $args)
         {
             $guilds             = $this->discord->formatNumber(sizeof($this->discord->guilds));
@@ -59,6 +66,7 @@ class Botinfo implements CommandInterface
             $embed->addField($this->makeField("Shard Count", $this->discord->options['shardCount']));
             $embed->addField($this->makeField("Guilds", $guilds));
             $embed->addField($this->makeField("Members", $members));
+            $embed->addField($this->makeField("Commands", $this->loader->getCommandsCount()));
             $embed->addField($this->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
             $embed->setThumbnail($this->discord->avatar);
             $embed->setAuthor($msg->author->username);

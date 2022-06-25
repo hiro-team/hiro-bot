@@ -89,6 +89,19 @@ class CommandLoader
         }
         print "All Commands Are Loaded." . PHP_EOL;
     }
+
+    public function getCommandsCount()
+    {
+        $num = 0;
+        foreach($this->categories as $category)
+        {
+            foreach($category as $command)
+            {
+                $num += 1;
+            }
+        }
+        return $num;
+    }
     
     private function clearConsole()
     {
