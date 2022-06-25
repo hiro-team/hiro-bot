@@ -51,11 +51,13 @@ class Slots implements CommandInterface
         $this->discord = $client;
         $client->registerCommand('slots', function($msg, $args)
         {
-        	print_r($this->discord->getCommand('slots')->cooldown);
         	$items = [
         		"<a:blue_cane:990303193332346970>",
         		"<a:blue_moon:990303158389583873>",
-        		":strawberry:"
+        		":strawberry:",
+                ":fireworks:",
+                ":gem:",
+                ":heart:"
         	];
 			$database = new Database();
             if(!$database->isConnected)
@@ -86,20 +88,43 @@ class Slots implements CommandInterface
             }
             if($payamount > $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id))) return $msg->reply("You can't pay this money, because u dont have it.");
             if(!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id)) - $payamount)) return $msg->reply("An error excepted when trying to pay.");
-            $choosed = [
-            	$items[random_int(0, sizeof($items) - 1)],
-            	$items[random_int(0, sizeof($items) - 1)],
-            	$items[random_int(0, sizeof($items) - 1)],
-            ];
-            if($choosed[0] === $choosed[1] && $choosed[1] === $choosed[2])
+            $chance = random_int(1, 3);
+            if($chance === 1)
             {
             	if(!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id)) + ($payamount * 3))) return $msg->reply("An error excepted when trying to give your money.");
+                $rand_emote = $items[random_int(0, sizeof($items) - 1)];
+                $choosed = [
+                    $rand_emote,
+                    $rand_emote,
+                    $rand_emote
+                ];
+            }else {
+                $rand_emotes = [
+                    random_int(0, sizeof($items) - 2),
+                    random_int(0, sizeof($items) - 2),
+                    random_int(0, sizeof($items) - 2)
+                ];
+                if($rand_emotes[0] === $rand_emotes[1] && $rand_emotes[1] === $rand_emotes[2])
+                {
+                    if($rand_emotes[0] === 0 || $rand_emotes[0] < sizeof($items) - 1)
+                    {
+                        $rand_emotes[random_int(0, 2)] += 1;
+                    }else 
+                    {
+                        $rand_emotes[random_int(0, 2)] -= 1;
+                    }
+                }
+                $choosed = [
+                    $items[random_int(0, sizeof($items) - 2)],
+                    $items[random_int(0, sizeof($items) - 1)],
+                    $items[random_int(0, sizeof($items) - 2)]
+                ];
             }
-			$msg->reply("Slot is spinning... <a:loading:990300992287424553> \n<a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008>")->then(function($msg) use ($choosed, $payamount)
+			$msg->reply("Slot is spinning... <a:loading:990300992287424553> \n<a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008>")->then(function($msg) use ($chance, $choosed, $payamount)
 			{
 				if(!($msg instanceof Message)) return $msg->reply("An error excepted.");
-				$this->discord->getLoop()->addTimer(3.0, function() use ($msg, $choosed, $payamount) {
-					if($choosed[0] === $choosed[1] && $choosed[1] === $choosed[2]) $text = "**YOU WON!!! $ " . $payamount * 3 . "**";
+				$this->discord->getLoop()->addTimer(3.0, function() use ($msg, $chance, $choosed, $payamount) {
+					if($chance === 1) $text = "**YOU WON!!! $ " . $payamount * 3 . "**";
 					else $text = "You lose all of your pay :(";
 					$msg->channel->editMessage($msg, "Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text");
 				});
