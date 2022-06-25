@@ -92,14 +92,14 @@ class Coinflip implements CommandInterface
 					$embed->setColor('#ff0000');
 				}else {
 					$payamount = $args[0];
-					$rand = rand(0, 5);
+					$rand = random_int(0, 1);
 					
 					// delete user money from payamount
 					$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
 					$usermoney = $usermoney - $payamount;
 					
                     setlocale(LC_MONETARY, 'en_US');
-					if(!$rand)
+					if($rand)
 					{
 						$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
                         $embed->setTitle("You Won!");
