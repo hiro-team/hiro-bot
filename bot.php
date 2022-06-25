@@ -38,7 +38,7 @@ $shard_id = $ArgumentParser->getShardId();
 $shard_count = $ArgumentParser->getShardCount();
 $bot = new Hiro([
     'token' => $_ENV['TOKEN'],
-    'prefix' => "hiro!",
+    'prefix' => $_ENV['PREFIX'],
     'shardId' => $shard_id,
     'shardCount' => $shard_count,
     'caseInsensitiveCommands' => true,
@@ -55,7 +55,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $presenceManager->setLoopTime(60.0)
     ->setPresenceType(Activity::TYPE_WATCHING)
     ->setPresences([
-        sizeof($discord->guilds) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
+        "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
     ])
     ->startThread();
 
@@ -63,7 +63,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord, $shard_id, $shard_count)
     {
         $presenceManager->setPresences([
-            sizeof($discord->guilds) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
+            "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
         ]);
     });
 
