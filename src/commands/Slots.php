@@ -84,6 +84,7 @@ class Slots implements CommandInterface
             		'discord_id' => $msg->author->user->id
             	])) return $msg->reply("An error excepted when adding you to database.");
             }
+            if($payamount > $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id))) return $msg->reply("You can't pay this money, because u dont have it.");
             if(!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id)) - $payamount)) return $msg->reply("An error excepted when trying to pay.");
             $choosed = [
             	$items[random_int(0, sizeof($items) - 1)],
