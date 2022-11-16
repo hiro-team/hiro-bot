@@ -109,7 +109,8 @@ class Database extends PDO
             if($query->execute([
                 "discord_id" => $data['discord_id'],
                 "money" => 0,
-                "register_time" => time()
+                "register_time" => time(),
+                "last_daily" => 0,
             ]))
             {
                 return true;
