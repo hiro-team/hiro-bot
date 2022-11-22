@@ -1,17 +1,26 @@
 <?php
 
-/*
- * This file is a part of the DiscordPHP project. Used in Hiro Bot!
+/**
+ * Copyright 2022 bariscodefx
+ * 
+ * This file part of project Hiro 016 Discord Bot.
  *
- * Copyright (c) 2015-present David Cole <david.cole1340@gmail.com>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This file is subject to the MIT license that is bundled
- * with this source code in the LICENSE.md file.
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-namespace hiro\CommandClient;
+namespace hiro\command;
 
-use hiro\Hiro;;
+use hiro\Hiro;
 use Discord\Parts\Channel\Message;
 
 /**

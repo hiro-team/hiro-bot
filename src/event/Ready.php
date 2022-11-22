@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2021 bariscodefx
+ * Copyright 2022 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -17,47 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-namespace hiro;
-
-class ArgumentParser {
-
-	/** arguments */
-	public $args;
-
-	public function __construct($args)
-	{
-		$this->args = $args;
-	}
-
-	public function getShardId()
-	{
-		if($this->args)
-		{
-			$args = $this->args;
-
-			if(in_array('--shard-id', $args))
-			{
-				$key = array_search('--shard-id', $args);
-				return $args[$key+1];
-			}
-
-		}
-	}
-
-	public function getShardCount()
-	{
-		if($this->args)
-		{
-			$args = $this->args;
-
-			if(in_array('--shard-count', $args))
-			{
-				$key = array_search('--shard-count', $args);
-				return $args[$key+1];
-			}
-
-		}
-	}
-
-}
+ 
+ class Ready
+ {
+ }

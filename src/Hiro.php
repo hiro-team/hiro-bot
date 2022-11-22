@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2021 bariscodefx
+ * Copyright 2022 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -22,7 +22,8 @@ namespace hiro;
 
 use Discord\Discord;
 use hiro\interfaces\HiroInterface;
-use hiro\CommandClient\Command;
+use hiro\command\Command;
+use hiro\utils\PresenceManager;
 use Discord\Parts\Embed\Embed;
 use Discord\WebSockets\Intents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
