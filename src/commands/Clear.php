@@ -91,6 +91,10 @@ class Clear extends Command
         $embed->setDescription($limit . " messages was deleted.");
         $embed->setColor("#5558E0");
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->channel->sendEmbed($embed)->then(function ($msg) {
+            $this->discord->getLoop()->addTimer(3.0, function () use ($msg) {
+                $msg->delete();
+            });
+        });
     }
 }
