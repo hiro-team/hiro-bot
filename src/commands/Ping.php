@@ -20,52 +20,36 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Ping command class
+ * Ping
  */
-class Ping implements CommandInterface
+class Ping extends Command
 {
-    
     /**
-     * command $category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "ping";
+        $this->description = "Displays bot's latency.";
+        $this->aliases = ["latency", "ms"];
         $this->category = "bot";
-        $client->registerCommand('ping', function($msg, $args)
-        {
-            $embed = new Embed($this->discord);
-            $embed->setTitle("Pong");
-            $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
-            $embed->setDescription("Your ping took ".$diff."ms to arrive.");
-            $embed->setColor("#ffffff");
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => ["latency", "ms"],
-            "description" => "Displays bot's latency"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
+        $msg->channel->sendMessage("Your ping took {$diff}ms to arrive.");
     }
-    
 }

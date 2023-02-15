@@ -20,105 +20,86 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Embed\Field;
 use hiro\database\Database;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
-class Pay implements CommandInterface
+class Pay extends Command
 {
-    
     /**
-     * command $category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
+        $this->command = "pay";
+        $this->description = "Send your money to anybody.";
+        $this->aliases = [];
         $this->category = "economy";
-        $this->discord = $client;
-        $client->registerCommand('pay', function($msg, $args)
-        {
-            $database = new Database();
-            if(!$database->isConnected)
-            {
-                $msg->channel->sendMessage("Couldn't connect to database.");
-                return;
-            }
-            $embed = new Embed($this->discord);
-			$user = $msg->mentions->first();
-            if(!$user) {
-                $embed->setDescription("You should select a user for send money.");
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
-                return;
-            }
-            if($user->id === $msg->author->user->id)
-            {
-                $embed->setDescription("You can't send your money to yourself.");
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
-                return;
-            }
-            if(!isset($args[1]) && !is_numeric($args[1]))
-            {
-                $embed->setDescription('You should give a numeric money.');
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
-                return;
-            }
-            if(!$database->getUser($database->getUserIdByDiscordId($msg->author->user->id)))
-            {
-                if(!$database->addUser(["discord_id" => $user->id]))
-                {
-                    $embed->setDescription('An error excepted when registering you to database :(');
-                    $embed->setColor('#ff0000');
-                    $msg->channel->sendEmbed($embed);
-                    return;
-                }
-            }
-            if(!$database->getUser($database->getUserIdByDiscordId($user->id)))
-            {
-                if(!$database->addUser(["discord_id" => $user->id]))
-                {
-                    $embed->setDescription('An error excepted when registering user to database :(');
-                    $embed->setColor('#ff0000');
-                    $msg->channel->sendEmbed($embed);
-                    return;
-                }
-            }
-            if(!$database->pay($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserIdByDiscordId($user->id), $args[1]))
-            {
-                $embed->setDescription('An error excepted when sending money :(');
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
-                return;
-            }
-            setlocale(LC_MONETARY, 'en_US');
-            $embed->setTitle("Money Sent!");
-            $embed->setDescription($msg->user . " - $ " . number_format($args[1], 2,',', '.') . "  -->  " . $user . " + $ " . number_format($args[1], 2,',', '.'));
-            $embed->setColor('#7CFC00');
+        $this->cooldown = 10 * 1000;
+    }
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
+    {
+        $database = new Database();
+        if (!$database->isConnected) {
+            $msg->channel->sendMessage("Couldn't connect to database.");
+            return;
+        }
+        $embed = new Embed($this->discord);
+        $user = $msg->mentions->first();
+        if (!$user) {
+            $embed->setDescription("You should select a user for send money.");
+            $embed->setColor('#ff0000');
             $msg->channel->sendEmbed($embed);
             return;
-        }, [
-            "description" => "Send your money to anybody.",
-            "cooldown" => 10 * 1000
-        ]);
+        }
+        if ($user->id === $msg->author->user->id) {
+            $embed->setDescription("You can't send your money to yourself.");
+            $embed->setColor('#ff0000');
+            $msg->channel->sendEmbed($embed);
+            return;
+        }
+        if (!isset($args[1]) && !is_numeric($args[1])) {
+            $embed->setDescription('You should give a numeric money.');
+            $embed->setColor('#ff0000');
+            $msg->channel->sendEmbed($embed);
+            return;
+        }
+        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->user->id))) {
+            if (!$database->addUser(["discord_id" => $user->id])) {
+                $embed->setDescription('An error excepted when registering you to database :(');
+                $embed->setColor('#ff0000');
+                $msg->channel->sendEmbed($embed);
+                return;
+            }
+        }
+        if (!$database->getUser($database->getUserIdByDiscordId($user->id))) {
+            if (!$database->addUser(["discord_id" => $user->id])) {
+                $embed->setDescription('An error excepted when registering user to database :(');
+                $embed->setColor('#ff0000');
+                $msg->channel->sendEmbed($embed);
+                return;
+            }
+        }
+        if (!$database->pay($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
+            $embed->setDescription('An error excepted when sending money :(');
+            $embed->setColor('#ff0000');
+            $msg->channel->sendEmbed($embed);
+            return;
+        }
+        setlocale(LC_MONETARY, 'en_US');
+        $embed->setTitle("Money Sent!");
+        $embed->setDescription($msg->user . " - $ " . number_format($args[1], 2, ',', '.') . "  -->  " . $user . " + $ " . number_format($args[1], 2, ',', '.'));
+        $embed->setColor('#7CFC00');
+        $msg->channel->sendEmbed($embed);
+        return;
     }
-    
-    public function __get(string $name)
-    {
-        return $this->{$name};
-    }
-    
 }

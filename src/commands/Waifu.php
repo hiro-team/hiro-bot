@@ -20,108 +20,94 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
 
 /**
- * Waifu command class
+ * Waifu
  */
-class Waifu implements CommandInterface
+class Waifu extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "waifu";
+        $this->description = "Find your own waifu!";
+        $this->aliases = ["wfu"];
         $this->category = "fun";
         $this->browser = new Browser(null, $this->discord->getLoop());
-        $client->registerCommand('waifu', function($msg, $args)
-        {
-            $type_array = [
-                "waifu",
-                "neko",
-                "shinobu",
-                "megumin",
-                "bully",
-                "cuddle",
-                "cry",
-                "hug",
-                "awoo",
-                "kiss",
-                "lick",
-                "pat",
-                "smug",
-                "bonk",
-                "yeet",
-                "blush",
-                "smile",
-                "wave",
-                "highfive",
-                "handhold",
-                "nom",
-                "bite",
-                "glomp",
-                "slap",
-                "kill",
-                "kick",
-                "happy",
-                "wink",
-                "poke",
-                "dance",
-                "cringe"
-            ];
-            if(!isset($args[0])) $type = "waifu";
-            if(isset($args[0])){
-                if(!in_array($args[0], $type_array))
-                {
-                    $msg->reply("{$args[0]} is not available. \nAvailable categories: `". implode(", ", $type_array) . "`");
-                    return;
-                }
-                $type = $args[0];
-            }
-            $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
-                function (ResponseInterface $response) use ($msg) {
-                    $result = (string) $response->getBody();
-                    $api = json_decode($result);
-                    $embed = new Embed($this->discord);
-                    $embed->setColor("#EB00EA");
-                    $embed->setTitle('Waifu Generator');
-                    $embed->setDescription("{$msg->user->username} Your random waifu!");
-                    $embed->setImage($api->url);
-                    $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
-                },
-                function (Exception $e) use ($msg) {
-                    $msg->reply('Unable to acesss the waifu.pics API :(');
-                }
-            );
-        }, [
-            "aliases" => [
-                "wfu"
-            ],
-            "description" => "How much u are waifu"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $type_array = [
+            "waifu",
+            "neko",
+            "shinobu",
+            "megumin",
+            "bully",
+            "cuddle",
+            "cry",
+            "hug",
+            "awoo",
+            "kiss",
+            "lick",
+            "pat",
+            "smug",
+            "bonk",
+            "yeet",
+            "blush",
+            "smile",
+            "wave",
+            "highfive",
+            "handhold",
+            "nom",
+            "bite",
+            "glomp",
+            "slap",
+            "kill",
+            "kick",
+            "happy",
+            "wink",
+            "poke",
+            "dance",
+            "cringe"
+        ];
+        if (!isset($args[0])) $type = "waifu";
+        if (isset($args[0])) {
+            if (!in_array($args[0], $type_array)) {
+                $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+                return;
+            }
+            $type = $args[0];
+        }
+        $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
+            function (ResponseInterface $response) use ($msg) {
+                $result = (string)$response->getBody();
+                $api = json_decode($result);
+                $embed = new Embed($this->discord);
+                $embed->setColor("#EB00EA");
+                $embed->setTitle('Waifu Generator');
+                $embed->setDescription("{$msg->user->username} Your random waifu!");
+                $embed->setImage($api->url);
+                $embed->setTimestamp();
+                $msg->channel->sendEmbed($embed);
+            },
+            function (Exception $e) use ($msg) {
+                $msg->reply('Unable to acesss the waifu.pics API :(');
+            }
+        );
     }
-    
 }

@@ -20,86 +20,122 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Embed\Field;
-use hiro\CommandLoader;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\ExtendedCommandInterface;
 
 /**
- * Help command class
+ * Help
  */
-class Help implements ExtendedCommandInterface
+class Help extends Command
 {
-    
     /**
-     * command $category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * $loader
-     */
-    private $loader;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client, CommandLoader $loader)
+    public function configure(): void
     {
-        $this->loader = $loader;
+        $this->discord->unregisterCommand('help');
+        $this->command = "help";
+        $this->description = "Displays commands.";
+        $this->aliases = ["?"];
         $this->category = "bot";
-        $this->discord = $client;
-        $client->unregisterCommand('help');
-        $client->registerCommand('help', function($msg, $args)
-        {
-            $prefix = "hiro!";
-            //$msg->channel->sendMessage("ok");
-            $embed = new Embed($this->discord);
-            $embed->setColor("#ff0000");
-            $embed->setTitle("Help");
-            $embed->setDescription("Displaying all commands of the bot");
-            $embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
-            foreach($this->loader->categories as $category)
-            {
-                if(array_search($category, $this->loader->categories) == "author") continue;
-                $field = new Field($this->discord);
-                $value = "`";
-                $b = 0;
-                $field->name = "category";
-                foreach($category as $cmd)
-                {
-                    if($b == sizeof($category) - 1)
-                    {
-                        $field->name = "Category: " . array_search($category, $this->loader->categories) . " (" . sizeof($category) . ")";
-                        $value .= "$prefix$cmd`";
-                    }else {
-                        $value .= "$prefix$cmd, ";
-                    }
-                    $b++;
-                }
-                $field->value = $value;
-                $embed->addField($field);
-            }
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => [
-                "?"
-            ],
-            "description" => "Displays commands"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        if (isset($args[0])) {
+            $command = $args[0];
+            if ($cmd = $this->findCommand($command)) {
+                $description = $cmd->description ?? "No description";
+                $cooldown = $cmd->cooldown ? $cmd->cooldown / 1000 . "sec" : "No cooldown";
+
+                $embed = new Embed($this->discord);
+                $embed->setTitle($command);
+                $embed->setColor("#ff0000");
+                $embed->setDescription(
+                    <<<EOF
+Name: {$command}
+Description: {$description}
+Cooldown: {$cooldown}
+EOF
+                );
+                $embed->setAuthor($msg->user->username, $msg->user->avatar);
+                $msg->channel->sendEmbed($embed);
+            } else {
+                $msg->channel->sendMessage("Command not found named '$command'");
+            }
+            return;
+        }
+        $prefix = $this->discord->getCommandClientOptions()['prefix'];
+        $emotes = [
+            "mod" => ":tools:",
+            "fun" => ":smiley:",
+            "bot" => ":robot:",
+            "nsfw" => ":underage:",
+            "economy" => ":dollar:"
+        ];
+        $embed = new Embed($this->discord);
+        $embed->setColor("#ff0000");
+        $embed->setTitle("Usages");
+        $embed->setDescription(
+            <<<EOF
+Here is the list of commands!
+For more info on a specific command, use {$prefix}help {command}
+Need more help? Checkout [Github](https://github.com/hiro-team/hiro-bot)
+EOF
+        );
+        $embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
+        foreach ($this->loader->categories as $category) {
+            $category_name = array_search($category, $this->loader->categories);
+            if ($category_name == "author") continue;
+            $field = new Field($this->discord);
+            $value = "`";
+            $b = 0;
+            foreach ($category as $cmd) {
+                $cmd = $cmd->command;
+                if ($b == sizeof($category) - 1) {
+                    if (isset($emotes[$category_name]))
+                        $field->name = $emotes[$category_name] . " " . array_search($category, $this->loader->categories) . " (" . sizeof($category) . ")";
+                    else
+                        $field->name = ":grey_question: " . $emotes[$category_name] . $category_name . " (" . sizeof($category) . ")";
+                    $value .= "$cmd`";
+                } else {
+                    $value .= "$cmd, ";
+                }
+                $b++;
+            }
+            $field->value = $value;
+            $embed->addField($field);
+        }
+        $embed->setAuthor($msg->user->username, $msg->user->avatar);
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
-    
+
+    /**
+     * findCommand
+     *
+     * @param string $command_name
+     * @return Command|null
+     */
+    protected function findCommand(string $command_name): ?Command
+    {
+        $cmd = null;
+        foreach ($this->loader->categories as $category) {
+            foreach ($category as $command) {
+                if ($command->command === $command_name) {
+                    $cmd = $command;
+                }
+            }
+        }
+        return $cmd;
+    }
 }

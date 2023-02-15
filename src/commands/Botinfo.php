@@ -20,76 +20,48 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Embed\Field;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\ExtendedCommandInterface;
-use hiro\CommandLoader;
 
 /**
- * Botinfo command class
+ * Botinfo
  */
-class Botinfo implements ExtendedCommandInterface
+class Botinfo extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-
-    /**
-     * $loader
-     */
-    private $loader;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client, CommandLoader $loader)
+    public function configure(): void
     {
-        $this->discord = $client;
-        $this->category = "bot";
-        $this->loader = $loader;
-        $client->registerCommand('botinfo', function($msg, $args)
-        {
-            $guilds             = $this->discord->formatNumber(sizeof($this->discord->guilds));
-            $members            = $this->discord->formatNumber(sizeof($this->discord->users));
-            $embed = new Embed($this->discord);
-            $embed->setTitle("Bot Info");
-            $embed->addField($this->makeField("Shard ID", $this->discord->options['shardId']));
-            $embed->addField($this->makeField("Shard Count", $this->discord->options['shardCount']));
-            $embed->addField($this->makeField("Guilds", $guilds));
-            $embed->addField($this->makeField("Members", $members));
-            $embed->addField($this->makeField("Commands", $this->loader->getCommandsCount()));
-            $embed->addField($this->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
-            $embed->setThumbnail($this->discord->avatar);
-            $embed->setAuthor($msg->author->username);
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        },
-        [
-            "description" => "Shows bot's info",
-            "cooldown" => 10 * 1000
-        ]);
+        $this->command = "botinfo";
+        $this->description = "Bans mentioned user.";
+        $this->aliases = [];
+        $this->category = "mod";
     }
 
-    protected function makeField(string $name, string $value)
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        $field = new Field($this->discord);
-        $field->name = $name;
-        $field->value = $value;
-        return $field;
+        $guilds             = $this->discord->formatNumber(sizeof($this->discord->guilds));
+        $members            = $this->discord->formatNumber(sizeof($this->discord->users));
+        $embed = new Embed($this->discord);
+        $embed->setTitle("Bot Info");
+        $embed->addField($this->discord->makeField("Shard ID", $this->discord->options['shardId']));
+        $embed->addField($this->discord->makeField("Shard Count", $this->discord->options['shardCount']));
+        $embed->addField($this->discord->makeField("Guilds", $guilds));
+        $embed->addField($this->discord->makeField("Members", $members));
+        $embed->addField($this->discord->makeField("Commands", $this->loader->getCommandsCount()));
+        $embed->addField($this->discord->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
+        $embed->setThumbnail($this->discord->avatar);
+        $embed->setAuthor($msg->author->username);
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
-    
-    public function __get(string $name)
-    {
-        return $this->{$name};
-    }
-    
 }

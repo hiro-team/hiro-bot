@@ -27,13 +27,21 @@ use hiro\interfaces\HiroInterface;
  */
 interface CommandInterface
 {
+	/**
+	 * configure
+	 *
+	 * @return void
+	 */
+	public function configure(): void;
 
 	/**
-	 * Constructor
-	 * 
-	 * @param HiroInterface client
+	 * handle
+	 *
+	 * @param [type] $msg
+	 * @param [type] $args
+	 * @return void
 	 */
-	public function __construct(HiroInterface $client);
+	public function handle($msg, $args): void;
 
 	/**
 	 * __get

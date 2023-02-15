@@ -20,81 +20,66 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Slap command class
+ * Slap
  */
-class Slap implements CommandInterface
+class Slap extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "slap";
+        $this->description = "You can slap everybody.";
+        $this->aliases = ["tokat"];
         $this->category = "fun";
-        $client->registerCommand('slap', function($msg, $args)
-        {
-            $gifs = [
-                "https://bariscodefxy.github.io/cdn/hiro/slap.gif",
-                "https://bariscodefxy.github.io/cdn/hiro/slap_1.gif",
-                "https://bariscodefxy.github.io/cdn/hiro/slap_2.gif",
-                "https://bariscodefxy.github.io/cdn/hiro/slap_3.gif",
-                "https://bariscodefxy.github.io/cdn/hiro/slap_4.gif",
-                "https://bariscodefxy.github.io/cdn/hiro/slap_5.gif",
-            ];
-            $random = $gifs[rand(0, sizeof($gifs) - 1)];
-            $self = $msg->author->user;
-            $user = $msg->mentions->first();
-            if(empty($user))
-            {
-                $embed = new Embed($this->discord);
-                $embed->setColor("#ff0000");
-                $embed->setDescription("You must mention a user for slap");
-                $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
-                return;
-            }else if($user->id == $self->id)
-            {
-                $embed = new Embed($this->discord);
-                $embed->setColor("#ff0000");
-                $embed->setDescription("You cant slap yourself stupid!");
-                $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
-                return;
-            }
+    }
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
+    {
+        $gifs = [
+            "https://bariscodefxy.github.io/cdn/hiro/slap.gif",
+            "https://bariscodefxy.github.io/cdn/hiro/slap_1.gif",
+            "https://bariscodefxy.github.io/cdn/hiro/slap_2.gif",
+            "https://bariscodefxy.github.io/cdn/hiro/slap_3.gif",
+            "https://bariscodefxy.github.io/cdn/hiro/slap_4.gif",
+            "https://bariscodefxy.github.io/cdn/hiro/slap_5.gif",
+        ];
+        $random = $gifs[rand(0, sizeof($gifs) - 1)];
+        $self = $msg->author->user;
+        $user = $msg->mentions->first();
+        if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("$self slapped you! $user");
-            $embed->setImage($random);
+            $embed->setDescription("You must mention a user for slap");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => [
-                "tokat"
-            ],
-            "description" => "You can slap everybody"
-        ]);
+            return;
+        } else if ($user->id == $self->id) {
+            $embed = new Embed($this->discord);
+            $embed->setColor("#ff0000");
+            $embed->setDescription("You cant slap yourself stupid!");
+            $embed->setTimestamp();
+            $msg->channel->sendEmbed($embed);
+            return;
+        }
+        $embed = new Embed($this->discord);
+        $embed->setColor("#ff0000");
+        $embed->setDescription("$self slapped you! $user");
+        $embed->setImage($random);
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
-    
-    public function __get(string $name)
-    {
-        return $this->{$name};
-    }
-    
 }

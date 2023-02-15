@@ -20,63 +20,50 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
-use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
-
 /**
- * Evals command class
+ * Evals
  */
-class Evals implements CommandInterface
+class Evals extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "evals";
+        $this->description = "Runs a code **ONLY FOR AUTHOR**";
+        $this->aliases = ["run", "code", "eval"];
         $this->category = "author";
-        $client->registerCommand('eval', function($msg, $args)
-        {
-            if($msg->author->user->id != 793431383506681866)
-            {
-                $msg->channel->sendMessage("No");
-                return;
-            }
-            $content = explode(' ', $msg->content, 2);
-            if(!isset($content[1])) return $msg->reply("No args.");
-            $code = $content[1];
-            if(str_starts_with($code, "```php")) $code = substr($code, 6);
-            if(str_starts_with($code, "```")) $code = substr($code, 3);
-            if(str_ends_with($code, "```")) $code = substr($code, 0, -3);
-            try {
-                eval($code);
-            }catch(\Throwable $e){
-                $msg->reply("Error: \n```\n{$e->getMessage()}```");
-            }
-        }, [
-            "aliases" => [
-                "execute", "code"
-            ],
-            "description" => "Runs a code **ONLY FOR AUTHOR**"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        if ($msg->author->user->id != 793431383506681866) {
+            $msg->channel->sendMessage("No");
+            return;
+        }
+        $content = explode(' ', $msg->content, 2);
+        if (!isset($content[1])) {
+            $msg->reply("No args.");
+            return;
+        }
+        $code = $content[1];
+        if (str_starts_with($code, "```php")) $code = substr($code, 6);
+        if (str_starts_with($code, "```")) $code = substr($code, 3);
+        if (str_ends_with($code, "```")) $code = substr($code, 0, -3);
+        try {
+            eval($code);
+        } catch (\Throwable $e) {
+            $msg->reply("Error: \n```\n{$e->getMessage()}```");
+        }
     }
-    
 }

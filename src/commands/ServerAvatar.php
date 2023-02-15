@@ -20,62 +20,44 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * ServerAvatar command class
+ * ServerAvatar
  */
-class ServerAvatar implements CommandInterface
+class ServerAvatar extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "serveravatar";
+        $this->description = "Returns server pfp.";
+        $this->aliases = ["server_avatar", "server-avatar", "svavatar", "savatar", "getserveravatar"];
         $this->category = "bot";
-        $client->registerCommand('serveravatar', function($msg, $args)
-        {
-            if(!@$msg->channel->guild) 
-            {
-                $msg->reply("You can only use in a guild!");
-                return;
-            }
-            $embed = new Embed($this->discord);
-            $embed->setColor("#ff0000");
-            $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . "'s Avatar");
-            $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => [
-                "server_avatar",
-                "server-avatar",
-                "svavatar",
-                "savatar",
-                "getserveravatar"
-            ],
-            "description" => "Returns server pfp"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        if (!@$msg->channel->guild) {
+            $msg->reply("You can only use in a guild!");
+            return;
+        }
+        $embed = new Embed($this->discord);
+        $embed->setColor("#ff0000");
+        $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . "'s Avatar");
+        $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
-    
 }

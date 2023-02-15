@@ -31,8 +31,8 @@ use hiro\PresenceManager;
 use Discord\WebSockets\Intents;
 
 // REMOVE SLASHES IF YOU DON'T RUN IN HEROKU
-//$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-//$dotenv->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $ArgumentParser = new ArgumentParser($argv);
 $shard_id = $ArgumentParser->getShardId();

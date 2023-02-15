@@ -20,93 +20,67 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Embed\Field;
-use Dotenv\Dotenv;
-use hiro\CommandLoader;
 use hiro\database\Database;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Class Money
- * @package hiro\commands
+ * Money
  */
-class Money implements CommandInterface
+class Money extends Command
 {
-
     /**
-     * @var string Command Category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-
-    /**
-     * @var HiroInterface
-     */
-    private $discord;
-
-    /**
-     * Money constructor.
-     * @param HiroInterface $client
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
+        $this->command = "money";
+        $this->description = "Displays your money.";
+        $this->aliases = ["cash"];
         $this->category = "economy";
-        $this->discord = $client;
-        $client->registerCommand('money', function($msg, $args)
-        {
-            $database = new Database();
-            if(!$database->isConnected)
-            {
-                $msg->channel->sendMessage("Couldn't connect to database.");
-                return;
-            }
-            $user = $msg->mentions->first();
-            if(!$user) $user = $msg->author->user;
-            $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
-            if(!is_numeric($user_money))
-            {
-                echo "money is empty" . PHP_EOL;
-                if(!$database->addUser([
-                    "discord_id" => $user->id
-                ]))
-                {
-                    $embed = new Embed($this->discord);
-                    $embed->setTitle('You are couldnt added to database.');
-                    $msg->channel->sendEmbed($embed);
-                    echo "cant added" . PHP_EOL;
-                    return;
-                }else
-                {
-                    echo "User added" . PHP_EOL;
-                    $user_money = 0;
-                }
-            }
-            setlocale(LC_MONETARY, 'en_US');
-            $user_money = number_format($user_money, 2,',', '.');
-            $embed = new Embed($this->discord);
-            $embed->setTitle("Money: $".$user_money);
-            $embed->setTimestamp();
-            $embed->setColor('#7CFC00');
-            $msg->channel->sendEmbed($embed);
-            $database = NULL;
-        }, [
-            "aliases" => [
-                "cash"
-            ],
-            "description" => "Displays your money.",
-            "cooldown" => 10 * 1000
-        ]);
+        $this->cooldown = 10 * 1000;
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
      */
-    public function __get(string $name)
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $database = new Database();
+        if (!$database->isConnected) {
+            $msg->channel->sendMessage("Couldn't connect to database.");
+            return;
+        }
+        $user = $msg->mentions->first();
+        if (!$user) $user = $msg->author->user;
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
+        if (!is_numeric($user_money)) {
+            echo "money is empty" . PHP_EOL;
+            if (!$database->addUser([
+                "discord_id" => $user->id
+            ])) {
+                $embed = new Embed($this->discord);
+                $embed->setTitle('You are couldnt added to database.');
+                $msg->channel->sendEmbed($embed);
+                echo "cant added" . PHP_EOL;
+                return;
+            } else {
+                echo "User added" . PHP_EOL;
+                $user_money = 0;
+            }
+        }
+        setlocale(LC_MONETARY, 'en_US');
+        $user_money = number_format($user_money, 2, ',', '.');
+        $embed = new Embed($this->discord);
+        $embed->setTitle("Money: $" . $user_money);
+        $embed->setTimestamp();
+        $embed->setColor('#7CFC00');
+        $msg->channel->sendEmbed($embed);
+        $database = NULL;
     }
-
 }

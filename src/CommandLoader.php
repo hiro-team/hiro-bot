@@ -23,11 +23,11 @@ namespace hiro;
 use hiro\interfaces\HiroInterface;
 
 /**
-* CommandLoader
-*/
+ * CommandLoader
+ */
 class CommandLoader
 {
-    
+
     /**
      * Command categories
      */
@@ -37,92 +37,131 @@ class CommandLoader
      * CommandLoader $version
      */
     protected $version = "1.1";
-    
+
     /**
      * Commands Directory
      */
     protected $dir = "";
 
     /**
-    * CommandLoader Constructor
-    */
-    public function __construct(HiroInterface $client) {
+     * CommandLoader Constructor
+     */
+    public function __construct(HiroInterface $client)
+    {
         $this->dir = __DIR__ . "/commands";
         $this->loadAllCommands($client);
     }
-    
+
     public function loadCommand(HiroInterface $client, string $commandName)
-    {
-        
-    }
-    
+    { }
+
     /**
-     * Loads all commands
+     * loadAllCommands
+     *
+     * @param HiroInterface $client
+     * @return void
      */
     public function loadAllCommands(HiroInterface $client)
     {
         $dir = __DIR__ . '/commands';
+
         $this->clearConsole();
         $this->loaderInfo();
+
         print "Loading Commands" . PHP_EOL;
+
         foreach (scandir($dir) as $file) {
             $extension = substr($file, -4);
+
             if ($file != '.' && $file != '..' && $extension == '.php') {
                 $class = substr($file, 0, -4);
                 $classnamespace = 'hiro\commands\\' . $class;
                 $cmd = new $classnamespace($client, $this);
+
+                if ($class === "Command") { // default class
+                    continue;
+                }
+
+                $client->registerCommand(
+                    $cmd->command,
+                    function ($msg, $args) use ($cmd) {
+                        $cmd->handle($msg, $args);
+                    },
+                    [
+                        'aliases' => $cmd->aliases,
+                        'description' => $cmd->description,
+                        'cooldown' => $cmd->cooldown ?? 0
+                    ]
+                );
+
+                if (!isset($this->categories[$cmd->category])) {
+                    $this->categories[$cmd->category] = [];
+                }
+
+                $kategori = $this->categories[$cmd->category];
+                array_push($kategori, $cmd);
+                $this->categories[$cmd->category] = $kategori;
+
                 print "====================" . PHP_EOL;
                 print "Loaded : $class" . PHP_EOL;
                 print "====================" . PHP_EOL;
-                if(!isset($this->categories))
-                {
-                    $this->categories = [];
-                }
-                if(!isset($this->categories[$cmd->category]))
-                {
-                    $this->categories[$cmd->category] = [];
-                }
-                $kategori = $this->categories[$cmd->category];
-                array_push($kategori, $client->commands[strtolower($class)]->command);
-                $this->categories[$cmd->category] = $kategori;
             }
         }
         print "All Commands Are Loaded." . PHP_EOL;
     }
 
+    /**
+     * getCommandsCount
+     *
+     * @return void
+     */
     public function getCommandsCount()
     {
         $num = 0;
-        foreach($this->categories as $category)
-        {
-            foreach($category as $command)
-            {
+        foreach ($this->categories as $category) {
+            foreach ($category as $command) {
                 $num += 1;
             }
         }
         return $num;
     }
-    
+
+    /**
+     * clearConsole
+     * 
+     * This function clears the console/terminal.
+     *
+     * @return void
+     */
     private function clearConsole()
     {
-        for ($i = 0; $i < 100; $i++)
-        {
+        for ($i = 0; $i < 100; $i++) {
             print PHP_EOL;
         }
     }
+
+    /**
+     * loaderInfo
+     *
+     * @return void
+     */
     private function loaderInfo()
     {
         exec("figlet \"Command\nLoader\nv$this->version\"", $figlet);
-        foreach($figlet as $line)
-        {
+        foreach ($figlet as $line) {
             print $line . PHP_EOL;
         }
         print PHP_EOL . PHP_EOL;
     }
-    
+
+    /**
+     * __get
+     *
+     * @param string $var
+     * @return void
+     */
     public function __get(string $var)
     {
         return $this->{$var};
     }
-
 }

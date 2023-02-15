@@ -20,102 +20,73 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Embed\Field;
-use Dotenv\Dotenv;
-use hiro\CommandLoader;
 use hiro\database\Database;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Class Daily
- * @package hiro\commands
+ * Daily
  */
-class Daily implements CommandInterface
+class Daily extends Command
 {
-
     /**
-     * @var string Command Category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-
-    /**
-     * @var HiroInterface
-     */
-    private $discord;
-
-    /**
-     * Money constructor.
-     * @param HiroInterface $client
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
+        $this->command = "daily";
+        $this->description = "Daily moneys.";
+        $this->aliases = [];
         $this->category = "economy";
-        $this->discord = $client;
-        $client->registerCommand('daily', function($msg, $args)
-        {
-            $database = new Database();
-            if(!$database->isConnected)
-            {
-                $msg->channel->sendMessage("Couldn't connect to database.");
-                return;
-            }
-            $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
-    	    $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
-    	    if(time() - $last_daily < 86400)
-            {
-        		$msg->channel->sendMessage('You must wait 24 hours.');
-        		return;
-    	    }
-            if(!is_numeric($user_money))
-            {
-                echo "money is empty" . PHP_EOL;
-                if(!$database->addUser([
-                    "discord_id" => $msg->author->id
-                ]))
-                {
-                    $embed = new Embed($this->discord);
-                    $embed->setTitle('You are couldnt added to database.');
-                    $msg->channel->sendEmbed($embed);
-                    echo "cant added" . PHP_EOL;
-                    return;
-                }else
-                {
-                    echo "User added" . PHP_EOL;
-                    $user_money = 0;
-                }
-            }
-            setlocale(LC_MONETARY, 'en_US');
-            $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
-            if($daily)
-            {
-                $embed = new Embed($this->discord);
-                $embed->setTitle("You Gained $" . number_format($daily, 2,',', '.') );
-                $embed->setTimestamp();
-                $embed->setColor('#7CFC00');
-                $msg->channel->sendEmbed($embed);
-            }else {
-                $msg->channel->sendMessage('Cant give daily');
-            }
-            $database = NULL;
-        }, [
-            "aliases" => [
-                
-            ],
-            "description" => "Daily moneys.",
-            "cooldown" => 10 * 1000
-        ]);
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
      */
-    public function __get(string $name)
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $database = new Database();
+        if (!$database->isConnected) {
+            $msg->channel->sendMessage("Couldn't connect to database.");
+            return;
+        }
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
+        if (time() - $last_daily < 86400) {
+            $msg->channel->sendMessage('You must wait 24 hours.');
+            return;
+        }
+        if (!is_numeric($user_money)) {
+            echo "money is empty" . PHP_EOL;
+            if (!$database->addUser([
+                "discord_id" => $msg->author->id
+            ])) {
+                $embed = new Embed($this->discord);
+                $embed->setTitle('You are couldnt added to database.');
+                $msg->channel->sendEmbed($embed);
+                echo "cant added" . PHP_EOL;
+                return;
+            } else {
+                echo "User added" . PHP_EOL;
+                $user_money = 0;
+            }
+        }
+        setlocale(LC_MONETARY, 'en_US');
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
+        if ($daily) {
+            $embed = new Embed($this->discord);
+            $embed->setTitle("You Gained $" . number_format($daily, 2, ',', '.'));
+            $embed->setTimestamp();
+            $embed->setColor('#7CFC00');
+            $msg->channel->sendEmbed($embed);
+        } else {
+            $msg->channel->sendMessage('Cant give daily');
+        }
+        $database = NULL;
     }
-
 }

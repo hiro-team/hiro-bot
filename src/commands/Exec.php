@@ -20,56 +20,42 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
-use Discord\Parts\Embed\Embed;
 use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Exec command class
+ * Exec
  */
-class Exec implements CommandInterface
+class Exec extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "exec";
+        $this->description = "Executes an command **ONLY FOR AUTHOR**";
+        $this->aliases = ["execute", "shell-exec"];
         $this->category = "author";
-        $client->registerCommand('exec', function($msg, $args)
-        {
-            if($msg->author->user->id != 793431383506681866)
-            {
-                $msg->channel->sendMessage("No");
-                return;
-            }
-            $ex = implode(' ', $args);
-            if(!$ex) $ex = " ";
-            $output = shell_exec($ex);
-            $msg->channel->sendMessage("```\n" . $output . "\n```");
-        }, [
-            "aliases" => [
-                "execute", "shell-exec"
-            ],
-            "description" => "Executes an command **ONLY FOR AUTHOR**"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        if ($msg->author->user->id != 793431383506681866) {
+            $msg->channel->sendMessage("No");
+            return;
+        }
+        $ex = implode(' ', $args);
+        if (!$ex) $ex = " ";
+        $output = shell_exec($ex);
+        $msg->channel->sendMessage("```\n" . $output . "\n```");
     }
-    
 }

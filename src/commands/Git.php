@@ -20,58 +20,42 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
 /**
- * Git command class
+ * Git
  */
-class Git implements CommandInterface
+class Git extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "git";
+        $this->description = "URL of bot's source code.";
+        $this->aliases = ["source","opensource","open-source","github"];
         $this->category = "bot";
-        $client->registerCommand('git', function($msg, $args)
-        {
-            $embed = new Embed($this->discord);
-            $embed->setColor("#ff0000");
-            $embed->setTitle("Git (Github)");
-            $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
-            $embed->setDescription("I'm open source!\nClick to go to the link.");
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => [
-                "source",
-                "opensource",
-                "open-source",
-                "github",
-                "code",
-            ],
-            "description" => "URL of bot's source code"
-        ]);
     }
     
-    public function __get(string $name)
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $embed = new Embed($this->discord);
+        $embed->setColor("#ff0000");
+        $embed->setTitle("Git (Github)");
+        $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
+        $embed->setDescription("I'm open source!\nClick to go to the link.");
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
     
 }

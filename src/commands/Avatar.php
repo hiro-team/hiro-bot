@@ -20,63 +20,47 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
-/**
- * Avatar command class
- */
-class Avatar implements CommandInterface
+class Avatar extends Command
 {
-    
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "avatar";
+        $this->description = "Shows your avatar.";
+        $this->aliases = [];
         $this->category = "fun";
-        $client->registerCommand('avatar', function($msg, $args)
-        {
-            $user = $msg->mentions->first();
-            if($user)
-            {
-                $avatar = $user->avatar;
-            }else {
-                $avatar = $msg->author->user->avatar;
-            }
-            if (strpos($avatar, 'a_') !== false){
-                $avatar= str_replace('jpg', 'gif', $avatar);
-            }
-            $embed = new Embed($this->discord);
-            $embed->setColor("#ff0000");
-            $embed->setTitle("Avatar");
-            $embed->setImage($avatar);
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
-        }, [
-            "aliases" => [
-                "whoami"
-            ],
-            "description" => "Shows avatar"
-        ]);
     }
-    
-    public function __get(string $name)
+
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
     {
-        return $this->{$name};
+        $user = $msg->mentions->first();
+        if($user)
+        {
+            $avatar = $user->avatar;
+        }else {
+            $avatar = $msg->author->user->avatar;
+        }
+        if (strpos($avatar, 'a_') !== false){
+            $avatar= str_replace('jpg', 'gif', $avatar);
+        }
+        $embed = new Embed($this->discord);
+        $embed->setColor("#ff0000");
+        $embed->setTitle("Avatar");
+        $embed->setImage($avatar);
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
-    
 }

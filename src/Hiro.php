@@ -101,8 +101,8 @@ class Hiro extends Discord implements HiroInterface
                         $command = $this->commands[$this->aliases[$command]];
                     } else {
                         // Command doesn't exist.
-                        $message->react('⛔');
-                        $message->reply("Command not found for **$command**");
+                        // $message->react('⛔');
+                        // $message->reply("Command not found for **$command**");
                         return;
                     }
                     $message->react('✅');
@@ -506,6 +506,21 @@ class Hiro extends Discord implements HiroInterface
         }else {
             return $number;
         }
+    }
+
+    /**
+     * makeField
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    public function makeField(string $name, string $value)
+    {
+        $field = new \Discord\Parts\Embed\Field($this);
+        $field->name = $name;
+        $field->value = $value;
+        return $field;
     }
 
     /**

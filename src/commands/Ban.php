@@ -20,101 +20,100 @@
 
 namespace hiro\commands;
 
-use Discord\DiscordCommandClient;
 use Discord\Parts\Embed\Embed;
-use hiro\interfaces\HiroInterface;
-use hiro\interfaces\CommandInterface;
 
-/**
- * Ban command class
- */
-class Ban implements CommandInterface
+class Ban extends Command
 {
-    
+
     /**
-     * command category
+     * configure
+     *
+     * @return void
      */
-    private $category;
-    
-    /**
-     * $client
-     */
-    private $discord;
-    
-    /**
-     * __construct
-     */
-    public function __construct(HiroInterface $client)
+    public function configure(): void
     {
-        $this->discord = $client;
+        $this->command = "ban";
+        $this->description = "Bans mentioned user.";
+        $this->aliases = [];
         $this->category = "mod";
-        $client->registerCommand('ban', function($msg, $args)
+    }
+    
+    /**
+     * handle
+     *
+     * @param [type] $msg
+     * @param [type] $args
+     * @return void
+     */
+    public function handle($msg, $args): void
+    {
+        if(@$msg->author->getPermissions()['ban_members'])
         {
-            if(@$msg->author->getPermissions()['ban_members'])
+            $user = @$msg->mentions->first();
+            if($user)
             {
-                $user = @$msg->mentions->first();
-                if($user)
+                $banner = $msg->author->user;
+                if(!isset($msg->channel->guild->members[$user->id])) 
                 {
-                    $banner = $msg->author->user;
-                    if(!isset($msg->channel->guild->members[$user->id])) 
-                    {
-                        $embed = new Embed($this->discord);
-                        $embed->setColor('#ff0000');
-                        $embed->setDescription("User couldn't found.");
-                        $embed->setTimestamp();
-                        $msg->channel->sendEmbed($embed);
-                        return;
-                    }
-                    $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
-                    $roles_self = max($this->rolePositionsMap($msg->author->roles));
-                    if($banner->id == $user->id)
-                    {
-                        $embed = new Embed($this->discord);
-                        $embed->setColor('#ff0000');
-                        $embed->setDescription("You cant ban yourself");
-                        $embed->setTimestamp();
-                        $msg->channel->sendEmbed($embed);
-                        return;
-                    }else {
-                        if( $roles_self < $roles_men )
-                        {
-                            $embed = new Embed($this->discord);
-                            $embed->setColor('#ff0000');
-                            $embed->setDescription("Your role position too low!");
-                            $embed->setTimestamp();
-                            $msg->channel->sendEmbed($embed);
-                            return;
-                         }else {
-                             $msg->channel->guild->members[$user->id]->ban(null, null);
-                             $embed = new Embed($this->discord);
-                             $embed->setColor('#ff0000');
-                             $embed->setDescription("$user banned by $banner.");
-                             $embed->setTimestamp();
-                             $msg->channel->sendEmbed($embed);
-                         }
-                     }
-                }else {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("If you want ban a user you must mention a user.");
+                    $embed->setDescription("User couldn't found.");
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
+                    return;
                 }
+                $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
+                $roles_self = max($this->rolePositionsMap($msg->author->roles));
+                if($banner->id == $user->id)
+                {
+                    $embed = new Embed($this->discord);
+                    $embed->setColor('#ff0000');
+                    $embed->setDescription("You cant ban yourself");
+                    $embed->setTimestamp();
+                    $msg->channel->sendEmbed($embed);
+                    return;
+                }else {
+                    if( $roles_self < $roles_men )
+                    {
+                        $embed = new Embed($this->discord);
+                        $embed->setColor('#ff0000');
+                        $embed->setDescription("Your role position too low!");
+                        $embed->setTimestamp();
+                        $msg->channel->sendEmbed($embed);
+                        return;
+                        }else {
+                            $msg->channel->guild->members[$user->id]->ban(null, null);
+                            $embed = new Embed($this->discord);
+                            $embed->setColor('#ff0000');
+                            $embed->setDescription("$user banned by $banner.");
+                            $embed->setTimestamp();
+                            $msg->channel->sendEmbed($embed);
+                        }
+                    }
             }else {
                 $embed = new Embed($this->discord);
                 $embed->setColor('#ff0000');
-                $embed->setDescription("If you want ban a user u must have `ban_members` permission.");
+                $embed->setDescription("If you want ban a user you must mention a user.");
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             }
-        }, [
-            "aliases" => [
-                "yasakla"
-            ],
-            "description" => "Bans user"
-        ]);
+        }else {
+            $embed = new Embed($this->discord);
+            $embed->setColor('#ff0000');
+            $embed->setDescription("If you want ban a user u must have `ban_members` permission.");
+            $embed->setTimestamp();
+            $msg->channel->sendEmbed($embed);
+        }
     }
 
+    /**
+     * rolePositionsMap
+     * 
+     * This function returns descending list role positions of server for user.
+     *
+     * @param [type] $rolesCollision
+     * @return void
+     */
     protected function rolePositionsMap($rolesCollision)
     {
         $rolesArray = $rolesCollision->toArray();
@@ -125,10 +124,4 @@ class Ban implements CommandInterface
         }
         return $new;
     }
-    
-    public function __get(string $name)
-    {
-        return $this->{$name};
-    }
-    
 }
