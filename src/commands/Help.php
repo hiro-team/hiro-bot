@@ -80,7 +80,8 @@ EOF
             "fun" => ":smiley:",
             "bot" => ":robot:",
             "nsfw" => ":underage:",
-            "economy" => ":dollar:"
+            "economy" => ":dollar:",
+            "nasa" => ":rocket:"
         ];
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
