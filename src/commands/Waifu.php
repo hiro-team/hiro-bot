@@ -100,7 +100,7 @@ class Waifu extends Command
                 $embed = new Embed($this->discord);
                 $embed->setColor("#EB00EA");
                 $embed->setTitle('Waifu Generator');
-                $embed->setDescription("{$msg->user->username} Your random waifu!");
+                $embed->setDescription("{$msg->author->username} Your random waifu!");
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);

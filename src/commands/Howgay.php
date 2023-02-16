@@ -50,7 +50,7 @@ class Howgay extends Command
     public function handle($msg, $args): void
     {
         $user = $msg->mentions->first();
-        if (!$user) $user = $msg->author->user;
+        if (!$user) $user = $msg->author;
         $random = rand(0, 100);
         $embed = new Embed($this->discord);
         $embed->setColor("#EB00EA");

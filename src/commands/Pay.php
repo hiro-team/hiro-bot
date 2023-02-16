@@ -61,7 +61,7 @@ class Pay extends Command
             $msg->channel->sendEmbed($embed);
             return;
         }
-        if ($user->id === $msg->author->user->id) {
+        if ($user->id === $msg->author->id) {
             $embed->setDescription("You can't send your money to yourself.");
             $embed->setColor('#ff0000');
             $msg->channel->sendEmbed($embed);
@@ -73,7 +73,7 @@ class Pay extends Command
             $msg->channel->sendEmbed($embed);
             return;
         }
-        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->user->id))) {
+        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->id))) {
             if (!$database->addUser(["discord_id" => $user->id])) {
                 $embed->setDescription('An error excepted when registering you to database :(');
                 $embed->setColor('#ff0000');
@@ -89,7 +89,7 @@ class Pay extends Command
                 return;
             }
         }
-        if (!$database->pay($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
+        if (!$database->pay($database->getUserIdByDiscordId($msg->author->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
             $embed->setDescription('An error excepted when sending money :(');
             $embed->setColor('#ff0000');
             $msg->channel->sendEmbed($embed);

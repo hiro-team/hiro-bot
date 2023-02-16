@@ -60,7 +60,7 @@ class Botinfo extends Command
         $embed->addField($this->discord->makeField("Commands", $this->loader->getCommandsCount()));
         $embed->addField($this->discord->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
         $embed->setThumbnail($this->discord->avatar);
-        $embed->setAuthor($msg->author->username);
+        $embed->setAuthor($msg->member->username);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

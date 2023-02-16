@@ -58,7 +58,7 @@ class Slap extends Command
             "https://bariscodefxy.github.io/cdn/hiro/slap_5.gif",
         ];
         $random = $gifs[rand(0, sizeof($gifs) - 1)];
-        $self = $msg->author->user;
+        $self = $msg->author;
         $user = $msg->mentions->first();
         if (empty($user)) {
             $embed = new Embed($this->discord);

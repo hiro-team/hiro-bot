@@ -47,7 +47,7 @@ class Evals extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->user->id != 793431383506681866) {
+        if ($msg->author->id != $_ENV['AUTHOR']) {
             $msg->channel->sendMessage("No");
             return;
         }

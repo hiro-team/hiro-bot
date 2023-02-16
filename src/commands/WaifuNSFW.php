@@ -77,7 +77,7 @@ class WaifuNSFW extends Command
                 $embed = new Embed($this->discord);
                 $embed->setColor("#EB00EA");
                 $embed->setTitle('Horny Waifu Generator');
-                $embed->setDescription("{$msg->user->username} Your random horny waifu :)");
+                $embed->setDescription("{$msg->author->username} Your random horny waifu :)");
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);

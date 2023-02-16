@@ -47,12 +47,12 @@ class Ban extends Command
      */
     public function handle($msg, $args): void
     {
-        if(@$msg->author->getPermissions()['ban_members'])
+        if(@$msg->member->getPermissions()['ban_members'])
         {
             $user = @$msg->mentions->first();
             if($user)
             {
-                $banner = $msg->author->user;
+                $banner = $msg->author;
                 if(!isset($msg->channel->guild->members[$user->id])) 
                 {
                     $embed = new Embed($this->discord);
@@ -63,7 +63,7 @@ class Ban extends Command
                     return;
                 }
                 $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
-                $roles_self = max($this->rolePositionsMap($msg->author->roles));
+                $roles_self = max($this->rolePositionsMap($msg->member->roles));
                 if($banner->id == $user->id)
                 {
                     $embed = new Embed($this->discord);

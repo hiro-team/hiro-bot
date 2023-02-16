@@ -57,11 +57,11 @@ class Coinflip extends Command
             return;
         }
         $embed = new Embed($this->discord);
-        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
         if (!is_numeric($usermoney)) {
             echo "money is empty" . PHP_EOL;
             if (!$database->addUser([
-                "discord_id" => $msg->author->id
+                "discord_id" => $msg->member->id
             ])) {
                 $embed->setTitle('You are couldnt added to database.');
                 $msg->channel->sendEmbed($embed);
@@ -87,12 +87,12 @@ class Coinflip extends Command
                 $rand = random_int(0, 1);
 
                 // delete user money from payamount
-                $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
+                $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney - $payamount);
                 $usermoney = $usermoney - $payamount;
 
                 setlocale(LC_MONETARY, 'en_US');
                 if ($rand) {
-                    $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
+                    $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney + $payamount * 2);
                     $embed->setTitle("You Won!");
                     $embed->setDescription("$ " . number_format($payamount * 2, 2, ',', '.'));
                     $embed->setColor('#7CFC00');

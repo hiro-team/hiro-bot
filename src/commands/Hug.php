@@ -58,7 +58,7 @@ class Hug extends Command
             "https://bariscodefxy.github.io/cdn/hiro/hug_5.gif",
         ];
         $random = $gifs[rand(0, sizeof($gifs) - 1)];
-        $self = $msg->author->user;
+        $self = $msg->author;
         $user = $msg->mentions->first();
         if (empty($user)) {
             $embed = new Embed($this->discord);

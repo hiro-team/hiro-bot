@@ -50,7 +50,7 @@ class Nick extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->getPermissions()['manage_nicknames']) {
+        if ($msg->member->getPermissions()['manage_nicknames']) {
             $user = $msg->mentions->first();
             if ($user) {
                 $newname = explode("$user ", implode(' ', $args))[1];

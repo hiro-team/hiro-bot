@@ -59,7 +59,7 @@ class Kiss extends Command
             "https://bariscodefxy.github.io/cdn/hiro/kiss_6.gif",
         ];
         $random = $gifs[rand(0, sizeof($gifs) - 1)];
-        $self = $msg->author->user;
+        $self = $msg->author;
         $user = $msg->mentions->first();
         if (empty($user)) {
             $embed = new Embed($this->discord);
@@ -71,8 +71,7 @@ class Kiss extends Command
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            if ($msg->author->user->id == 837641679879274506) $embed->setDescription("Kendini öpemezsin Reis-i Führer.");
-            else $embed->setDescription("You cant kiss yourself stupid!");
+            $embed->setDescription("You cant kiss yourself stupid!");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;

@@ -58,7 +58,7 @@ class Apod extends Command
 
             $result = json_decode((string)$response->getBody());
 
-            $embed->setAuthor($result->copyright, $msg->user->avatar);
+            $embed->setAuthor($result->copyright, $msg->author->avatar);
             $embed->setTitle($result->title);
             $embed->setImage($result->hdurl);
             $embed->setDescription($result->explanation);

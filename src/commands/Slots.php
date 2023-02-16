@@ -76,25 +76,25 @@ class Slots extends Command
         if ($payamount < 1) {
             $msg->reply("Invalid pay amount.");
         }
-        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->user->id))) {
+        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->id))) {
             if (!$database->addUser([
-                'discord_id' => $msg->author->user->id
+                'discord_id' => $msg->author->id
             ])) {
                 $msg->reply("An error excepted when adding you to database.");
                 return;
             }
         }
-        if ($payamount > $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id))) {
+        if ($payamount > $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id))) {
             $msg->reply("You can't pay this money, because u dont have it.");
             return;
         }
-        if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id)) - $payamount)) {
+        if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id)) - $payamount)) {
             $msg->reply("An error excepted when trying to pay.");
             return;
         }
         $chance = random_int(1, 3);
         if ($chance === 1) {
-            if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->user->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->user->id)) + ($payamount * 3))) {
+            if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id)) + ($payamount * 3))) {
                 $msg->reply("An error excepted when trying to give your money.");
                 return;
             }
@@ -131,7 +131,7 @@ class Slots extends Command
             $this->discord->getLoop()->addTimer(3.0, function () use ($msg, $chance, $choosed, $payamount) {
                 if ($chance === 1) $text = "**YOU WON!!! $ " . $payamount * 3 . "**";
                 else $text = "You lose all of your pay :(";
-                $msg->channel->editMessage($msg, "Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text");
+                $msg->edit(\Discord\Builders\MessageBuilder::new()->setContent("Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text"));
             });
         });
     }
