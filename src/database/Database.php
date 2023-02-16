@@ -57,9 +57,9 @@ class Database extends PDO
      * getUser
      *
      * @param integer $user_id
-     * @return void
+     * @return boolean|array
      */
-    public function getUser(int $user_id)
+    public function getUser(int $user_id): bool|array
     {
         $query = $this->prepare("SELECT * FROM users WHERE id = ?");
         $query->execute([$user_id]);
@@ -73,9 +73,9 @@ class Database extends PDO
      * getUserMoney
      *
      * @param integer $user_id
-     * @return void
+     * @return boolean|integer
      */
-    public function getUserMoney(int $user_id)
+    public function getUserMoney(int $user_id): bool|int
     {
         if ($this->getUser($user_id)) {
             $user = $this->getUser($user_id);
@@ -89,9 +89,9 @@ class Database extends PDO
      * getUserIdByDiscordId
      *
      * @param integer $discord_id
-     * @return void
+     * @return boolean|integer
      */
-    public function getUserIdByDiscordId(int $discord_id)
+    public function getUserIdByDiscordId(int $discord_id): bool|int
     {
         $query = $this->prepare("SELECT * FROM users WHERE discord_id = ?");
         $query->execute([$discord_id]);
@@ -106,9 +106,9 @@ class Database extends PDO
      * addUser
      *
      * @param array $data
-     * @return void
+     * @return boolean
      */
-    public function addUser(array $data)
+    public function addUser(array $data): bool
     {
         if (!$data['discord_id']) {
             return false;
@@ -132,9 +132,9 @@ class Database extends PDO
      * getLastDailyForUser
      *
      * @param integer $userid
-     * @return void
+     * @return boolean|integer
      */
-    public function getLastDailyForUser(int $userid)
+    public function getLastDailyForUser(int $userid): bool|int
     {
         $query = $this->prepare('SELECT last_daily FROM users WHERE id = :id');
         $query->execute([
@@ -147,9 +147,9 @@ class Database extends PDO
      * daily
      *
      * @param integer $userid
-     * @return void
+     * @return boolean|integer
      */
-    public function daily(int $userid)
+    public function daily(int $userid): bool|int
     {
         $query = $this->prepare('SELECT money FROM users WHERE id = :id');
         $query->execute([
@@ -171,9 +171,9 @@ class Database extends PDO
      *
      * @param integer $user_id
      * @param integer $money
-     * @return void
+     * @return boolean
      */
-    public function setUserMoney(int $user_id, int $money)
+    public function setUserMoney(int $user_id, int $money): bool
     {
         $query = $this->prepare('UPDATE users SET money = :money WHERE id = :id');
         return $query->execute([
@@ -188,9 +188,9 @@ class Database extends PDO
      * @param integer $user1
      * @param integer $user2
      * @param integer $payamount
-     * @return void
+     * @return boolean
      */
-    public function pay(int $user1, int $user2, int $payamount)
+    public function pay(int $user1, int $user2, int $payamount): bool
     {
         $user1_money = $this->getUserMoney($user1);
         $user2_money = $this->getUserMoney($user2);
