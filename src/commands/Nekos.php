@@ -57,7 +57,7 @@ class Nekos extends Command
             $type = "waifu";
         }
 
-        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($msg) {
+        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($type_array) {
             $result = json_decode((string)$response->getBody(), true);
             foreach ($result as $key => $useless) {
                 $type_array[] = $key;
