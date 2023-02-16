@@ -57,41 +57,41 @@ class Nekos extends Command
             $type = "waifu";
         }
 
-        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($type_array) {
+        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($msg, $args, $type_array) {
             $result = json_decode((string)$response->getBody(), true);
             foreach ($result as $key => $useless) {
                 $type_array[] = $key;
             }
-        });
 
-        if (!$type_array) {
-            $msg->channel->sendMessage("Failed to get type(s).");
-            return;
-        }
-
-        if (isset($args[0])) {
-            if (!in_array($args[0], $type_array)) {
-                $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+            if (!$type_array) {
+                $msg->channel->sendMessage("Failed to get type(s).");
                 return;
             }
-            $type = $args[0];
-        }
-
-        $this->browser->get("https://nekos.best/api/v2/$type")->then(
-            function (ResponseInterface $response) use ($msg) {
-                $result = (string)$response->getBody();
-                $api = json_decode($result)['results'];
-                $embed = new Embed($this->discord);
-                $embed->setColor("#EB00EA");
-                $embed->setTitle('Nekos API');
-                $embed->setImage($api->url);
-                $embed->setAuthor($msg->author->username, $msg->author->avatar);
-                $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
-            },
-            function (Exception $e) use ($msg) {
-                $msg->reply('Unable to acesss the nekos API :(');
+    
+            if (isset($args[0])) {
+                if (!in_array($args[0], $type_array)) {
+                    $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+                    return;
+                }
+                $type = $args[0];
             }
-        );
+    
+            $this->browser->get("https://nekos.best/api/v2/$type")->then(
+                function (ResponseInterface $response) use ($msg) {
+                    $result = (string)$response->getBody();
+                    $api = json_decode($result)['results'];
+                    $embed = new Embed($this->discord);
+                    $embed->setColor("#EB00EA");
+                    $embed->setTitle('Nekos API');
+                    $embed->setImage($api->url);
+                    $embed->setAuthor($msg->author->username, $msg->author->avatar);
+                    $embed->setTimestamp();
+                    $msg->channel->sendEmbed($embed);
+                },
+                function (Exception $e) use ($msg) {
+                    $msg->reply('Unable to acesss the nekos API :(');
+                }
+            );
+        });
     }
 }
