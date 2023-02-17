@@ -62,7 +62,7 @@ class Botinfo extends Command
         $embed->addField($this->discord->makeField("Version", sprintf("%s %s", Version::VERSION, Version::TYPE)));
         $embed->addField($this->discord->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
         $embed->setThumbnail($this->discord->avatar);
-        $embed->setAuthor($msg->member->username);
+        $embed->setAuthor($msg->member->username, $msg->author->avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }
