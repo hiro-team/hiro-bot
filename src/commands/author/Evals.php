@@ -71,8 +71,6 @@ class Evals extends Command
         } catch (\Throwable $e) {
             $msg->reply("Error: \n```\n{$e->getMessage()}```");
         }
-        if (is_string($output)) {
-            $msg->reply($output);
-        }
+        $msg->reply($output);
     }
 }
