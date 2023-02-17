@@ -18,7 +18,8 @@
     "license": "apache-2.0",
     "autoload": {
         "psr-4": {
-            "hiro\\": "src/"
+            "hiro\\": "src/",
+            "hiro\\tests\\": "tests/hiro/"
         }
     },
     "require": {
