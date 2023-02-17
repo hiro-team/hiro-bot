@@ -52,8 +52,6 @@ class Slots extends Command
     public function handle($msg, $args): void
     {
         $items = [
-            "<a:blue_cane:990303193332346970>",
-            "<a:blue_moon:990303158389583873>",
             ":strawberry:",
             ":fireworks:",
             ":gem:",
@@ -123,7 +121,7 @@ class Slots extends Command
                 $items[$rand_emotes[2]]
             ];
         }
-        $msg->reply("Slot is spinning... <a:loading:990300992287424553> \n<a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008> <a:slotmachine:990303077213012008>")->then(function ($msg) use ($chance, $choosed, $payamount) {
+        $msg->reply("Slot is spinning... :arrows_clockwise: \n:cd: :cd: :cd:")->then(function ($msg) use ($chance, $choosed, $payamount) {
             if (!($msg instanceof Message)) {
                 $msg->reply("An error excepted.");
                 return;
