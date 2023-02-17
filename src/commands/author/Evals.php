@@ -68,7 +68,9 @@ class Evals extends Command
         }
         try {
             $output = eval($code);
-            $msg->reply($output);
+            if ($output !== null) {
+                $msg->reply($output);
+            }
         } catch (\Throwable $e) {
             $msg->reply("Error: \n```\n{$e->getMessage()}```");
         }
