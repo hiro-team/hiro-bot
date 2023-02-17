@@ -1,6 +1,6 @@
 <?php
 
-namespace hiro;
+namespace hiro\tests;
 
 use PHPUnit\Framework\TestSuite;
 
