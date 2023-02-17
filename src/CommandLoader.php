@@ -120,7 +120,11 @@ class CommandLoader
                 $this->client->registerCommand(
                     $cmd->command,
                     function ($msg, $args) use ($cmd) {
-                        $cmd->handle($msg, $args);
+                        try {
+                            $cmd->handle($msg, $args);
+                        } catch (\Throwable $e) {
+                            $msg->reply("ERROR: `".$e->getMessage()."`");
+                        }
                     },
                     [
                         'aliases' => $cmd->aliases,
