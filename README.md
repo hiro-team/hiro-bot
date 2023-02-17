@@ -7,7 +7,7 @@ A discord bot written in PHP
 
 |Project Name|Author|Minimum PHP Version|
 |--|--|--|--|
-|Hiro Bot|Hiro Team|8.0|
+|Hiro Bot|Hiro Team|8.0+|
 
 ## For Contributors
 Pull Requests Only New Cool Commands and Bug Fixes!!!
