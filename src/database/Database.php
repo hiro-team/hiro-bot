@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2021 bariscodefx
- * 
+ *
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ use PDOException;
  */
 class Database extends PDO
 {
-
     /**
      * isConnected
      *
@@ -41,9 +40,13 @@ class Database extends PDO
      */
     public function __construct()
     {
-        if (!file_exists(dirname(__DIR__, 2) . "/db-settings.inc")) return false;
+        if (!file_exists(dirname(__DIR__, 2) . "/db-settings.inc")) {
+            return false;
+        }
         include dirname(__DIR__, 2) . "/db-settings.inc";
-        if (!isset($db_user) || !isset($db_pass) || !isset($db_host) || !isset($db_dbname)) return false;
+        if (!isset($db_user) || !isset($db_pass) || !isset($db_host) || !isset($db_dbname)) {
+            return false;
+        }
         try {
             parent::__construct("mysql:host=$db_host;dbname=$db_dbname;charset=utf8", $db_user, $db_pass);
         } catch (PDOException $e) {
@@ -51,6 +54,7 @@ class Database extends PDO
             return false;
         }
         $this->isConnected = true;
+        $this->createTables();
     }
 
     /**
@@ -63,10 +67,11 @@ class Database extends PDO
     {
         $query = $this->prepare("SELECT * FROM users WHERE id = ?");
         $query->execute([$user_id]);
-        if ($query->rowCount())
+        if ($query->rowCount()) {
             return $query->fetch(PDO::FETCH_ASSOC);
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -194,10 +199,53 @@ class Database extends PDO
     {
         $user1_money = $this->getUserMoney($user1);
         $user2_money = $this->getUserMoney($user2);
-        if ($payamount > $user1_money) return false;
-        if ($payamount < 1) return false;
-        if (!$this->setUserMoney($user1, $user1_money - $payamount)) return false;
-        if (!$this->setUserMoney($user2, $user2_money + $payamount)) return false;
+        if ($payamount > $user1_money) {
+            return false;
+        }
+        if ($payamount < 1) {
+            return false;
+        }
+        if (!$this->setUserMoney($user1, $user1_money - $payamount)) {
+            return false;
+        }
+        if (!$this->setUserMoney($user2, $user2_money + $payamount)) {
+            return false;
+        }
         return true;
+    }
+
+    /**
+     * createTables
+     *
+     * @return void
+     */
+    public function createTables(): void
+    {
+        $this->exec(<<<EOF
+        CREATE TABLE IF NOT EXISTS `users` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        EOF);
+
+        $columns = [
+            "users" => [
+                "discord_id" => "bigint(21) NOT NULL",
+                "money" => "int(11) DEFAULT '0'",
+                "last_daily" => "int(11) DEFAULT NULL",
+                "register_time" => "int(11) DEFAULT NULL",
+            ]
+        ];
+
+        foreach ( $columns as $table_key => $table )
+        {
+            foreach( $table as $column_key => $column )
+            {
+                try {
+                    $col = $this->query("SELECT $column_key FROM $table_key");
+                } catch (\Exception $e) {
+                    $this->exec("ALTER TABLE `$table_key` ADD $column_key $column;");
+                }
+            }
+        }
     }
 }
