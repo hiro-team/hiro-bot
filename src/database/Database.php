@@ -75,6 +75,23 @@ class Database extends PDO
     }
 
     /**
+     * getServer
+     *
+     * @param integer $server_id
+     * @return boolean|array
+     */
+    public function getServer(int $server_id): bool|array
+    {
+        $query = $this->prepare("SELECT * FROM servers WHERE id = ?");
+        $query->execute([$server_id]);
+        if ($query->rowCount()) {
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * getUserMoney
      *
      * @param integer $user_id
@@ -109,6 +126,24 @@ class Database extends PDO
     }
 
     /**
+     * getServerIdByDiscordId
+     *
+     * @param integer $discord_id
+     * @return boolean|integer
+     */
+    public function getServerIdByDiscordId(int $discord_id): bool|int
+    {
+        $query = $this->prepare("SELECT * FROM servers WHERE discord_id = ?");
+        $query->execute([$discord_id]);
+        if ($query->rowCount()) {
+            return $query->fetch(PDO::FETCH_ASSOC)['id'];
+        } else {
+            $this->addServer(['discord_id' => $discord_id]);
+            return $this->getServerIdByDiscordId($discord_id);
+        }
+    }
+
+    /**
      * addUser
      *
      * @param array $data
@@ -135,6 +170,59 @@ class Database extends PDO
     }
 
     /**
+     * addServer
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function addServer(array $data): bool
+    {
+        if (!$data['discord_id']) {
+            return false;
+        } else {
+            $query = $this->prepare("INSERT INTO servers SET discord_id = :discord_id");
+            if ($query->execute([
+                "discord_id" => $data['discord_id']
+            ])) {
+                return true;
+            } else {
+                print_r($query->errorInfo());
+                return false;
+            }
+        }
+    }
+
+    /**
+     * getRPGChannelForServer
+     *
+     * @param integer $serverid
+     * @return boolean|integer
+     */
+    public function getRPGChannelForServer(int $serverid): bool|int
+    {
+        $query = $this->prepare('SELECT rpg_channel FROM servers WHERE id = :id');
+        $query->execute([
+            "id" => $serverid
+        ]);
+        return $query->fetch()[0] ?? false;
+    }
+
+    /**
+     * getRPGEnabledForServer
+     *
+     * @param integer $serverid
+     * @return boolean|integer
+     */
+    public function getRPGEnabledForServer(int $serverid): bool|int
+    {
+        $query = $this->prepare('SELECT rpg_enabled FROM servers WHERE id = :id');
+        $query->execute([
+            "id" => $serverid
+        ]);
+        return $query->fetch()[0] ?? false;
+    }
+
+    /**
      * getLastDailyForUser
      *
      * @param integer $userid
@@ -146,7 +234,7 @@ class Database extends PDO
         $query->execute([
             "id" => $userid
         ]);
-        return $query->fetch()[0];
+        return $query->fetch()[0] ?? false;
     }
 
     /**
@@ -185,6 +273,38 @@ class Database extends PDO
         return $query->execute([
             "money" => $money,
             "id" => $user_id
+        ]);
+    }
+
+    /**
+     * setServerRPGChannel
+     *
+     * @param integer $server_id
+     * @param integer $channel
+     * @return boolean
+     */
+    public function setServerRPGChannel(int $server_id, int $channel): bool
+    {
+        $query = $this->prepare('UPDATE servers SET rpg_channel = :rpg_channel WHERE id = :id');
+        return $query->execute([
+            "rpg_channel" => $channel,
+            "id" => $server_id
+        ]);
+    }
+
+    /**
+     * setServerRPGEnabled
+     *
+     * @param integer $server_id
+     * @param integer $enabled
+     * @return boolean
+     */
+    public function setServerRPGEnabled(int $server_id, int $enabled): bool
+    {
+        $query = $this->prepare('UPDATE servers SET rpg_enabled = :rpg_enabled WHERE id = :id');
+        return $query->execute([
+            "rpg_enabled" => $enabled,
+            "id" => $server_id
         ]);
     }
 
@@ -319,6 +439,9 @@ class Database extends PDO
         CREATE TABLE IF NOT EXISTS `users` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        CREATE TABLE IF NOT EXISTS `servers` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         EOF);
 
         $columns = [
@@ -330,6 +453,11 @@ class Database extends PDO
                 "rpg_chartype" => "int(11) DEFAULT NULL",
                 "rpg_charrace" => "int(11) DEFAULT NULL",
                 "rpg_chargender" => "int(11) DEFAULT NULL",
+            ],
+            "servers" => [
+                "discord_id" => "bigint(21) NOT NULL",
+                "rpg_channel" => "bigint(21) DEFAULT NULL",
+                "rpg_enabled" => "int(11) DEFAULT NULL",
             ]
         ];
 

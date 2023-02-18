@@ -103,7 +103,7 @@ class CreateChar extends Command
         }
 
         // database progress
-        
+
         if ($database->setRPGCharType($database->getUserIdByDiscordId($msg->author->id), $char)) {
             $msg->reply("Your class has been changed to " . $args[0] . " successfully.");
         } else {
