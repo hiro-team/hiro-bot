@@ -87,6 +87,10 @@ class Hiro extends Discord implements HiroInterface
                     return;
                 }
 
+                if ($message->author->bot) {
+                    return;
+                }
+
                 if ($withoutPrefix = $this->checkForPrefix($message->content)) {
                     $args = str_getcsv($withoutPrefix, ' ');
                     $command = array_shift($args);
