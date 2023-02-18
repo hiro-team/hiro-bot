@@ -103,7 +103,8 @@ class Database extends PDO
         if ($query->rowCount()) {
             return $query->fetch(PDO::FETCH_ASSOC)['id'];
         } else {
-            return false;
+            $this->addUser(['discord_id' => $discord_id]);
+            return $this->getUserIdByDiscordId($discord_id);
         }
     }
 
@@ -215,6 +216,99 @@ class Database extends PDO
     }
 
     /**
+     * getRPGCharType
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharType(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_chartype'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharType
+     *
+     * @param integer $user_id
+     * @param integer $type
+     * @return boolean
+     */
+    public function setRPGCharType(int $user_id, int $type): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_chartype = ? WHERE id = ?");
+
+        return $query->execute([$type, $user_id]);
+    }
+
+    /**
+     * getRPGCharRace
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharRace(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_charrace'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharRace
+     *
+     * @param integer $user_id
+     * @param integer $race
+     * @return boolean
+     */
+    public function setRPGCharRace(int $user_id, int $race): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_charrace = ? WHERE id = ?");
+
+        return $query->execute([$race, $user_id]);
+    }
+
+    /**
+     * getRPGCharGender
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharGender(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_chargender'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharGender
+     *
+     * @param integer $user_id
+     * @param integer $gender
+     * @return boolean
+     */
+    public function setRPGCharGender(int $user_id, int $gender): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_chargender = ? WHERE id = ?");
+
+        return $query->execute([$gender, $user_id]);
+    }
+
+    /**
      * createTables
      *
      * @return void
@@ -233,13 +327,14 @@ class Database extends PDO
                 "money" => "int(11) DEFAULT '0'",
                 "last_daily" => "int(11) DEFAULT NULL",
                 "register_time" => "int(11) DEFAULT NULL",
+                "rpg_chartype" => "int(11) DEFAULT NULL",
+                "rpg_charrace" => "int(11) DEFAULT NULL",
+                "rpg_chargender" => "int(11) DEFAULT NULL",
             ]
         ];
 
-        foreach ( $columns as $table_key => $table )
-        {
-            foreach( $table as $column_key => $column )
-            {
+        foreach ($columns as $table_key => $table) {
+            foreach ($table as $column_key => $column) {
                 try {
                     $col = $this->query("SELECT $column_key FROM $table_key");
                 } catch (\Exception $e) {
