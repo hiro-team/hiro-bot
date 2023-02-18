@@ -18,15 +18,16 @@
     "license": "apache-2.0",
     "autoload": {
         "psr-4": {
-            "hiro\\": "src/"
+            "hiro\\": "src/",
+            "hiro\\tests\\": "tests/hiro/"
         }
     },
     "require": {
         "php": "^8.0",
-        "team-reflex/discord-php": "^6.0.3",
+        "team-reflex/discord-php": "^7.3.4",
         "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^10.0"
     }
 }

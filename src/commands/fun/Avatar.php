@@ -51,7 +51,7 @@ class Avatar extends Command
         {
             $avatar = $user->avatar;
         }else {
-            $avatar = $msg->author->user->avatar;
+            $avatar = $msg->author->avatar;
         }
         if (strpos($avatar, 'a_') !== false){
             $avatar= str_replace('jpg', 'gif', $avatar);

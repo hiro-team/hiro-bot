@@ -55,8 +55,8 @@ class Daily extends Command
             $msg->channel->sendMessage("Couldn't connect to database.");
             return;
         }
-        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
-        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
         if (time() - $last_daily < 86400) {
             $msg->channel->sendMessage('You must wait 24 hours.');
             return;
@@ -64,7 +64,7 @@ class Daily extends Command
         if (!is_numeric($user_money)) {
             echo "money is empty" . PHP_EOL;
             if (!$database->addUser([
-                "discord_id" => $msg->author->id
+                "discord_id" => $msg->member->id
             ])) {
                 $embed = new Embed($this->discord);
                 $embed->setTitle('You are couldnt added to database.');
@@ -77,7 +77,7 @@ class Daily extends Command
             }
         }
         setlocale(LC_MONETARY, 'en_US');
-        $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
         if ($daily) {
             $embed = new Embed($this->discord);
             $embed->setTitle("You Gained $" . number_format($daily, 2, ',', '.'));

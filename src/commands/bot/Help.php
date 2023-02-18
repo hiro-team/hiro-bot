@@ -67,7 +67,7 @@ Description: {$description}
 Cooldown: {$cooldown}
 EOF
                 );
-                $embed->setAuthor($msg->user->username, $msg->user->avatar);
+                $embed->setAuthor($msg->author->username, $msg->author->avatar);
                 $msg->channel->sendEmbed($embed);
             } else {
                 $msg->channel->sendMessage("Command not found named '$command'");
@@ -106,7 +106,7 @@ EOF
                     if (isset($emotes[$category_name]))
                         $field->name = $emotes[$category_name] . " " . array_search($category, $this->loader->categories) . " (" . sizeof($category) . ")";
                     else
-                        $field->name = ":grey_question: " . $emotes[$category_name] . $category_name . " (" . sizeof($category) . ")";
+                        $field->name = ":grey_question: " . $category_name . " (" . sizeof($category) . ")";
                     $value .= "$cmd`";
                 } else {
                     $value .= "$cmd, ";
@@ -116,7 +116,7 @@ EOF
             $field->value = $value;
             $embed->addField($field);
         }
-        $embed->setAuthor($msg->user->username, $msg->user->avatar);
+        $embed->setAuthor($msg->author->username, $msg->author->avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

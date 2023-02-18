@@ -57,7 +57,7 @@ class Money extends Command
             return;
         }
         $user = $msg->mentions->first();
-        if (!$user) $user = $msg->author->user;
+        if (!$user) $user = $msg->author;
         $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
         if (!is_numeric($user_money)) {
             echo "money is empty" . PHP_EOL;

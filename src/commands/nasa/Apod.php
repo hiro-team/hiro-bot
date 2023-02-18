@@ -53,12 +53,14 @@ class Apod extends Command
      */
     public function handle($msg, $args): void
     {
+        die("lol");
+        return;
         $this->browser->get("https://api.nasa.gov/planetary/apod?thumbs=true&api_key=cAHfqwYbmsLQBpLcIbpLYzXn7q9ArLgrPr6BGVss")->then(function (ResponseInterface $response) use ($msg) {
             $embed = new Embed($this->discord);
 
             $result = json_decode((string)$response->getBody());
 
-            $embed->setAuthor($result->copyright, $msg->user->avatar);
+            $embed->setAuthor($result->copyright, $msg->author->avatar);
             $embed->setTitle($result->title);
             $embed->setImage($result->hdurl);
             $embed->setDescription($result->explanation);

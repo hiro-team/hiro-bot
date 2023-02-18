@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2021 bariscodefx
- * 
+ *
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@
 
 namespace hiro;
 
+use hiro\commands\Command;
 use hiro\interfaces\HiroInterface;
 
 /**
@@ -27,6 +28,12 @@ use hiro\interfaces\HiroInterface;
  */
 class CommandLoader
 {
+    /**
+     * client
+     *
+     * @var HiroInterface
+     */
+    protected HiroInterface $client;
 
     /**
      * Command categories
@@ -36,7 +43,7 @@ class CommandLoader
     /**
      * CommandLoader $version
      */
-    protected $version = "1.1";
+    protected $version = "1.2";
 
     /**
      * Commands Directory
@@ -48,65 +55,23 @@ class CommandLoader
      */
     public function __construct(HiroInterface $client)
     {
+        $this->client = $client;
         $this->dir = __DIR__ . "/commands";
-        $this->loadAllCommands($client);
+        $this->loadAllCommands();
     }
-
-    public function loadCommand(HiroInterface $client, string $commandName)
-    { }
 
     /**
      * loadAllCommands
      *
-     * @param HiroInterface $client
      * @return void
      */
-    public function loadAllCommands(HiroInterface $client)
+    public function loadAllCommands()
     {
-        $dir = __DIR__ . '/commands';
-
         $this->clearConsole();
         $this->loaderInfo();
 
         print "Loading Commands" . PHP_EOL;
-
-        foreach (scandir($dir) as $file) {
-            $extension = substr($file, -4);
-
-            if ($file != '.' && $file != '..' && $extension == '.php') {
-                $class = substr($file, 0, -4);
-                $classnamespace = 'hiro\commands\\' . $class;
-                $cmd = new $classnamespace($client, $this);
-
-                if ($class === "Command") { // default class
-                    continue;
-                }
-
-                $client->registerCommand(
-                    $cmd->command,
-                    function ($msg, $args) use ($cmd) {
-                        $cmd->handle($msg, $args);
-                    },
-                    [
-                        'aliases' => $cmd->aliases,
-                        'description' => $cmd->description,
-                        'cooldown' => $cmd->cooldown ?? 0
-                    ]
-                );
-
-                if (!isset($this->categories[$cmd->category])) {
-                    $this->categories[$cmd->category] = [];
-                }
-
-                $kategori = $this->categories[$cmd->category];
-                array_push($kategori, $cmd);
-                $this->categories[$cmd->category] = $kategori;
-
-                print "====================" . PHP_EOL;
-                print "Loaded : $class" . PHP_EOL;
-                print "====================" . PHP_EOL;
-            }
-        }
+        $this->loadDir($this->dir);
         print "All Commands Are Loaded." . PHP_EOL;
     }
 
@@ -127,8 +92,67 @@ class CommandLoader
     }
 
     /**
+     * loadDir
+     *
+     * @param string $dir
+     * @return void
+     */
+    protected function loadDir(string $dir): void
+    {
+        foreach (scandir($dir) as $file) {
+            $extension = substr($file, -4);
+
+            if ($file != '.' && $file != '..' && $extension == '.php') {
+                $class = substr($file, 0, -4);
+
+                if ($class === "Command") { // default class
+                    continue;
+                }
+
+                try {
+                    require $dir . "/" . $file;
+                } catch (\Throwable $e) {
+                }
+
+                $classnamespace = 'hiro\\commands\\' . $class;
+                $cmd = new $classnamespace($this->client, $this);
+
+                $this->client->registerCommand(
+                    $cmd->command,
+                    function ($msg, $args) use ($cmd) {
+                        try {
+                            $cmd->handle($msg, $args);
+                        } catch (\Throwable $e) {
+                            $msg->reply("ERROR: `".$e->getMessage()."`");
+                        }
+                    },
+                    [
+                        'aliases' => $cmd->aliases,
+                        'description' => $cmd->description,
+                        'cooldown' => $cmd->cooldown ?? 0
+                    ]
+                );
+
+                if (!isset($this->categories[$cmd->category])) {
+                    $this->categories[$cmd->category] = [];
+                }
+
+                $kategori = $this->categories[$cmd->category];
+                array_push($kategori, $cmd);
+                $this->categories[$cmd->category] = $kategori;
+
+                print "====================" . PHP_EOL;
+                print "Loaded : $class" . PHP_EOL;
+                print "====================" . PHP_EOL;
+            } elseif ($file != '.' && $file != '..' && is_dir($dir . "/" . $file)) {
+                $this->loadDir($dir . "/" . $file);
+            }
+        }
+    }
+
+    /**
      * clearConsole
-     * 
+     *
      * This function clears the console/terminal.
      *
      * @return void

@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2021 bariscodefx
- * 
+ *
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,44 +20,59 @@
 
 namespace hiro;
 
-class ArgumentParser {
+/**
+ * ArgumentParser
+ */
+class ArgumentParser
+{
+    /** arguments */
+    public $args;
 
-	/** arguments */
-	public $args;
+    /**
+     * __construct
+     *
+     * @param [type] $args
+     */
+    public function __construct($args)
+    {
+        $this->args = $args;
+    }
 
-	public function __construct($args)
-	{
-		$this->args = $args;
-	}
+    /**
+     * getShardId
+     *
+     * @return void
+     */
+    public function getShardId()
+    {
+        if ($this->args) {
+            $args = $this->args;
 
-	public function getShardId()
-	{
-		if($this->args)
-		{
-			$args = $this->args;
+            if (in_array('--shard-id', $args)) {
+                $key = array_search('--shard-id', $args);
+                return $args[$key+1];
+            }
 
-			if(in_array('--shard-id', $args))
-			{
-				$key = array_search('--shard-id', $args);
-				return $args[$key+1];
-			}
+            return (0 << 0);
+        }
+    }
 
-		}
-	}
+    /**
+     * getShardCount
+     *
+     * @return void
+     */
+    public function getShardCount()
+    {
+        if ($this->args) {
+            $args = $this->args;
 
-	public function getShardCount()
-	{
-		if($this->args)
-		{
-			$args = $this->args;
+            if (in_array('--shard-count', $args)) {
+                $key = array_search('--shard-count', $args);
+                return $args[$key+1];
+            }
 
-			if(in_array('--shard-count', $args))
-			{
-				$key = array_search('--shard-count', $args);
-				return $args[$key+1];
-			}
-
-		}
-	}
-
+            return (1 << 0);
+        }
+    }
 }

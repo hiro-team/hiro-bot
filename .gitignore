@@ -6,3 +6,4 @@ composer.phar
 /.idea/
 phpDocumentor.php
 db-settings.inc
+.phpunit*

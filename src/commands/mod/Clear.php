@@ -50,7 +50,7 @@ class Clear extends Command
      */
     public function handle($msg, $args): void
     {
-        if (!$msg->author->getPermissions()["manage_messages"]) {
+        if (!$msg->member->getPermissions()["manage_messages"]) {
             $embed = new Embed($this->discord);
             $embed->setTitle("Error!");
             $embed->setDescription("You must have manage messages permission for use this");

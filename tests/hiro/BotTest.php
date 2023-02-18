@@ -1,13 +1,21 @@
 <?php
 
-namespace hiro;
+declare(strict_types=1);
 
-use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestCase;
 
-final class BotTest extends TestSuite {
-    
-    public final function RunBot(){
-        return true;
+/**
+ * BotTest
+ */
+final class BotTest extends TestCase
+{
+    /**
+     * testSomething
+     *
+     * @return void
+     */
+    public function testSomething(): void
+    {
+        $this->assertTrue(true, "");
     }
-    
 }

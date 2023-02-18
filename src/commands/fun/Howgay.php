@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2022 bariscodefx
+ * Copyright 2021 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -20,10 +20,12 @@
 
 namespace hiro\commands;
 
+use Discord\Parts\Embed\Embed;
+
 /**
- * Evals
+ * Howgay
  */
-class Evals extends Command
+class Howgay extends Command
 {
     /**
      * configure
@@ -32,10 +34,10 @@ class Evals extends Command
      */
     public function configure(): void
     {
-        $this->command = "evals";
-        $this->description = "Runs a code **ONLY FOR AUTHOR**";
-        $this->aliases = ["run", "code", "eval"];
-        $this->category = "author";
+        $this->command = "howgay";
+        $this->description = "How much u are gay?";
+        $this->aliases = ["gay"];
+        $this->category = "fun";
     }
 
     /**
@@ -47,23 +49,13 @@ class Evals extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->user->id != 793431383506681866) {
-            $msg->channel->sendMessage("No");
-            return;
-        }
-        $content = explode(' ', $msg->content, 2);
-        if (!isset($content[1])) {
-            $msg->reply("No args.");
-            return;
-        }
-        $code = $content[1];
-        if (str_starts_with($code, "```php")) $code = substr($code, 6);
-        if (str_starts_with($code, "```")) $code = substr($code, 3);
-        if (str_ends_with($code, "```")) $code = substr($code, 0, -3);
-        try {
-            eval($code);
-        } catch (\Throwable $e) {
-            $msg->reply("Error: \n```\n{$e->getMessage()}```");
-        }
+        $user = $msg->mentions->first();
+        if (!$user) $user = $msg->author;
+        $random = rand(0, 100);
+        $embed = new Embed($this->discord);
+        $embed->setColor("#EB00EA");
+        $embed->setDescription("$user you are $random% gay. :gay_pride_flag:");
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
 }

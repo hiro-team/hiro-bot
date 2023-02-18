@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright 2021 bariscodefx
- * 
+ * Copyright 2022 bariscodefx
+ *
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,10 @@
 
 namespace hiro\commands;
 
-use hiro\interfaces\HiroInterface;
-
 /**
- * Exec
+ * Evals
  */
-class Exec extends Command
+class Evals extends Command
 {
     /**
      * configure
@@ -34,9 +32,9 @@ class Exec extends Command
      */
     public function configure(): void
     {
-        $this->command = "exec";
-        $this->description = "Executes an command **ONLY FOR AUTHOR**";
-        $this->aliases = ["execute", "shell-exec"];
+        $this->command = "evals";
+        $this->description = "Runs a code **ONLY FOR AUTHOR**";
+        $this->aliases = ["run", "code", "eval"];
         $this->category = "author";
     }
 
@@ -49,13 +47,32 @@ class Exec extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->user->id != 793431383506681866) {
+        if ($msg->author->id != $_ENV['AUTHOR']) {
             $msg->channel->sendMessage("No");
             return;
         }
-        $ex = implode(' ', $args);
-        if (!$ex) $ex = " ";
-        $output = shell_exec($ex);
-        $msg->channel->sendMessage("```\n" . $output . "\n```");
+        $content = explode(' ', $msg->content, 2);
+        if (!isset($content[1])) {
+            $msg->reply("No args.");
+            return;
+        }
+        $code = $content[1];
+        if (str_starts_with($code, "```php")) {
+            $code = substr($code, 6);
+        }
+        if (str_starts_with($code, "```")) {
+            $code = substr($code, 3);
+        }
+        if (str_ends_with($code, "```")) {
+            $code = substr($code, 0, -3);
+        }
+        try {
+            $output = eval($code);
+            if ($output !== null) {
+                $msg->reply($output);
+            }
+        } catch (\Throwable $e) {
+            $msg->reply("Error: \n```\n{$e->getMessage()}```");
+        }
     }
 }

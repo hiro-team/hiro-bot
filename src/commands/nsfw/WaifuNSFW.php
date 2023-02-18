@@ -25,9 +25,9 @@ use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
 
 /**
- * Waifu
+ * WaifuNSFW
  */
-class Waifu extends Command
+class WaifuNSFW extends Command
 {
     /**
      * configure
@@ -36,10 +36,10 @@ class Waifu extends Command
      */
     public function configure(): void
     {
-        $this->command = "waifu";
-        $this->description = "Find your own waifu!";
-        $this->aliases = ["wfu"];
-        $this->category = "fun";
+        $this->command = "waifunsfw";
+        $this->description = "Find your own *horny* waifu!";
+        $this->aliases = [];
+        $this->category = "nsfw";
         $this->browser = new Browser(null, $this->discord->getLoop());
     }
 
@@ -52,38 +52,15 @@ class Waifu extends Command
      */
     public function handle($msg, $args): void
     {
+        if (!$msg->channel->nsfw) {
+            $msg->reply('You have to use this command in nsfw channel!');
+            return;
+        }
         $type_array = [
             "waifu",
             "neko",
-            "shinobu",
-            "megumin",
-            "bully",
-            "cuddle",
-            "cry",
-            "hug",
-            "awoo",
-            "kiss",
-            "lick",
-            "pat",
-            "smug",
-            "bonk",
-            "yeet",
-            "blush",
-            "smile",
-            "wave",
-            "highfive",
-            "handhold",
-            "nom",
-            "bite",
-            "glomp",
-            "slap",
-            "kill",
-            "kick",
-            "happy",
-            "wink",
-            "poke",
-            "dance",
-            "cringe"
+            "trap",
+            "blowjob"
         ];
         if (!isset($args[0])) $type = "waifu";
         if (isset($args[0])) {
@@ -93,14 +70,14 @@ class Waifu extends Command
             }
             $type = $args[0];
         }
-        $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
+        $this->browser->get("https://api.waifu.pics/nsfw/$type")->then(
             function (ResponseInterface $response) use ($msg) {
                 $result = (string)$response->getBody();
                 $api = json_decode($result);
                 $embed = new Embed($this->discord);
                 $embed->setColor("#EB00EA");
-                $embed->setTitle('Waifu Generator');
-                $embed->setDescription("{$msg->user->username} Your random waifu!");
+                $embed->setTitle('Horny Waifu Generator');
+                $embed->setDescription("{$msg->author->username} Your random horny waifu :)");
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);

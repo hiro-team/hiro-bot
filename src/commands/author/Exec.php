@@ -20,12 +20,12 @@
 
 namespace hiro\commands;
 
-use Discord\Parts\Embed\Embed;
+use hiro\interfaces\HiroInterface;
 
 /**
- * Howgay
+ * Exec
  */
-class Howgay extends Command
+class Exec extends Command
 {
     /**
      * configure
@@ -34,10 +34,10 @@ class Howgay extends Command
      */
     public function configure(): void
     {
-        $this->command = "howgay";
-        $this->description = "How much u are gay?";
-        $this->aliases = ["gay"];
-        $this->category = "fun";
+        $this->command = "exec";
+        $this->description = "Executes an command **ONLY FOR AUTHOR**";
+        $this->aliases = ["execute", "shell-exec"];
+        $this->category = "author";
     }
 
     /**
@@ -49,13 +49,13 @@ class Howgay extends Command
      */
     public function handle($msg, $args): void
     {
-        $user = $msg->mentions->first();
-        if (!$user) $user = $msg->author->user;
-        $random = rand(0, 100);
-        $embed = new Embed($this->discord);
-        $embed->setColor("#EB00EA");
-        $embed->setDescription("$user you are $random% gay. :gay_pride_flag:");
-        $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        if ($msg->author->id != $_ENV['AUTHOR']) {
+            $msg->channel->sendMessage("No");
+            return;
+        }
+        $ex = implode(' ', $args);
+        if (!$ex) $ex = " ";
+        $output = shell_exec($ex);
+        $msg->channel->sendMessage("```\n" . $output . "\n```");
     }
 }

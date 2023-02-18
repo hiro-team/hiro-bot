@@ -21,6 +21,7 @@
 namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
+use hiro\Version;
 
 /**
  * Botinfo
@@ -37,7 +38,7 @@ class Botinfo extends Command
         $this->command = "botinfo";
         $this->description = "Bans mentioned user.";
         $this->aliases = [];
-        $this->category = "mod";
+        $this->category = "bot";
     }
 
     /**
@@ -58,9 +59,10 @@ class Botinfo extends Command
         $embed->addField($this->discord->makeField("Guilds", $guilds));
         $embed->addField($this->discord->makeField("Members", $members));
         $embed->addField($this->discord->makeField("Commands", $this->loader->getCommandsCount()));
+        $embed->addField($this->discord->makeField("Version", sprintf("%s %s", Version::VERSION, Version::TYPE)));
         $embed->addField($this->discord->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
         $embed->setThumbnail($this->discord->avatar);
-        $embed->setAuthor($msg->author->username);
+        $embed->setAuthor($msg->member->username, $msg->author->avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }
