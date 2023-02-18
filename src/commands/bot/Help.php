@@ -81,7 +81,8 @@ EOF
             "bot" => ":robot:",
             "nsfw" => ":underage:",
             "economy" => ":dollar:",
-            "nasa" => ":rocket:"
+            "nasa" => ":rocket:",
+            "rpg" => ":crossed_swords:",
         ];
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
