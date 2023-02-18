@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2022 bariscodefx
- * 
+ *
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,11 +57,20 @@ class Evals extends Command
             return;
         }
         $code = $content[1];
-        if (str_starts_with($code, "```php")) $code = substr($code, 6);
-        if (str_starts_with($code, "```")) $code = substr($code, 3);
-        if (str_ends_with($code, "```")) $code = substr($code, 0, -3);
+        if (str_starts_with($code, "```php")) {
+            $code = substr($code, 6);
+        }
+        if (str_starts_with($code, "```")) {
+            $code = substr($code, 3);
+        }
+        if (str_ends_with($code, "```")) {
+            $code = substr($code, 0, -3);
+        }
         try {
-            eval($code);
+            $output = eval($code);
+            if ($output !== null) {
+                $msg->reply($output);
+            }
         } catch (\Throwable $e) {
             $msg->reply("Error: \n```\n{$e->getMessage()}```");
         }
