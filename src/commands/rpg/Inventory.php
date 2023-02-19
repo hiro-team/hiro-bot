@@ -40,7 +40,7 @@ class Inventory extends Command
             return;
         }
 
-        $user = $msg->mentions->first() ?? $msg->member;
+        $user = $msg->member;
         $user_id = $database->getUserIdByDiscordId($user->id);
         $money =  $database->getUserMoney($user_id);
         $gender = $database->getRPGCharGenderAsText($user_id);
