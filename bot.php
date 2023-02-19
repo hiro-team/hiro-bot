@@ -54,7 +54,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $commandLoader = new CommandLoader($discord);
 
     $presenceManager = new PresenceManager($discord);
-    $presenceManager->setLoopTime(60.0)
+    $presenceManager->setLoopTime(15.0)
     ->setPresenceType(Activity::TYPE_WATCHING)
     ->setPresences([
         "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
