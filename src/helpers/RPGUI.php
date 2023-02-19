@@ -61,11 +61,29 @@ class RPGUI
     protected static function drawCharacter(GdImage $image, string $username, string $file): GdImage
     {
         if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png")) return $image;
-        $orange = imagecolorallocate($image, 220, 210, 60);
-        imagestring($image, self::FONT, (123 - (strlen($username) * imagefontwidth(self::FONT)) / 2), 75, $username, $orange);
+        $image = self::drawCharacterNick($image, $username);
         $character = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png");
         $character = imagescale($character, ceil(imagesx($character)/4.2));
         imagecopy($image, $character, (123 - (imagesx($character) / 2)), (187 - (imagesy($character) / 2)), 0, 0, imagesx($character), imagesy($character));
+        return $image;
+    }
+
+    /**
+     * drawCharacterNick
+     *
+     * @param GdImage $image
+     * @param string $username
+     * @return GdImage
+     */
+    protected static function drawCharacterNick(GdImage $image, string $username): GdImage
+    {
+        $background_path = dirname(__DIR__, 1) . "/images/rpg/ui/nick_background.png";
+        if(file_exists($background_path)){
+            $background = imagecreatefrompng($background_path);
+            imagecopy($image, $background, (123 - ( (imagesx($background) / 2) ) ), 80 - (imagesy($background) / 2), 0, 0, imagesx($background), imagesy($background));
+        }
+        $orange = imagecolorallocate($image, 220, 210, 60);
+        imagestring($image, self::FONT, (123 - (strlen($username) * imagefontwidth(self::FONT)) / 2), 75, $username, $orange);
         return $image;
     }
 
