@@ -497,16 +497,16 @@ class Hiro extends Discord implements HiroInterface
      * @param  int    $number 
      * @return int|string
      */
-    public function formatNumber(int $number)
+    public static function formatNumber(int $number)
     {
-        if($number >= 1000)
+        if($number >= 1000 && $number <= 999999)
         {
-            return $number / 1000 . "k";
-        }else if($number >= 1000000)
+            return round($number / 1000, 2) . "k";
+        }else if($number >= 1000000 && $number <= 999999999)
         {
-            return $number / 1000000 . "m";
+            return round($number / 1000000, 2) . "kk";
         }else if($number >= 1000000000){
-            return $number / 1000000000 . "t";
+            return round($number / 1000000000, 2) . "kkk";
         }else {
             return $number;
         }

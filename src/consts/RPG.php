@@ -83,6 +83,15 @@ class RPG
     public const SHORT_WEAPON                      = (1 << 2);
 
     /**
+     * Armor Types
+     */
+    public const ARMOR_HELMET                      = (1 << 1);
+    public const ARMOR_PAULDRON                    = (1 << 2);
+    public const ARMOR_LEGGINGS                    = (1 << 3);
+    public const ARMOR_SHOES                       = (1 << 4);
+    public const ARMOR_GAUNTLETS                   = (1 << 5);
+
+    /**
      * getRacesAsArray
      *
      * @param boolean $swap
@@ -119,7 +128,7 @@ class RPG
         ];
 
         if ($swap) {
-            array_flip($array);
+            $array = array_flip($array);
         }
 
         return $array;

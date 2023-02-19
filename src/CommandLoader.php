@@ -138,6 +138,17 @@ class CommandLoader
                                         $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
                                         return;
                                     }
+
+                                    if ($cmd->command != "createchar") {
+                                        $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
+                                        $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($msg->author->id));
+                                        $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($msg->author->id));
+
+                                        if (!$charType || !$charNation || !$charGender) {
+                                            $msg->reply('You must create your character first!');
+                                            return;
+                                        }
+                                    }
                                 }
                             }
 

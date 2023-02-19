@@ -20,6 +20,7 @@
 
 namespace hiro\database;
 
+use hiro\consts\RPG;
 use PDO;
 use PDOException;
 
@@ -426,6 +427,60 @@ class Database extends PDO
         $query = $this->prepare("UPDATE users SET rpg_chargender = ? WHERE id = ?");
 
         return $query->execute([$gender, $user_id]);
+    }
+
+    /**
+     * getRPGCharGenderAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharGenderAsText(int $user_id): ?string
+    {
+        $gender = self::getRPGCharGender($user_id);
+        if ($gender == RPG::MALE_GENDER) {
+            $gender = "male";
+        } elseif ($gender == RPG::FEMALE_GENDER) {
+            $gender = "female";
+        }
+
+        return $gender;
+    }
+
+    /**
+     * getRPGCharRaceAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharRaceAsText(int $user_id): ?string
+    {
+        $races = RPG::getRacesAsArray(true);
+
+        $race = $races[self::getRPGCharRace($user_id)];
+        return $race;
+    }
+
+    /**
+     * getRPGCharTypeAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharTypeAsText(int $user_id): ?string
+    {
+        $type = self::getRPGCharType($user_id);
+        if ($type == RPG::WARRIOR_CHAR) {
+            $type = "warrior";
+        } elseif ($type == RPG::RANGER_CHAR) {
+            $type = "ranger";
+        } elseif ($type == RPG::MAGE_CHAR) {
+            $type = "mage";
+        } elseif ($type == RPG::HEALER_CHAR) {
+            $type = "healer";
+        }
+
+        return $type;
     }
 
     /**
