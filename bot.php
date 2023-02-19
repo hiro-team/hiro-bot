@@ -58,7 +58,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     ->setPresenceType(Activity::TYPE_WATCHING)
     ->setPresences([
         "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
-        ":crossed_swords: RPG System coming soon!"
+        "⚔️ RPG System coming soon!"
     ])
     ->startThread();
 
@@ -67,7 +67,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     {
         $presenceManager->setPresences([
             "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
-            ":crossed_swords: RPG System coming soon!"
+            "⚔️ RPG System coming soon!"
         ]);
     });
 
