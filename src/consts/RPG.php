@@ -37,30 +37,13 @@ class RPG
      * Race Types
      */
     public const HUMAN_RACE                        = (1 << 1);
-    public const BEARHUMAN_RACE                    = (1 << 2);
-    public const BEASTHUMAN_RACE                   = (1 << 3);
-    public const DEERHUMAN_RACE                    = (1 << 4);
-    public const DEMONBEAST_RACE                   = (1 << 5);
-    public const DRAGON_RACE                       = (1 << 6);
-    public const DRAGONKIN_RACE                    = (1 << 7);
-    public const DWARF_RACE                        = (1 << 8);
-    public const EARTHDRAGON_RACE                  = (1 << 9);
-    public const ELF_RACE                          = (1 << 10);
-    public const EVILEYETRIBE_RACE                 = (1 << 11);
-    public const FOXHUMAN_RACE                     = (1 << 12);
-    public const GIANT_RACE                        = (1 << 13);
-    public const HALFONI_RACE                      = (1 << 14);
-    public const HALFELF_RACE                      = (1 << 15);
-    public const HYENAHUMAN_RACE                   = (1 << 16);
-    public const LIZARDHUMAN_RACE                  = (1 << 17);
-    public const ONI_RACE                          = (1 << 18);
-    public const PHANTOM_RACE                      = (1 << 19);
-    public const RABBITHUMAN_RACE                  = (1 << 20);
-    public const SHUDRAK_RACE                      = (1 << 21);
-    public const SNAKEHUMAN_RACE                   = (1 << 22);
-    public const SPIRIT_RACE                       = (1 << 23);
-    public const TANUKIHUMAN_RACE                  = (1 << 24);
-    public const WOLFHUMAN_RACE                    = (1 << 25);
+    public const DRAGON_RACE                       = (1 << 2);
+    public const ELF_RACE                          = (1 << 3);
+    public const EVILEYETRIBE_RACE                 = (1 << 4);
+    public const HALFONI_RACE                      = (1 << 5);
+    public const HALFELF_RACE                      = (1 << 6);
+    public const ONI_RACE                          = (1 << 7);
+    public const WOLFHUMAN_RACE                    = (1 << 8);
 
     /**
      * Gender Types
@@ -101,29 +84,12 @@ class RPG
     {
         $array = [
             "human" => self::HUMAN_RACE,
-            "bearhuman" => self::BEARHUMAN_RACE,
-            "beasthuman" => self::BEASTHUMAN_RACE,
-            "deerhuman" => self::DEERHUMAN_RACE,
-            "demonbeast" => self::DEMONBEAST_RACE,
             "dragon" => self::DRAGON_RACE,
-            "dragonkin" => self::DRAGONKIN_RACE,
-            "dwarf" => self::DWARF_RACE,
-            "earthdragon" => self::EARTHDRAGON_RACE,
             "elf" => self::ELF_RACE,
             "evileyetribe" => self::EVILEYETRIBE_RACE,
-            "foxhuman" => self::FOXHUMAN_RACE,
-            "giant" => self::GIANT_RACE,
             "halfoni" => self::HALFONI_RACE,
             "halfelf" => self::HALFELF_RACE,
-            "hyenahuman" => self::HYENAHUMAN_RACE,
-            "lizardhuman" => self::LIZARDHUMAN_RACE,
             "oni" => self::ONI_RACE,
-            "phantom" => self::PHANTOM_RACE,
-            "rabbithuman" => self::RABBITHUMAN_RACE,
-            "shudrak" => self::SHUDRAK_RACE,
-            "snakehuman" => self::SNAKEHUMAN_RACE,
-            "spirit" => self::SPIRIT_RACE,
-            "tanukihuman" => self::TANUKIHUMAN_RACE,
             "wolfhuman" => self::WOLFHUMAN_RACE,
         ];
 

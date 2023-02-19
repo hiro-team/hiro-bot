@@ -25,12 +25,10 @@ class RPGUI
     {
         $username = substr(self::remove_emoji($username), 0, 20);
         $image     = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/InvUI.png");
-        $orange = imagecolorallocate($image, 220, 210, 60);
         $filepath = dirname(__DIR__, 2) . "/cache/" . random_int(100000, 999999) . ".png";
 
-        imagestring($image, self::FONT, (123 - (strlen($username) * imagefontwidth(self::FONT)) / 2), 83, $username, $orange);
         $image = self::drawMoney($image, $money);
-        $image = self::drawCharacter($image, $character);
+        $image = self::drawCharacter($image, $username, $character);
 
         imagepng($image, $filepath);
         imagedestroy($image);
@@ -56,15 +54,52 @@ class RPGUI
      * drawCharacter
      *
      * @param GdImage $image
+     * @param string $username
      * @param string $file
      * @return GdImage
      */
-    protected static function drawCharacter(GdImage $image, string $file): GdImage
+    protected static function drawCharacter(GdImage $image, string $username, string $file): GdImage
     {
         if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png")) return $image;
+        $orange = imagecolorallocate($image, 220, 210, 60);
+        imagestring($image, self::FONT, (123 - (strlen($username) * imagefontwidth(self::FONT)) / 2), 75, $username, $orange);
         $character = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png");
         $character = imagescale($character, ceil(imagesx($character)/4.2));
         imagecopy($image, $character, (123 - (imagesx($character) / 2)), (187 - (imagesy($character) / 2)), 0, 0, imagesx($character), imagesy($character));
+        return $image;
+    }
+
+    /**
+     * drawItem
+     *
+     * @param GdImage $image
+     * @param string $file
+     * @param integer $slot
+     * @return GdImage
+     */
+    protected static function drawItem(GdImage $image, string $file, int $slot): GdImage
+    {
+        // 28, 346
+        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png")) return $image;
+        $item = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png");
+        $item = imagescale($item, 47, 47);
+        imagecopy($image, $item, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($item), imagesy($item)); // what the fuck
+        return $image;
+    }
+
+    /**
+     * drawItemFrame
+     *
+     * @param GdImage $image
+     * @param integer $slot
+     * @return GdImage
+     */
+    protected static function drawItemFrame(GdImage $image, int $slot): GdImage
+    {
+        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png")) return $image;
+        $fr = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png");
+        $fr = imagescale($fr, 47, 47);
+        imagecopy($image, $fr, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($fr), imagesy($fr)); // what the fuck
         return $image;
     }
 
