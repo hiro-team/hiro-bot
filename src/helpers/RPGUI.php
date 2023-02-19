@@ -70,6 +70,40 @@ class RPGUI
     }
 
     /**
+     * drawItem
+     *
+     * @param GdImage $image
+     * @param string $file
+     * @param integer $slot
+     * @return GdImage
+     */
+    protected static function drawItem(GdImage $image, string $file, int $slot): GdImage
+    {
+        // 28, 346
+        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png")) return $image;
+        $item = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png");
+        $item = imagescale($item, 47, 47);
+        imagecopy($image, $item, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($item), imagesy($item)); // what the fuck
+        return $image;
+    }
+
+    /**
+     * drawItemFrame
+     *
+     * @param GdImage $image
+     * @param integer $slot
+     * @return GdImage
+     */
+    protected static function drawItemFrame(GdImage $image, int $slot): GdImage
+    {
+        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png")) return $image;
+        $fr = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png");
+        $fr = imagescale($fr, 47, 47);
+        imagecopy($image, $fr, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($fr), imagesy($fr)); // what the fuck
+        return $image;
+    }
+
+    /**
      * remove_emoji
      *
      * @param string $string
