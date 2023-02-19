@@ -40,8 +40,6 @@ class RPG
     public const DRAGON_RACE                       = (1 << 2);
     public const ELF_RACE                          = (1 << 3);
     public const EVILEYETRIBE_RACE                 = (1 << 4);
-    public const HALFONI_RACE                      = (1 << 5);
-    public const HALFELF_RACE                      = (1 << 6);
     public const ONI_RACE                          = (1 << 7);
     public const WOLFHUMAN_RACE                    = (1 << 8);
 
@@ -52,27 +50,27 @@ class RPG
     public const FEMALE_GENDER                     = (1 << 2);
 
     /**
-     * Weapons
+     * Item Types
      */
-    public const SWORD_WEAPON                      = 1;
-    public const BOW_WEAPON                        = 2;
-    public const STAFF_WEAPON                      = 3;
-    public const MORNINGSTAR_WEAPON                = 4;
+    public const ITEM_DEFAULT                      = (1 << 1);
+    public const ITEM_WEAPON                       = (1 << 2);
+    public const ITEM_ARMOR                        = (1 << 3);
+    public const ITEM_ARMOR_BOOTS                  = (1 << 4);
+    public const ITEM_ARMOR_GLOVES                 = (1 << 5);
+    public const ITEM_ARMOR_HELMET                 = (1 << 6);
+    public const ITEM_ARMOR_PANTS                  = (1 << 7);
+    public const ITEM_ARMOR_PAULDRON               = (1 << 8);
 
     /**
-     * Weapon Types
+     * Inventory UI
      */
-    public const LONG_WEAPON                       = (1 << 1);
-    public const SHORT_WEAPON                      = (1 << 2);
-
-    /**
-     * Armor Types
-     */
-    public const ARMOR_HELMET                      = (1 << 1);
-    public const ARMOR_PAULDRON                    = (1 << 2);
-    public const ARMOR_LEGGINGS                    = (1 << 3);
-    public const ARMOR_SHOES                       = (1 << 4);
-    public const ARMOR_GAUNTLETS                   = (1 << 5);
+    public const MAX_ITEM_SLOT                     = 7 * 4;
+    public const POS_HELMET                        = [292, 96];
+    public const POS_PAULDRON                      = [292, 148];
+    public const POS_PANTS                         = [292, 252];
+    public const POS_BOOTS                         = [292, 304];
+    public const POS_GLOVES                        = [240, 304];
+    public const POS_WEAPON                        = [240, 200];
 
     /**
      * getRacesAsArray
@@ -87,8 +85,6 @@ class RPG
             "dragon" => self::DRAGON_RACE,
             "elf" => self::ELF_RACE,
             "evileyetribe" => self::EVILEYETRIBE_RACE,
-            "halfoni" => self::HALFONI_RACE,
-            "halfelf" => self::HALFELF_RACE,
             "oni" => self::ONI_RACE,
             "wolfhuman" => self::WOLFHUMAN_RACE,
         ];

@@ -3,7 +3,7 @@
 namespace hiro\helpers;
 
 use GdImage;
-use hiro\Hiro;
+use hiro\consts\RPG;
 
 /**
  * RPGUI
@@ -21,7 +21,7 @@ class RPGUI
      * @param string $username
      * @return string
      */
-    public static function drawRPGInventoryUI(string $username, string $character, int $money = 0): string
+    public static function drawRPGInventoryUI(string $username, string $character, array $items, int $money = 0): string
     {
         $username = substr(self::remove_emoji($username), 0, 20);
         $image     = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/InvUI.png");
@@ -29,6 +29,7 @@ class RPGUI
 
         $image = self::drawMoney($image, $money);
         $image = self::drawCharacter($image, $username, $character);
+        $image = self::drawItems($image, $items);
 
         imagepng($image, $filepath);
         imagedestroy($image);
@@ -60,11 +61,13 @@ class RPGUI
      */
     protected static function drawCharacter(GdImage $image, string $username, string $file): GdImage
     {
-        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png")) return $image;
-        $image = self::drawCharacterNick($image, $username);
+        if (!file_exists(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png")) {
+            return $image;
+        }
         $character = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/characters/" . $file . ".png");
         $character = imagescale($character, ceil(imagesx($character)/4.2));
         imagecopy($image, $character, (123 - (imagesx($character) / 2)), (187 - (imagesy($character) / 2)), 0, 0, imagesx($character), imagesy($character));
+        $image = self::drawCharacterNick($image, $username);
         return $image;
     }
 
@@ -78,9 +81,9 @@ class RPGUI
     protected static function drawCharacterNick(GdImage $image, string $username): GdImage
     {
         $background_path = dirname(__DIR__, 1) . "/images/rpg/ui/nick_background.png";
-        if(file_exists($background_path)){
+        if (file_exists($background_path)) {
             $background = imagecreatefrompng($background_path);
-            imagecopy($image, $background, (123 - ( (imagesx($background) / 2) ) ), 80 - (imagesy($background) / 2), 0, 0, imagesx($background), imagesy($background));
+            imagecopy($image, $background, (123 - ((imagesx($background) / 2))), 80 - (imagesy($background) / 2), 0, 0, imagesx($background), imagesy($background));
         }
         $orange = imagecolorallocate($image, 220, 210, 60);
         imagestring($image, self::FONT, (123 - (strlen($username) * imagefontwidth(self::FONT)) / 2), 75, $username, $orange);
@@ -95,13 +98,20 @@ class RPGUI
      * @param integer $slot
      * @return GdImage
      */
-    protected static function drawItem(GdImage $image, string $file, int $slot): GdImage
+    protected static function drawItem(GdImage $image, string $file, int $slot, $x = null, $y = null): GdImage
     {
-        // 28, 346
-        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png")) return $image;
+        if (!file_exists(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png")) {
+            return $image;
+        }
         $item = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png");
-        $item = imagescale($item, 47, 47);
-        imagecopy($image, $item, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($item), imagesy($item)); // what the fuck
+        $item = imagescale($item, 46, 46);
+        if($x && $y) {
+            imagecopy($image, $item, $x - imagesx($item)/2, $y - imagesy($item)/2, 0, 0, imagesx($item), imagesy($item));
+            return $image;
+        }
+        $y = intval($slot / 7);
+        $x = $slot % 7;
+        imagecopy($image, $item, 28 + (49 * $x), 346 + (49 * $y), 0, 0, imagesx($item), imagesy($item)); // what the fuck
         return $image;
     }
 
@@ -112,12 +122,62 @@ class RPGUI
      * @param integer $slot
      * @return GdImage
      */
-    protected static function drawItemFrame(GdImage $image, int $slot): GdImage
+    protected static function drawItemFrame(GdImage $image, int $slot, $x = null, $y = null): GdImage
     {
-        if(!file_exists(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png")) return $image;
+        if (!file_exists(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png")) {
+            return $image;
+        }
         $fr = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png");
-        $fr = imagescale($fr, 47, 47);
-        imagecopy($image, $fr, ((28 + ( 49 * ( ( intval( $slot / 8 ) >= 1 ? intval( $slot / 8 ) : $slot ) - 1 ) ) ) ), ((346 + ( 49 * ( intval( $slot / 8 ) ) ) ) ), 0, 0, imagesx($fr), imagesy($fr)); // what the fuck
+        $fr = imagescale($fr, 46, 46);
+        if($x && $y) {
+            imagecopy($image, $fr, $x - imagesx($fr)/2, $y - imagesy($fr)/2, 0, 0, imagesx($fr), imagesy($fr));
+            return $image;
+        }
+        $y = intval($slot / 7);
+        $x = $slot % 7;
+        imagecopy($image, $fr, 28 + (49 * $x), 346 + (49 * $y), 0, 0, imagesx($fr), imagesy($fr)); // what the fuck
+        return $image;
+    }
+
+    /**
+     * drawItems
+     *
+     * @param GdImage $image
+     * @param array $items
+     * @return GdImage
+     */
+    protected static function drawItems(GdImage $image, array $items): GdImage
+    {
+        foreach ($items as $i) {
+            if ($i['item_using']) {
+                if ($i['item_type'] & RPG::ITEM_ARMOR) {
+                    if ($i['item_type'] & RPG::ITEM_ARMOR_BOOTS) {
+                        $x = RPG::POS_BOOTS[0];
+                        $y = RPG::POS_BOOTS[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_GLOVES) {
+                        $x = RPG::POS_GLOVES[0];
+                        $y = RPG::POS_GLOVES[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_HELMET) {
+                        $x = RPG::POS_HELMET[0];
+                        $y = RPG::POS_HELMET[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_PANTS) {
+                        $x = RPG::POS_PANTS[0];
+                        $y = RPG::POS_PANTS[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_PAULDRON) {
+                        $x = RPG::POS_PAULDRON[0];
+                        $y = RPG::POS_PAULDRON[1];
+                    }
+                } elseif($i['item_type'] & RPG::ITEM_WEAPON) {
+                    $x = RPG::POS_WEAPON[0];
+                    $y = RPG::POS_WEAPON[1];
+                }
+                $image = self::drawItemFrame($image, $i['item_slot'] ?? 0, $x, $y);
+                $image = self::drawItem($image, $i['item_image'], $i['item_slot'] ?? 0, $x, $y);
+                continue;
+            }
+            $image = self::drawItemFrame($image, $i['item_slot']);
+            $image = self::drawItem($image, $i['item_image'], $i['item_slot']);
+        }
         return $image;
     }
 

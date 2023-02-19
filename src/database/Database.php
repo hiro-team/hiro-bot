@@ -484,6 +484,146 @@ class Database extends PDO
     }
 
     /**
+     * getRPGUserItems
+     *
+     * @param integer $user_id
+     * @return array|null
+     */
+    public function getRPGUserItems(int $user_id): ?array
+    {
+        $query = $this->prepare(sprintf("SELECT * FROM rpg_items WHERE item_owner = ? LIMIT %d", RPG::MAX_ITEM_SLOT));
+        $query->execute([$user_id]);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * getRPGUserItemBySlot
+     *
+     * @param integer $user_id
+     * @param integer $slot
+     * @return array|null
+     */
+    public function getRPGUserItemBySlot(int $user_id, int $slot): ?array
+    {
+        $query = $this->prepare("SELECT * FROM rpg_items WHERE item_owner = ? AND item_slot = ?");
+        $query->execute([$user_id, $slot]);
+
+        $fetch = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$fetch) {
+            return null;
+        }
+
+        return $fetch;
+    }
+
+    /**
+     * useRPGUserItem
+     *
+     * @param integer $user_id
+     * @param integer $slot
+     * @return boolean|null
+     */
+    public function useRPGUserItem(int $user_id, int $slot): ?bool
+    {
+        $item = $this->getRPGUserItemBySlot($user_id, $slot);
+        if (!$item) {
+            return null;
+        }
+
+        if (!($item['item_type'] & RPG::ITEM_ARMOR) && !($item['item_type'] & RPG::ITEM_WEAPON)) {
+            return null;
+        }
+
+        return $this->query(
+            sprintf(
+                "UPDATE rpg_items 
+            SET item_using = 1, item_slot = NULL
+            WHERE item_owner = %d 
+            AND item_slot = %d",
+                $user_id,
+                $slot
+            )
+        ) ? true : false;
+    }
+
+    /**
+     * releaseRPGUserItem
+     *
+     * @param integer $user_id
+     * @param integer $itemtype
+     * @param integer $toslot
+     * @return boolean|null
+     */
+    public function releaseRPGUserItem(int $user_id, int $itemtype, int $toslot): ?bool
+    {
+        $item = $this->getRPGUsingItemByType($user_id, $itemtype);
+        if (!$item) {
+            return null;
+        }
+
+        if (!($item['item_type'] & $itemtype)) {
+            return null;
+        }
+
+        return $this->query(
+            sprintf(
+                "UPDATE rpg_items SET item_using = NULL, item_slot = %d WHERE item_owner = %d AND item_type = %d AND item_using = 1",
+                $toslot,
+                $user_id,
+                $item['item_type']
+            )
+        ) ? true : false;
+    }
+
+    /**
+     * getRPGUsingItemByType
+     *
+     * @param integer $user_id
+     * @param integer $type
+     * @return array|null
+     */
+    public function getRPGUsingItemByType(int $user_id, int $type): ?array
+    {
+        if($type & RPG::ITEM_ARMOR_BOOTS || $type & RPG::ITEM_ARMOR_GLOVES || $type & RPG::ITEM_ARMOR_HELMET || $type & RPG::ITEM_ARMOR_PANTS || $type & RPG::ITEM_ARMOR_PAULDRON) {
+            $type |= RPG::ITEM_ARMOR;
+        }
+        $query = $this->prepare("SELECT * FROM rpg_items WHERE item_owner = :owner AND item_using = 1 AND item_type = :type");
+        $query->execute(["owner" => $user_id, "type" => $type]);
+
+        $fetch = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$fetch) {
+            return null;
+        }
+
+        return $fetch;
+    }
+
+    /**
+     * findRPGEmptyInventorySlot
+     *
+     * @param integer $user_id
+     * @return integer|boolean
+     */
+    public function findRPGEmptyInventorySlot(int $user_id): int|bool
+    {
+        $items = $this->getRPGUserItems($user_id);
+
+        $slot = false;
+        for ($i = 0; $i < RPG::MAX_ITEM_SLOT; $i++) {
+            foreach ($items as $item) {
+                if ($item['item_slot'] == $i) {
+                    continue 2;
+                }
+            }
+            $slot = $i;
+            break;
+        }
+
+        return $slot;
+    }
+
+    /**
      * createTables
      *
      * @return void
@@ -495,6 +635,9 @@ class Database extends PDO
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         CREATE TABLE IF NOT EXISTS `servers` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        CREATE TABLE IF NOT EXISTS `rpg_items` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         EOF);
@@ -513,6 +656,16 @@ class Database extends PDO
                 "discord_id" => "bigint(21) NOT NULL",
                 "rpg_channel" => "bigint(21) DEFAULT NULL",
                 "rpg_enabled" => "int(11) DEFAULT NULL",
+            ],
+            "rpg_items" => [
+                "item_owner" => "bigint(21) NOT NULL",
+                "item_name" => "varchar(100) NOT NULL",
+                "item_type" => "int(11) NOT NULL",
+                "item_upgrade" => "int(11) NOT NULL",
+                "item_image" => "varchar(100) NOT NULL",
+                "item_slot" => "int(11) NOT NULL",
+                "item_count" => "int(11) DEFAULT NULL",
+                "item_using" => "int(11) DEFAULT NULL",
             ]
         ];
 

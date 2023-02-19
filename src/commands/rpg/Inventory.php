@@ -46,10 +46,10 @@ class Inventory extends Command
         $gender = $database->getRPGCharGenderAsText($user_id);
         $race = $database->getRPGCharRaceAsText($user_id);
         $type = $database->getRPGCharTypeAsText($user_id);
-        
+        $items = $database->getRPGUserItems($user->id);
         $character = $gender . "_" . $race . "_" . $type;
 
-        $msg->reply(MessageBuilder::new()->addFile($filepath = RPGUI::drawRPGInventoryUI($user->nick ?? $user->username, $character, $money)))->then(function () use ($filepath) {
+        $msg->reply(MessageBuilder::new()->addFile($filepath = RPGUI::drawRPGInventoryUI($user->nick ?? $user->username, $character, $items, $money)))->then(function () use ($filepath) {
             unlink($filepath);
         });
     }
