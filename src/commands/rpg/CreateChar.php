@@ -46,16 +46,26 @@ class CreateChar extends Command
 
         if (!isset($args[2])) {
             $prefix = $_ENV['PREFIX'];
+            $races_string = "";
+            foreach(RPG::getRacesAsArray(true) as $race)
+            {
+                if (end(RPG::getRacesAsArray(true)) === $race)
+                {
+                    $races_string .= $race;
+                    break;
+                }
+                $races_string .= $race . ", ";
+            }
             $msg->reply(<<<EOF
             Usage:
             {$prefix}createchar [type] [race] [gender]
 
             Available:
-            Type: warrior, ranger, mage, healer
+            Types: warrior, ranger, mage, healer
             
-            Race: human, bearhuman, beasthuman, deerhuman, demonbeast, dragon, dragonkin, dwarf, earthdragon, elf, evileyetribe, foxhuman, giant, halfoni, halfelf, hyenahuman, lizardhuman, oni, phantom, rabbithuman, shudrak, snakehuman, spirit, tanukihuman, wolfhuman
+            Races: $races_string
 
-            Gender: male or female
+            Genders: male or female
 
             Example:
             {$prefix}createchar healer elf female
