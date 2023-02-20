@@ -23,7 +23,6 @@ namespace hiro\commands;
 use Discord\Builders\MessageBuilder;
 use hiro\database\Database;
 use hiro\helpers\RPGUI;
-use hiro\consts\RPG;
 
 /**
  * Inventory
