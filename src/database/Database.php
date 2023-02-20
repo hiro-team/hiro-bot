@@ -609,14 +609,14 @@ class Database extends PDO
     {
         $items = $this->getRPGUserItems($user_id);
 
-        $slot = false;
         for ($i = 0; $i < RPG::MAX_ITEM_SLOT; $i++) {
+            $slot = $i;
             foreach ($items as $item) {
-                if ($item['item_slot'] == $i) {
+                if ($item['item_slot'] === $i) {
+                    $slot = false;
                     continue 2;
                 }
             }
-            $slot = $i;
             break;
         }
 
