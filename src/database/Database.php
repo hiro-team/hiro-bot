@@ -581,22 +581,26 @@ class Database extends PDO
      *
      * @param integer $user_id
      * @param integer $type
+     * @param boolean $equals
      * @return array|null
      */
-    public function getRPGUsingItemByType(int $user_id, int $type): ?array
+    public function getRPGUsingItemByType(int $user_id, int $type, bool $equals = true): ?array
     {
-        if($type & RPG::ITEM_ARMOR_BOOTS || $type & RPG::ITEM_ARMOR_GLOVES || $type & RPG::ITEM_ARMOR_HELMET || $type & RPG::ITEM_ARMOR_PANTS || $type & RPG::ITEM_ARMOR_PAULDRON) {
-            $type |= RPG::ITEM_ARMOR;
-        }
-        $query = $this->prepare("SELECT * FROM rpg_items WHERE item_owner = :owner AND item_using = 1 AND item_type = :type");
-        $query->execute(["owner" => $user_id, "type" => $type]);
+        $items = $this->getRPGUserItems($user_id);
 
-        $fetch = $query->fetch(\PDO::FETCH_ASSOC);
-        if (!$fetch) {
-            return null;
+        foreach ($items as $item) {
+            if ($equals) {
+                if ($item['item_type'] === $type) {
+                    return $item;
+                }
+            } else {
+                if ($item['item_type'] & $type) {
+                    return $item;
+                }
+            }
         }
 
-        return $fetch;
+        return null;
     }
 
     /**
@@ -621,6 +625,20 @@ class Database extends PDO
         }
 
         return $slot;
+    }
+
+    /**
+     * setRPGItemType
+     *
+     * @param integer $id
+     * @param integer $type
+     * @return boolean
+     */
+    public function setRPGItemType(int $id, int $type): bool
+    {
+        return $this->query(sprintf("UPDATE rpg_items SET 
+                    item_type = %d WHERE
+                    id = %d", $type, $id)) ? true : false;
     }
 
     /**

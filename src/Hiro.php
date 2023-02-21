@@ -65,7 +65,8 @@ class Hiro extends Discord implements HiroInterface
             'shardId' => $this->commandClientOptions['shardId'],
             'shardCount' => $this->commandClientOptions['shardCount'],
             'loadAllMembers' => $this->commandClientOptions['loadAllMembers'],
-            'intents' => $this->commandClientOptions['intents']
+            'intents' => $this->commandClientOptions['intents'],
+            'logger' => $this->commandClientOptions['logger']
         ]);
 
         parent::__construct($discordOptions);
@@ -440,7 +441,8 @@ class Hiro extends Discord implements HiroInterface
                 'shardId',
                 'shardCount',
                 'loadAllMembers',
-                'intents'
+                'intents',
+                'logger'
             ])
             ->setDefaults([
                 'prefix' => '@mention ',
@@ -453,7 +455,8 @@ class Hiro extends Discord implements HiroInterface
                 'shardId' => 0,
                 'shardCount' => 1,
                 'loadAllMembers' => false,
-                'intents' => Intents::getDefaultIntents()
+                'intents' => Intents::getDefaultIntents(),
+                'logger' => new \Monolog\Logger('hiro-log')
             ]);
 
         $options = $resolver->resolve($options);

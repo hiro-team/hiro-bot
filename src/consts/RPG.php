@@ -60,6 +60,21 @@ class RPG
     public const ITEM_ARMOR_HELMET                 = (1 << 6);
     public const ITEM_ARMOR_PANTS                  = (1 << 7);
     public const ITEM_ARMOR_PAULDRON               = (1 << 8);
+    public const ITEM_ARMOR_EARRING                = (1 << 9);
+    public const ITEM_ARMOR_RING                   = (1 << 10);
+    public const ITEM_ARMOR_BELT                   = (1 << 11);
+    public const ITEM_ARMOR_PENDANT                = (1 << 12);
+    public const ITEM_ARMOR_SHIELD                 = (1 << 13); // shield & weapon 2
+    public const ITEM_WEAPON_TWOHANDED             = (1 << 14);
+    public const ITEM_WEAPON_ONEHANDED             = (1 << 15);
+    public const ITEM_USED_LEFT                    = (1 << 16);
+    public const ITEM_USED_RIGHT                   = (1 << 17);
+    public const ITEM_DOUBLE_USABLE                = (1 << 18);
+    public const ITEM_USABLE_BY_WARRIOR            = (1 << 19);
+    public const ITEM_USABLE_BY_MAGE               = (1 << 20);
+    public const ITEM_USABLE_BY_RANGER             = (1 << 21);
+    public const ITEM_USABLE_BY_HEALER             = (1 << 22);
+
 
     /**
      * Inventory UI
@@ -71,6 +86,12 @@ class RPG
     public const POS_BOOTS                         = [292, 304];
     public const POS_GLOVES                        = [240, 304];
     public const POS_WEAPON                        = [240, 200];
+    public const POS_SHIELD                        = [344, 200];
+    public const POS_PENDANT                       = [240, 148];
+    public const POS_RING_LEFT                     = [240, 252];
+    public const POS_RING_RIGHT                    = [344, 252];
+    public const POS_EARRING_LEFT                  = [240, 96];
+    public const POS_EARRING_RIGHT                 = [344, 96];
 
     /**
      * getRacesAsArray

@@ -1,5 +1,23 @@
 <?php
 
+/**
+ * Copyright 2023 bariscodefx
+ *
+ * This file part of project Hiro 016 Discord Bot.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace hiro\helpers;
 
 use GdImage;
@@ -105,7 +123,7 @@ class RPGUI
         }
         $item = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/items/" . $file . ".png");
         $item = imagescale($item, 46, 46);
-        if($x && $y) {
+        if ($x && $y) {
             imagecopy($image, $item, $x - imagesx($item)/2, $y - imagesy($item)/2, 0, 0, imagesx($item), imagesy($item));
             return $image;
         }
@@ -129,7 +147,7 @@ class RPGUI
         }
         $fr = imagecreatefrompng(dirname(__DIR__, 1) . "/images/rpg/ui/itemFrame.png");
         $fr = imagescale($fr, 46, 46);
-        if($x && $y) {
+        if ($x && $y) {
             imagecopy($image, $fr, $x - imagesx($fr)/2, $y - imagesy($fr)/2, 0, 0, imagesx($fr), imagesy($fr));
             return $image;
         }
@@ -166,10 +184,37 @@ class RPGUI
                     } elseif ($i['item_type'] & RPG::ITEM_ARMOR_PAULDRON) {
                         $x = RPG::POS_PAULDRON[0];
                         $y = RPG::POS_PAULDRON[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_EARRING) {
+                        if ($i['item_type'] & RPG::ITEM_USED_LEFT) {
+                            $x = RPG::POS_EARRING_LEFT[0];
+                            $y = RPG::POS_EARRING_LEFT[1];
+                        } elseif ($i['item_type'] & RPG::ITEM_USED_RIGHT) {
+                            $x = RPG::POS_EARRING_RIGHT[0];
+                            $y = RPG::POS_EARRING_RIGHT[1];
+                        }
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_RING) {
+                        if ($i['item_type'] & RPG::ITEM_USED_LEFT) {
+                            $x = RPG::POS_RING_LEFT[0];
+                            $y = RPG::POS_RING_LEFT[1];
+                        } elseif ($i['item_type'] & RPG::ITEM_USED_RIGHT) {
+                            $x = RPG::POS_RING_RIGHT[0];
+                            $y = RPG::POS_RING_RIGHT[1];
+                        }
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_SHIELD) {
+                        $x = RPG::POS_SHIELD[0];
+                        $y = RPG::POS_SHIELD[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_ARMOR_PENDANT) {
+                        $x = RPG::POS_PENDANT[0];
+                        $y = RPG::POS_PENDANT[1];
                     }
-                } elseif($i['item_type'] & RPG::ITEM_WEAPON) {
-                    $x = RPG::POS_WEAPON[0];
-                    $y = RPG::POS_WEAPON[1];
+                } elseif ($i['item_type'] & RPG::ITEM_WEAPON) {
+                    if ($i['item_type'] & RPG::ITEM_USED_LEFT) {
+                        $x = RPG::POS_WEAPON[0];
+                        $y = RPG::POS_WEAPON[1];
+                    } elseif ($i['item_type'] & RPG::ITEM_USED_RIGHT) {
+                        $x = RPG::POS_SHIELD[0];
+                        $y = RPG::POS_SHIELD[1];
+                    }
                 }
                 $image = self::drawItemFrame($image, $i['item_slot'] ?? 0, $x, $y);
                 $image = self::drawItem($image, $i['item_image'], $i['item_slot'] ?? 0, $x, $y);

@@ -85,6 +85,17 @@ class ReleaseItem extends Command
             return;
         }
 
+        if( $database->getRPGUsingItemByType($msg->author->id, $slot | RPG::ITEM_WEAPON_ONEHANDED | RPG::ITEM_USED_LEFT) || $database->getRPGUsingItemByType($msg->author->id, $slot | RPG::ITEM_WEAPON_ONEHANDED | RPG::ITEM_USED_RIGHT) ) {
+            $slot |= RPG::ITEM_WEAPON_ONEHANDED;
+        }
+
+        if( $database->getRPGUsingItemByType($msg->author->id, $slot | RPG::ITEM_USED_RIGHT) ) {
+            $slot |= RPG::ITEM_USED_RIGHT;
+        } elseif ($database->getRPGUsingItemByType($msg->author->id, $slot | RPG::ITEM_USED_LEFT)) {
+            $slot |= RPG::ITEM_USED_LEFT;
+        }
+        $msg->reply($slot);
+
         if (!$database->releaseRPGUserItem($msg->author->id, $slot, $toslot)) {
             $msg->reply('Couldn\'t release item.');
             return;
