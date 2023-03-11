@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace hiro\commands\wikipedia;
+namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 use hiro\commands\Command;
