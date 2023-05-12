@@ -23,10 +23,7 @@ include __DIR__ . '/vendor/autoload.php';
 use hiro\Hiro;
 use Discord\Parts\User\Activity;
 use hiro\CommandLoader;
-use Discord\WebSockets\Event;
-use Discord\Parts\Channel\Message;
 use hiro\ArgumentParser;
-use hiro\interfaces\HiroInterface;
 use hiro\PresenceManager;
 use Discord\WebSockets\Intents;
 
@@ -49,15 +46,17 @@ $bot = new Hiro([
 ]);
 
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
+    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Debug));
     echo "Bot is ready!", PHP_EOL;
     
     $commandLoader = new CommandLoader($discord);
 
     $presenceManager = new PresenceManager($discord);
-    $presenceManager->setLoopTime(60.0)
+    $presenceManager->setLoopTime(15.0)
     ->setPresenceType(Activity::TYPE_WATCHING)
     ->setPresences([
         "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
+        "⚔️ RPG System coming soon!"
     ])
     ->startThread();
 
@@ -66,6 +65,7 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     {
         $presenceManager->setPresences([
             "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
+            "⚔️ RPG System coming soon!"
         ]);
     });
 

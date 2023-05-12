@@ -20,6 +20,7 @@
 
 namespace hiro\database;
 
+use hiro\consts\RPG;
 use PDO;
 use PDOException;
 
@@ -75,6 +76,23 @@ class Database extends PDO
     }
 
     /**
+     * getServer
+     *
+     * @param integer $server_id
+     * @return boolean|array
+     */
+    public function getServer(int $server_id): bool|array
+    {
+        $query = $this->prepare("SELECT * FROM servers WHERE id = ?");
+        $query->execute([$server_id]);
+        if ($query->rowCount()) {
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * getUserMoney
      *
      * @param integer $user_id
@@ -103,7 +121,26 @@ class Database extends PDO
         if ($query->rowCount()) {
             return $query->fetch(PDO::FETCH_ASSOC)['id'];
         } else {
-            return false;
+            $this->addUser(['discord_id' => $discord_id]);
+            return $this->getUserIdByDiscordId($discord_id);
+        }
+    }
+
+    /**
+     * getServerIdByDiscordId
+     *
+     * @param integer $discord_id
+     * @return boolean|integer
+     */
+    public function getServerIdByDiscordId(int $discord_id): bool|int
+    {
+        $query = $this->prepare("SELECT * FROM servers WHERE discord_id = ?");
+        $query->execute([$discord_id]);
+        if ($query->rowCount()) {
+            return $query->fetch(PDO::FETCH_ASSOC)['id'];
+        } else {
+            $this->addServer(['discord_id' => $discord_id]);
+            return $this->getServerIdByDiscordId($discord_id);
         }
     }
 
@@ -134,6 +171,59 @@ class Database extends PDO
     }
 
     /**
+     * addServer
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function addServer(array $data): bool
+    {
+        if (!$data['discord_id']) {
+            return false;
+        } else {
+            $query = $this->prepare("INSERT INTO servers SET discord_id = :discord_id");
+            if ($query->execute([
+                "discord_id" => $data['discord_id']
+            ])) {
+                return true;
+            } else {
+                print_r($query->errorInfo());
+                return false;
+            }
+        }
+    }
+
+    /**
+     * getRPGChannelForServer
+     *
+     * @param integer $serverid
+     * @return boolean|integer
+     */
+    public function getRPGChannelForServer(int $serverid): bool|int
+    {
+        $query = $this->prepare('SELECT rpg_channel FROM servers WHERE id = :id');
+        $query->execute([
+            "id" => $serverid
+        ]);
+        return $query->fetch()[0] ?? false;
+    }
+
+    /**
+     * getRPGEnabledForServer
+     *
+     * @param integer $serverid
+     * @return boolean|integer
+     */
+    public function getRPGEnabledForServer(int $serverid): bool|int
+    {
+        $query = $this->prepare('SELECT rpg_enabled FROM servers WHERE id = :id');
+        $query->execute([
+            "id" => $serverid
+        ]);
+        return $query->fetch()[0] ?? false;
+    }
+
+    /**
      * getLastDailyForUser
      *
      * @param integer $userid
@@ -145,7 +235,7 @@ class Database extends PDO
         $query->execute([
             "id" => $userid
         ]);
-        return $query->fetch()[0];
+        return $query->fetch()[0] ?? false;
     }
 
     /**
@@ -188,6 +278,38 @@ class Database extends PDO
     }
 
     /**
+     * setServerRPGChannel
+     *
+     * @param integer $server_id
+     * @param integer $channel
+     * @return boolean
+     */
+    public function setServerRPGChannel(int $server_id, int $channel): bool
+    {
+        $query = $this->prepare('UPDATE servers SET rpg_channel = :rpg_channel WHERE id = :id');
+        return $query->execute([
+            "rpg_channel" => $channel,
+            "id" => $server_id
+        ]);
+    }
+
+    /**
+     * setServerRPGEnabled
+     *
+     * @param integer $server_id
+     * @param integer $enabled
+     * @return boolean
+     */
+    public function setServerRPGEnabled(int $server_id, int $enabled): bool
+    {
+        $query = $this->prepare('UPDATE servers SET rpg_enabled = :rpg_enabled WHERE id = :id');
+        return $query->execute([
+            "rpg_enabled" => $enabled,
+            "id" => $server_id
+        ]);
+    }
+
+    /**
      * pay
      *
      * @param integer $user1
@@ -215,6 +337,311 @@ class Database extends PDO
     }
 
     /**
+     * getRPGCharType
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharType(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_chartype'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharType
+     *
+     * @param integer $user_id
+     * @param integer $type
+     * @return boolean
+     */
+    public function setRPGCharType(int $user_id, int $type): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_chartype = ? WHERE id = ?");
+
+        return $query->execute([$type, $user_id]);
+    }
+
+    /**
+     * getRPGCharRace
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharRace(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_charrace'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharRace
+     *
+     * @param integer $user_id
+     * @param integer $race
+     * @return boolean
+     */
+    public function setRPGCharRace(int $user_id, int $race): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_charrace = ? WHERE id = ?");
+
+        return $query->execute([$race, $user_id]);
+    }
+
+    /**
+     * getRPGCharGender
+     *
+     * @param integer $user_id
+     * @return integer|null
+     */
+    public function getRPGCharGender(int $user_id): ?int
+    {
+        $user = $this->getUser($user_id);
+
+        if ($user) {
+            return $user['rpg_chargender'];
+        }
+
+        return null;
+    }
+
+    /**
+     * setRPGCharGender
+     *
+     * @param integer $user_id
+     * @param integer $gender
+     * @return boolean
+     */
+    public function setRPGCharGender(int $user_id, int $gender): bool
+    {
+        $query = $this->prepare("UPDATE users SET rpg_chargender = ? WHERE id = ?");
+
+        return $query->execute([$gender, $user_id]);
+    }
+
+    /**
+     * getRPGCharGenderAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharGenderAsText(int $user_id): ?string
+    {
+        $gender = self::getRPGCharGender($user_id);
+        if ($gender == RPG::MALE_GENDER) {
+            $gender = "male";
+        } elseif ($gender == RPG::FEMALE_GENDER) {
+            $gender = "female";
+        }
+
+        return $gender;
+    }
+
+    /**
+     * getRPGCharRaceAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharRaceAsText(int $user_id): ?string
+    {
+        $races = RPG::getRacesAsArray(true);
+
+        $race = $races[self::getRPGCharRace($user_id)];
+        return $race;
+    }
+
+    /**
+     * getRPGCharTypeAsText
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getRPGCharTypeAsText(int $user_id): ?string
+    {
+        $type = self::getRPGCharType($user_id);
+        if ($type == RPG::WARRIOR_CHAR) {
+            $type = "warrior";
+        } elseif ($type == RPG::RANGER_CHAR) {
+            $type = "ranger";
+        } elseif ($type == RPG::MAGE_CHAR) {
+            $type = "mage";
+        } elseif ($type == RPG::HEALER_CHAR) {
+            $type = "healer";
+        }
+
+        return $type;
+    }
+
+    /**
+     * getRPGUserItems
+     *
+     * @param integer $user_id
+     * @return array|null
+     */
+    public function getRPGUserItems(int $user_id): ?array
+    {
+        $query = $this->prepare(sprintf("SELECT * FROM rpg_items WHERE item_owner = ? LIMIT %d", RPG::MAX_ITEM_SLOT));
+        $query->execute([$user_id]);
+
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * getRPGUserItemBySlot
+     *
+     * @param integer $user_id
+     * @param integer $slot
+     * @return array|null
+     */
+    public function getRPGUserItemBySlot(int $user_id, int $slot): ?array
+    {
+        $query = $this->prepare("SELECT * FROM rpg_items WHERE item_owner = ? AND item_slot = ?");
+        $query->execute([$user_id, $slot]);
+
+        $fetch = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$fetch) {
+            return null;
+        }
+
+        return $fetch;
+    }
+
+    /**
+     * useRPGUserItem
+     *
+     * @param integer $user_id
+     * @param integer $slot
+     * @return boolean|null
+     */
+    public function useRPGUserItem(int $user_id, int $slot): ?bool
+    {
+        $item = $this->getRPGUserItemBySlot($user_id, $slot);
+        if (!$item) {
+            return null;
+        }
+
+        if (!($item['item_type'] & RPG::ITEM_ARMOR) && !($item['item_type'] & RPG::ITEM_WEAPON)) {
+            return null;
+        }
+
+        return $this->query(
+            sprintf(
+                "UPDATE rpg_items 
+            SET item_using = 1, item_slot = NULL
+            WHERE item_owner = %d 
+            AND item_slot = %d",
+                $user_id,
+                $slot
+            )
+        ) ? true : false;
+    }
+
+    /**
+     * releaseRPGUserItem
+     *
+     * @param integer $user_id
+     * @param integer $itemtype
+     * @param integer $toslot
+     * @return boolean|null
+     */
+    public function releaseRPGUserItem(int $user_id, int $itemtype, int $toslot): ?bool
+    {
+        $item = $this->getRPGUsingItemByType($user_id, $itemtype);
+        if (!$item) {
+            return null;
+        }
+
+        if (!($item['item_type'] & $itemtype)) {
+            return null;
+        }
+
+        return $this->query(
+            sprintf(
+                "UPDATE rpg_items SET item_using = NULL, item_slot = %d WHERE item_owner = %d AND item_type = %d AND item_using = 1",
+                $toslot,
+                $user_id,
+                $item['item_type']
+            )
+        ) ? true : false;
+    }
+
+    /**
+     * getRPGUsingItemByType
+     *
+     * @param integer $user_id
+     * @param integer $type
+     * @param boolean $equals
+     * @return array|null
+     */
+    public function getRPGUsingItemByType(int $user_id, int $type, bool $equals = true): ?array
+    {
+        $items = $this->getRPGUserItems($user_id);
+
+        foreach ($items as $item) {
+            if ($equals) {
+                if ($item['item_type'] === $type) {
+                    return $item;
+                }
+            } else {
+                if ($item['item_type'] & $type) {
+                    return $item;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * findRPGEmptyInventorySlot
+     *
+     * @param integer $user_id
+     * @return integer|boolean
+     */
+    public function findRPGEmptyInventorySlot(int $user_id): int|bool
+    {
+        $items = $this->getRPGUserItems($user_id);
+
+        for ($i = 0; $i < RPG::MAX_ITEM_SLOT; $i++) {
+            $slot = $i;
+            foreach ($items as $item) {
+                if ($item['item_slot'] === $i) {
+                    $slot = false;
+                    continue 2;
+                }
+            }
+            break;
+        }
+
+        return $slot;
+    }
+
+    /**
+     * setRPGItemType
+     *
+     * @param integer $id
+     * @param integer $type
+     * @return boolean
+     */
+    public function setRPGItemType(int $id, int $type): bool
+    {
+        return $this->query(sprintf("UPDATE rpg_items SET 
+                    item_type = %d WHERE
+                    id = %d", $type, $id)) ? true : false;
+    }
+
+    /**
      * createTables
      *
      * @return void
@@ -225,6 +652,12 @@ class Database extends PDO
         CREATE TABLE IF NOT EXISTS `users` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        CREATE TABLE IF NOT EXISTS `servers` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        CREATE TABLE IF NOT EXISTS `rpg_items` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         EOF);
 
         $columns = [
@@ -233,13 +666,29 @@ class Database extends PDO
                 "money" => "int(11) DEFAULT '0'",
                 "last_daily" => "int(11) DEFAULT NULL",
                 "register_time" => "int(11) DEFAULT NULL",
+                "rpg_chartype" => "int(11) DEFAULT NULL",
+                "rpg_charrace" => "int(11) DEFAULT NULL",
+                "rpg_chargender" => "int(11) DEFAULT NULL",
+            ],
+            "servers" => [
+                "discord_id" => "bigint(21) NOT NULL",
+                "rpg_channel" => "bigint(21) DEFAULT NULL",
+                "rpg_enabled" => "int(11) DEFAULT NULL",
+            ],
+            "rpg_items" => [
+                "item_owner" => "bigint(21) NOT NULL",
+                "item_name" => "varchar(100) NOT NULL",
+                "item_type" => "int(11) NOT NULL",
+                "item_upgrade" => "int(11) NOT NULL",
+                "item_image" => "varchar(100) NOT NULL",
+                "item_slot" => "int(11) NOT NULL",
+                "item_count" => "int(11) DEFAULT NULL",
+                "item_using" => "int(11) DEFAULT NULL",
             ]
         ];
 
-        foreach ( $columns as $table_key => $table )
-        {
-            foreach( $table as $column_key => $column )
-            {
+        foreach ($columns as $table_key => $table) {
+            foreach ($table as $column_key => $column) {
                 try {
                     $col = $this->query("SELECT $column_key FROM $table_key");
                 } catch (\Exception $e) {

@@ -20,7 +20,7 @@
 
 namespace hiro;
 
-use hiro\commands\Command;
+use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
 
 /**
@@ -121,6 +121,37 @@ class CommandLoader
                     $cmd->command,
                     function ($msg, $args) use ($cmd) {
                         try {
+                            if ($cmd->category == "rpg") {
+                                $database = new Database();
+
+                                if ($database->isConnected) {
+                                    $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($msg->guild->id));
+                                    $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($msg->guild->id));
+
+                                    if (!$rpgenabled) {
+                                        $msg->reply('RPG commands is not enabled in this server.');
+                                        return;
+                                    } elseif (!$rpgchannel) {
+                                        $msg->reply('RPG commands channel is not available for this server.');
+                                        return;
+                                    } elseif ($rpgchannel != $msg->channel->id) {
+                                        $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
+                                        return;
+                                    }
+
+                                    if ($cmd->command != "createchar") {
+                                        $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
+                                        $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($msg->author->id));
+                                        $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($msg->author->id));
+
+                                        if (!$charType || !$charNation || !$charGender) {
+                                            $msg->reply('You must create your character first!');
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+
                             $cmd->handle($msg, $args);
                         } catch (\Throwable $e) {
                             $msg->reply("ERROR: `".$e->getMessage()."`");

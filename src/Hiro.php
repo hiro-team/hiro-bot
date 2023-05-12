@@ -65,7 +65,8 @@ class Hiro extends Discord implements HiroInterface
             'shardId' => $this->commandClientOptions['shardId'],
             'shardCount' => $this->commandClientOptions['shardCount'],
             'loadAllMembers' => $this->commandClientOptions['loadAllMembers'],
-            'intents' => $this->commandClientOptions['intents']
+            'intents' => $this->commandClientOptions['intents'],
+            'logger' => $this->commandClientOptions['logger']
         ]);
 
         parent::__construct($discordOptions);
@@ -440,7 +441,8 @@ class Hiro extends Discord implements HiroInterface
                 'shardId',
                 'shardCount',
                 'loadAllMembers',
-                'intents'
+                'intents',
+                'logger'
             ])
             ->setDefaults([
                 'prefix' => '@mention ',
@@ -453,7 +455,8 @@ class Hiro extends Discord implements HiroInterface
                 'shardId' => 0,
                 'shardCount' => 1,
                 'loadAllMembers' => false,
-                'intents' => Intents::getDefaultIntents()
+                'intents' => Intents::getDefaultIntents(),
+                'logger' => new \Monolog\Logger('hiro-log')
             ]);
 
         $options = $resolver->resolve($options);
@@ -497,16 +500,16 @@ class Hiro extends Discord implements HiroInterface
      * @param  int    $number 
      * @return int|string
      */
-    public function formatNumber(int $number)
+    public static function formatNumber(int $number)
     {
-        if($number >= 1000)
+        if($number >= 1000 && $number <= 999999)
         {
-            return $number / 1000 . "k";
-        }else if($number >= 1000000)
+            return round($number / 1000, 2) . "k";
+        }else if($number >= 1000000 && $number <= 999999999)
         {
-            return $number / 1000000 . "m";
+            return round($number / 1000000, 2) . "kk";
         }else if($number >= 1000000000){
-            return $number / 1000000000 . "t";
+            return round($number / 1000000000, 2) . "kkk";
         }else {
             return $number;
         }
