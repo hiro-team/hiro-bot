@@ -51,7 +51,7 @@ class Evals extends Command
             $msg->channel->sendMessage("No");
             return;
         }
-        $content = explode(' ', $msg->content, 2);
+        $content = trim(explode(' ', $msg->content, 2));
         if (!isset($content[1])) {
             $msg->reply("No args.");
             return;
