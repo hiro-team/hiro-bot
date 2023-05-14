@@ -61,7 +61,7 @@ class Database extends PDO
     /**
      * getUser
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return boolean|array
      */
     public function getUser(int $user_id): bool|array
@@ -78,7 +78,7 @@ class Database extends PDO
     /**
      * getServer
      *
-     * @param integer $server_id
+     * @param  integer $server_id
      * @return boolean|array
      */
     public function getServer(int $server_id): bool|array
@@ -95,7 +95,7 @@ class Database extends PDO
     /**
      * getUserMoney
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return boolean|integer
      */
     public function getUserMoney(int $user_id): bool|int
@@ -107,11 +107,43 @@ class Database extends PDO
             return false;
         }
     }
+    
+    /**
+     * getUserLevel
+     *
+     * @param  integer $user_id
+     * @return boolean|integer
+     */
+    public function getUserLevel(int $user_id): bool|int
+    {
+        if ($this->getUser($user_id)) {
+            $user = $this->getUser($user_id);
+            return $user['level'];
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * getUserExperience
+     *
+     * @param  integer $user_id
+     * @return boolean|integer
+     */
+    public function getUserExperience(int $user_id): bool|int
+    {
+        if ($this->getUser($user_id)) {
+            $user = $this->getUser($user_id);
+            return $user['experience'];
+        } else {
+            return false;
+        }
+    }
 
     /**
      * getUserIdByDiscordId
      *
-     * @param integer $discord_id
+     * @param  integer $discord_id
      * @return boolean|integer
      */
     public function getUserIdByDiscordId(int $discord_id): bool|int
@@ -129,7 +161,7 @@ class Database extends PDO
     /**
      * getServerIdByDiscordId
      *
-     * @param integer $discord_id
+     * @param  integer $discord_id
      * @return boolean|integer
      */
     public function getServerIdByDiscordId(int $discord_id): bool|int
@@ -147,7 +179,7 @@ class Database extends PDO
     /**
      * addUser
      *
-     * @param array $data
+     * @param  array $data
      * @return boolean
      */
     public function addUser(array $data): bool
@@ -156,12 +188,15 @@ class Database extends PDO
             return false;
         } else {
             $query = $this->prepare("INSERT INTO users SET discord_id = :discord_id, money = :money, register_time = :register_time, last_daily = :last_daily");
-            if ($query->execute([
+            if ($query->execute(
+                [
                 "discord_id" => $data['discord_id'],
                 "money" => 0,
                 "register_time" => time(),
                 "last_daily" => 0,
-            ])) {
+                ]
+            )
+            ) {
                 return true;
             } else {
                 print_r($query->errorInfo());
@@ -173,7 +208,7 @@ class Database extends PDO
     /**
      * addServer
      *
-     * @param array $data
+     * @param  array $data
      * @return boolean
      */
     public function addServer(array $data): bool
@@ -182,9 +217,12 @@ class Database extends PDO
             return false;
         } else {
             $query = $this->prepare("INSERT INTO servers SET discord_id = :discord_id");
-            if ($query->execute([
+            if ($query->execute(
+                [
                 "discord_id" => $data['discord_id']
-            ])) {
+                ]
+            )
+            ) {
                 return true;
             } else {
                 print_r($query->errorInfo());
@@ -196,60 +234,68 @@ class Database extends PDO
     /**
      * getRPGChannelForServer
      *
-     * @param integer $serverid
+     * @param  integer $serverid
      * @return boolean|integer
      */
     public function getRPGChannelForServer(int $serverid): bool|int
     {
         $query = $this->prepare('SELECT rpg_channel FROM servers WHERE id = :id');
-        $query->execute([
+        $query->execute(
+            [
             "id" => $serverid
-        ]);
+            ]
+        );
         return $query->fetch()[0] ?? false;
     }
 
     /**
      * getRPGEnabledForServer
      *
-     * @param integer $serverid
+     * @param  integer $serverid
      * @return boolean|integer
      */
     public function getRPGEnabledForServer(int $serverid): bool|int
     {
         $query = $this->prepare('SELECT rpg_enabled FROM servers WHERE id = :id');
-        $query->execute([
+        $query->execute(
+            [
             "id" => $serverid
-        ]);
+            ]
+        );
         return $query->fetch()[0] ?? false;
     }
 
     /**
      * getLastDailyForUser
      *
-     * @param integer $userid
+     * @param  integer $userid
      * @return boolean|integer
      */
     public function getLastDailyForUser(int $userid): bool|int
     {
         $query = $this->prepare('SELECT last_daily FROM users WHERE id = :id');
-        $query->execute([
+        $query->execute(
+            [
             "id" => $userid
-        ]);
+            ]
+        );
         return $query->fetch()[0] ?? false;
     }
 
     /**
      * daily
      *
-     * @param integer $userid
+     * @param  integer $userid
      * @return boolean|integer
      */
     public function daily(int $userid): bool|int
     {
         $query = $this->prepare('SELECT money FROM users WHERE id = :id');
-        $query->execute([
+        $query->execute(
+            [
             "id" => $userid
-        ]);
+            ]
+        );
         $usermoney = $query->fetch()[0];
         $daily = 500;
         $query = $this->prepare('UPDATE users SET money = :money, last_daily = :last_daily WHERE id = :id');
@@ -264,57 +310,63 @@ class Database extends PDO
     /**
      * setUserMoney
      *
-     * @param integer $user_id
-     * @param integer $money
+     * @param  integer $user_id
+     * @param  integer $money
      * @return boolean
      */
     public function setUserMoney(int $user_id, int $money): bool
     {
         $query = $this->prepare('UPDATE users SET money = :money WHERE id = :id');
-        return $query->execute([
+        return $query->execute(
+            [
             "money" => $money,
             "id" => $user_id
-        ]);
+            ]
+        );
     }
 
     /**
      * setServerRPGChannel
      *
-     * @param integer $server_id
-     * @param integer $channel
+     * @param  integer $server_id
+     * @param  integer $channel
      * @return boolean
      */
     public function setServerRPGChannel(int $server_id, int $channel): bool
     {
         $query = $this->prepare('UPDATE servers SET rpg_channel = :rpg_channel WHERE id = :id');
-        return $query->execute([
+        return $query->execute(
+            [
             "rpg_channel" => $channel,
             "id" => $server_id
-        ]);
+            ]
+        );
     }
 
     /**
      * setServerRPGEnabled
      *
-     * @param integer $server_id
-     * @param integer $enabled
+     * @param  integer $server_id
+     * @param  integer $enabled
      * @return boolean
      */
     public function setServerRPGEnabled(int $server_id, int $enabled): bool
     {
         $query = $this->prepare('UPDATE servers SET rpg_enabled = :rpg_enabled WHERE id = :id');
-        return $query->execute([
+        return $query->execute(
+            [
             "rpg_enabled" => $enabled,
             "id" => $server_id
-        ]);
+            ]
+        );
     }
 
     /**
      * pay
      *
-     * @param integer $user1
-     * @param integer $user2
-     * @param integer $payamount
+     * @param  integer $user1
+     * @param  integer $user2
+     * @param  integer $payamount
      * @return boolean
      */
     public function pay(int $user1, int $user2, int $payamount): bool
@@ -339,7 +391,7 @@ class Database extends PDO
     /**
      * getRPGCharType
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return integer|null
      */
     public function getRPGCharType(int $user_id): ?int
@@ -356,8 +408,8 @@ class Database extends PDO
     /**
      * setRPGCharType
      *
-     * @param integer $user_id
-     * @param integer $type
+     * @param  integer $user_id
+     * @param  integer $type
      * @return boolean
      */
     public function setRPGCharType(int $user_id, int $type): bool
@@ -370,7 +422,7 @@ class Database extends PDO
     /**
      * getRPGCharRace
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return integer|null
      */
     public function getRPGCharRace(int $user_id): ?int
@@ -387,8 +439,8 @@ class Database extends PDO
     /**
      * setRPGCharRace
      *
-     * @param integer $user_id
-     * @param integer $race
+     * @param  integer $user_id
+     * @param  integer $race
      * @return boolean
      */
     public function setRPGCharRace(int $user_id, int $race): bool
@@ -401,7 +453,7 @@ class Database extends PDO
     /**
      * getRPGCharGender
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return integer|null
      */
     public function getRPGCharGender(int $user_id): ?int
@@ -418,8 +470,8 @@ class Database extends PDO
     /**
      * setRPGCharGender
      *
-     * @param integer $user_id
-     * @param integer $gender
+     * @param  integer $user_id
+     * @param  integer $gender
      * @return boolean
      */
     public function setRPGCharGender(int $user_id, int $gender): bool
@@ -432,7 +484,7 @@ class Database extends PDO
     /**
      * getRPGCharGenderAsText
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return string|null
      */
     public function getRPGCharGenderAsText(int $user_id): ?string
@@ -450,7 +502,7 @@ class Database extends PDO
     /**
      * getRPGCharRaceAsText
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return string|null
      */
     public function getRPGCharRaceAsText(int $user_id): ?string
@@ -464,7 +516,7 @@ class Database extends PDO
     /**
      * getRPGCharTypeAsText
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return string|null
      */
     public function getRPGCharTypeAsText(int $user_id): ?string
@@ -486,7 +538,7 @@ class Database extends PDO
     /**
      * getRPGUserItems
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return array|null
      */
     public function getRPGUserItems(int $user_id): ?array
@@ -500,8 +552,8 @@ class Database extends PDO
     /**
      * getRPGUserItemBySlot
      *
-     * @param integer $user_id
-     * @param integer $slot
+     * @param  integer $user_id
+     * @param  integer $slot
      * @return array|null
      */
     public function getRPGUserItemBySlot(int $user_id, int $slot): ?array
@@ -520,8 +572,8 @@ class Database extends PDO
     /**
      * useRPGUserItem
      *
-     * @param integer $user_id
-     * @param integer $slot
+     * @param  integer $user_id
+     * @param  integer $slot
      * @return boolean|null
      */
     public function useRPGUserItem(int $user_id, int $slot): ?bool
@@ -550,9 +602,9 @@ class Database extends PDO
     /**
      * releaseRPGUserItem
      *
-     * @param integer $user_id
-     * @param integer $itemtype
-     * @param integer $toslot
+     * @param  integer $user_id
+     * @param  integer $itemtype
+     * @param  integer $toslot
      * @return boolean|null
      */
     public function releaseRPGUserItem(int $user_id, int $itemtype, int $toslot): ?bool
@@ -579,9 +631,9 @@ class Database extends PDO
     /**
      * getRPGUsingItemByType
      *
-     * @param integer $user_id
-     * @param integer $type
-     * @param boolean $equals
+     * @param  integer $user_id
+     * @param  integer $type
+     * @param  boolean $equals
      * @return array|null
      */
     public function getRPGUsingItemByType(int $user_id, int $type, bool $equals = true): ?array
@@ -606,7 +658,7 @@ class Database extends PDO
     /**
      * findRPGEmptyInventorySlot
      *
-     * @param integer $user_id
+     * @param  integer $user_id
      * @return integer|boolean
      */
     public function findRPGEmptyInventorySlot(int $user_id): int|bool
@@ -630,15 +682,19 @@ class Database extends PDO
     /**
      * setRPGItemType
      *
-     * @param integer $id
-     * @param integer $type
+     * @param  integer $id
+     * @param  integer $type
      * @return boolean
      */
     public function setRPGItemType(int $id, int $type): bool
     {
-        return $this->query(sprintf("UPDATE rpg_items SET 
+        return $this->query(
+            sprintf(
+                "UPDATE rpg_items SET 
                     item_type = %d WHERE
-                    id = %d", $type, $id)) ? true : false;
+                    id = %d", $type, $id
+            )
+        ) ? true : false;
     }
 
     /**
@@ -648,7 +704,8 @@ class Database extends PDO
      */
     public function createTables(): void
     {
-        $this->exec(<<<EOF
+        $this->exec(
+            <<<EOF
         CREATE TABLE IF NOT EXISTS `users` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -658,7 +715,8 @@ class Database extends PDO
         CREATE TABLE IF NOT EXISTS `rpg_items` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-        EOF);
+        EOF
+        );
 
         $columns = [
             "users" => [
@@ -669,6 +727,8 @@ class Database extends PDO
                 "rpg_chartype" => "int(11) DEFAULT NULL",
                 "rpg_charrace" => "int(11) DEFAULT NULL",
                 "rpg_chargender" => "int(11) DEFAULT NULL",
+                "experience" => "int(11) DEFAULT '0'",
+                "level" => "int(11) DEFAULT '1'",
             ],
             "servers" => [
                 "discord_id" => "bigint(21) NOT NULL",
