@@ -46,7 +46,7 @@ $bot = new Hiro([
 ]);
 
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
-    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Debug));
+    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Info));
     echo "Bot is ready!", PHP_EOL;
     
     $commandLoader = new CommandLoader($discord);
