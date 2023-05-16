@@ -20,9 +20,12 @@
 
 namespace hiro\commands;
 
-use Discord\Builders\MessageBuilder;
-use hiro\database\Database;
 use hiro\helpers\RPGUI;
+use hiro\database\Database;
+use Discord\Parts\Embed\Embed;
+use Discord\Builders\MessageBuilder;
+use Discord\Parts\Channel\Attachment;
+use Discord\Parts\Guild\Member;
 
 /**
  * Inventory
@@ -45,8 +48,8 @@ class Inventory extends Command
     /**
      * handle
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param  [type] $msg
+     * @param  [type] $args
      * @return void
      */
     public function handle($msg, $args): void
@@ -66,8 +69,21 @@ class Inventory extends Command
         $items = $database->getRPGUserItems($user->id);
         $character = $gender . "_" . $race . "_" . $type;
 
-        $msg->reply(MessageBuilder::new()->addFile($filepath = RPGUI::drawRPGInventoryUI($user->nick ?? $user->username, $character, $items, $money)))->then(function () use ($filepath) {
-            unlink($filepath);
-        });
+        $embed = new Embed($this->discord);
+        $embed->setTitle($user->username . " Inventory");
+        $embed->setAuthor($user->username, $msg->author->avatar);
+        $embed->setDescription(
+            "<:g_level:1107035586994389062> Level:      " . $database->getUserLevel($user_id) . 
+            "\n" . 
+            "<a:g_exp:1107035947494805584> Experience:      " . $database->getUserExperience($user_id) .
+            "\n" .
+            "<:race_Z:1107036549255790592> Race:        " . $race .
+            "\n" .
+            "<:gender:1107036557271113728> Gender:      " . $gender . 
+            "\n" .
+            "<:skill:1107037343610835006> Type:   asd  " . $type
+        );
+
+        $msg->reply(MessageBuilder::new()->addEmbed($embed));
     }
 }
