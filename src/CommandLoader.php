@@ -94,7 +94,7 @@ class CommandLoader
     /**
      * loadDir
      *
-     * @param string $dir
+     * @param  string $dir
      * @return void
      */
     protected function loadDir(string $dir): void
@@ -110,63 +110,15 @@ class CommandLoader
                 }
 
                 try {
-                    require $dir . "/" . $file;
+                    include $dir . "/" . $file;
                 } catch (\Throwable $e) {
+                    echo $e->getMessage() . " " . $e->getFile() . ":" . $e->getLine() . \PHP_EOL;
                 }
 
                 $classnamespace = 'hiro\\commands\\' . $class;
                 $cmd = new $classnamespace($this->client, $this);
 
-                $this->client->registerCommand(
-                    $cmd->command,
-                    function ($msg, $args) use ($cmd) {
-                        try {
-                            if ($cmd->category == "rpg") {
-                                $database = new Database();
-
-                                if ($database->isConnected) {
-                                    $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($msg->guild->id));
-                                    $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($msg->guild->id));
-
-                                    if($cmd->command != "setrpgchannel" && $cmd->command != "setrpgenabled")
-                                    {
-                                        if (!$rpgenabled) {
-                                            $msg->reply('RPG commands is not enabled in this server.');
-                                            return;
-                                        } elseif (!$rpgchannel) {
-                                            $msg->reply('RPG commands channel is not available for this server.');
-                                            return;
-                                        } elseif ($rpgchannel != $msg->channel->id) {
-                                            $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
-                                            return;
-                                        }
-                                    
-
-                                        if ($cmd->command != "createchar") {
-                                            $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
-                                            $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($msg->author->id));
-                                            $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($msg->author->id));
-
-                                            if (!$charType || !$charNation || !$charGender) {
-                                                $msg->reply('You must create your character first!');
-                                                return;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            $cmd->handle($msg, $args);
-                        } catch (\Throwable $e) {
-                            $msg->reply("ERROR: `".$e->getMessage()."`");
-                        }
-                    },
-                    [
-                        'aliases' => $cmd->aliases,
-                        'description' => $cmd->description,
-                        'cooldown' => $cmd->cooldown ?? 0
-                    ]
-                );
+                $this->loadCommand($cmd);
 
                 if (!isset($this->categories[$cmd->category])) {
                     $this->categories[$cmd->category] = [];
@@ -183,6 +135,77 @@ class CommandLoader
                 $this->loadDir($dir . "/" . $file);
             }
         }
+    }
+
+    /**
+     * getCmd
+     */
+    public function getCmd($cmd_name)
+    {
+        foreach($this->categories as $category)
+        {
+            foreach($category as $cmd)
+            {
+                if($cmd_name === $cmd->command) return $cmd;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * loadCommand
+     */
+    public function loadCommand($cmd)
+    {
+        $this->client->registerCommand(
+            $cmd->command,
+            function ($msg, $args) use ($cmd) {
+                try {
+                    if ($cmd->category == "rpg") {
+                        $database = new Database();
+
+                        if ($database->isConnected) {
+                            $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($msg->guild->id));
+                            $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($msg->guild->id));
+
+                            if($cmd->command != "setrpgchannel" && $cmd->command != "setrpgenabled") {
+                                if (!$rpgenabled) {
+                                    $msg->reply('RPG commands is not enabled in this server.');
+                                    return;
+                                } elseif (!$rpgchannel) {
+                                    $msg->reply('RPG commands channel is not available for this server.');
+                                    return;
+                                } elseif ($rpgchannel != $msg->channel->id) {
+                                    $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
+                                    return;
+                                }
+                                    
+
+                                if ($cmd->command != "createchar") {
+                                    $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
+                                    $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($msg->author->id));
+                                    $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($msg->author->id));
+
+                                    if (!$charType || !$charNation || !$charGender) {
+                                        $msg->reply('You must create your character first!');
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $cmd->handle($msg, $args);
+                } catch (\Throwable $e) {
+                    $msg->reply("ERROR: `".$e->getMessage()."`");
+                }
+            },
+            [
+                        'aliases' => $cmd->aliases,
+                        'description' => $cmd->description,
+                        'cooldown' => $cmd->cooldown ?? 0
+                    ]
+        );
     }
 
     /**
@@ -216,7 +239,7 @@ class CommandLoader
     /**
      * __get
      *
-     * @param string $var
+     * @param  string $var
      * @return void
      */
     public function __get(string $var)

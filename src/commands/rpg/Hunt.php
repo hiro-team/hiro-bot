@@ -22,7 +22,11 @@ namespace hiro\commands;
 
 use hiro\consts\RPG;
 use hiro\database\Database;
+use hiro\parts\generators\{GithubImageGenerator, MonsterGenerator};
 use Discord\Parts\Embed\Embed;
+use Discord\Builders\MessageBuilder;
+use Discord\Builders\Components\{Button, ActionRow};
+use Discord\Parts\Interactions\Interaction;
 
 class Hunt extends Command
 {
@@ -42,8 +46,8 @@ class Hunt extends Command
     /**
      * handle
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param  [type] $msg
+     * @param  [type] $args
      * @return void
      */
     public function handle($msg, $args): void
@@ -54,6 +58,42 @@ class Hunt extends Command
             return;
         }
 
-        $embed = new Embed();
+        $embed = new Embed($this->discord);
+        $embed->setTitle("Hunting");
+        $embed->setDescription("Click to the button for starting hunting");
+        $embed->setTimestamp();
+        $msg->channel->sendMessage(
+            MessageBuilder::new()
+                ->addEmbed($embed)
+                ->addComponent(
+                    ActionRow::new()->addComponent(
+                        Button::new(Button::STYLE_DANGER)
+                            ->setLabel("Start Hunting")
+                            ->setListener(
+                                function (Interaction $interaction) {
+                                    $generator = new MonsterGenerator();
+                                    $monster = $generator->generateRandom();
+                                    $embed = new Embed($this->discord);
+                                    $embed
+                                        ->setTitle("Hunting")
+                                        ->setDescription($monster->getName() . " seen " . GithubImageGenerator::generate($monster->getName()))
+                                        ->setImage(GithubImageGenerator::generate($monster->getName()))
+                                        ->setTimestamp();
+                                    $interaction->respondWithMessage(
+                                        MessageBuilder::new()
+                                            ->addComponent(
+                                                ActionRow::new()->addComponent(
+                                                    Button::new(Button::STYLE_DANGER)->setLabel("Attack")
+                                                )
+                                            )
+                                            ->addEmbed($embed),
+                                        true
+                                    );
+                                },
+                                $this->discord
+                            )
+                    )
+                )
+        );
     }
 }

@@ -73,17 +73,29 @@ class Inventory extends Command
         $embed->setTitle($user->username . " Inventory");
         $embed->setAuthor($user->username, $msg->author->avatar);
         $embed->setDescription(
-            "<:g_level:1107035586994389062> Level:      " . $database->getUserLevel($user_id) . 
-            "\n" . 
-            "<a:g_exp:1107035947494805584> Experience:      " . $database->getUserExperience($user_id) .
-            "\n" .
-            "<:race_Z:1107036549255790592> Race:        " . $race .
-            "\n" .
-            "<:gender:1107036557271113728> Gender:      " . $gender . 
-            "\n" .
-            "<:skill:1107037343610835006> Type:   asd  " . $type
+            vsprintf(
+                <<<EOF
+            %s `Level        : %d`
+            %s `Experience   : %d`
+            %s `Race         : %s`
+            %s `Gender       : %s`
+            %s `Type         : %s`
+EOF,
+                [
+                    "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level
+                    "<a:g_exp:1107035947494805584>", $database->getUserExperience($user_id),        // experience,
+                    "<:race_Z:1107036549255790592>", $race,                                         // race
+                    "<:gender:1107036557271113728>", $gender,                                       // gender
+                    "<:skill:1107037343610835006>", $type,                                          // type
+                ]
+            )
         );
+        $embed->setImage("https://raw.githubusercontent.com/bariscodefxy/Hiro-Discord-Bot/master/src/images/rpg/characters/". $character .".png");
+        $embed->setTimestamp();
 
-        $msg->reply(MessageBuilder::new()->addEmbed($embed));
+        $msg->reply(
+            MessageBuilder::new()
+                ->addEmbed($embed)
+        );
     }
 }
