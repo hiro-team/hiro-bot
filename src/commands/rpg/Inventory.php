@@ -75,11 +75,11 @@ class Inventory extends Command
         $embed->setDescription(
             vsprintf(
                 <<<EOF
-            %s `Level        : %d`
-            %s `Experience   : %d`
-            %s `Race         : %s`
-            %s `Gender       : %s`
-            %s `Type         : %s`
+%s `Level        : %d`
+%s `Experience   : %d`
+%s `Race         : %s`
+%s `Gender       : %s`
+%s `Type         : %s`
 EOF,
                 [
                     "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level
