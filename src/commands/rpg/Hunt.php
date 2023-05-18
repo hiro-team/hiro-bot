@@ -23,6 +23,8 @@ namespace hiro\commands;
 use hiro\consts\RPG;
 use hiro\database\Database;
 use hiro\parts\generators\{GithubImageGenerator, MonsterGenerator};
+use hiro\interfaces\GeneratorReturn;
+use Discord\Parts\Channel\Message;
 use Discord\Parts\Embed\Embed;
 use Discord\Builders\MessageBuilder;
 use Discord\Builders\Components\{Button, ActionRow};
@@ -73,27 +75,66 @@ class Hunt extends Command
                                 function (Interaction $interaction) {
                                     $generator = new MonsterGenerator();
                                     $monster = $generator->generateRandom();
-                                    $embed = new Embed($this->discord);
-                                    $embed
-                                        ->setTitle("Hunting")
-                                        ->setDescription($monster->getName() . " seen " . GithubImageGenerator::generate($monster->getName()))
-                                        ->setImage(GithubImageGenerator::generate($monster->getName()))
-                                        ->setTimestamp();
-                                    $interaction->respondWithMessage(
-                                        MessageBuilder::new()
-                                            ->addComponent(
-                                                ActionRow::new()->addComponent(
-                                                    Button::new(Button::STYLE_DANGER)->setLabel("Attack")
-                                                )
-                                            )
-                                            ->addEmbed($embed),
-                                        true
-                                    );
+                                    $this->attackHandle($interaction, $monster);
+                                    $interaction->message->delete();
                                 },
-                                $this->discord
+                                $this->discord,
+                                true
                             )
                     )
                 )
         );
+    }
+
+    /**
+     * attackHandle
+     * 
+     * @var Interaction $interaction
+     * @var GeneratorReturn $monster
+     * @var Message $epheralMessage = null
+     */
+    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, Message $epheralMessage = null)
+    {
+        $embed = new Embed($this->discord);
+        $embed
+            ->setTitle($monster->getName())
+            ->setDescription(<<<EOF
+Monster HP {$monster->getHealth()}
+EOF)
+            ->setImage(GithubImageGenerator::generate($monster->getName()))
+            ->setTimestamp();
+
+        // attack event
+        if($monster->getHealth() <= 0)
+        {
+            $epheralMessage->edit(MessageBuilder::new()->setContent("Monster died!")->setEmbeds([])->setComponents([]));
+            return;
+        }
+
+        $monster->setHealth(
+            $monster->getHealth() - random_int(30, 100)
+        );
+
+        $buildedMsg = MessageBuilder::new()
+        ->addComponent(
+            ActionRow::new()->addComponent(
+                Button::new(Button::STYLE_DANGER)->setLabel("Attack")
+                ->setListener(
+                    function(Interaction $interaction) use ($monster)
+                    {
+                        $this->attackHandle($interaction, $monster, $interaction->message);
+                    },
+                    $this->discord
+                )
+            )
+        )
+        ->addEmbed($embed);
+
+        if($epheralMessage)
+        {
+            $epheralMessage->edit($buildedMsg);
+        } else {
+            $interaction->respondWithMessage($buildedMsg);
+        }
     }
 }
