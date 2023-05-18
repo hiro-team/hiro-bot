@@ -48,6 +48,11 @@ abstract class Monster implements GeneratorReturn {
     public string $image;
 
     /**
+     * $xp
+     */
+    public int $xp;
+
+    /**
      * setHealth
      * 
      * @var int $health
@@ -85,6 +90,16 @@ abstract class Monster implements GeneratorReturn {
     public function setImage(string $image): void
     {
         $this->image = $image;
+    }
+
+    /**
+     * setXp
+     * 
+     * @var int $xp
+     */
+    public function setXp(int $xp): void
+    {
+        $this->xp = $xp;
     }
 
     /**
@@ -136,6 +151,16 @@ abstract class Monster implements GeneratorReturn {
     {
         $namespace = explode('\\', $this::class);
         return end($namespace);
+    }
+
+    /**
+     * getXp
+     * 
+     * @return int
+     */
+    public function getXp(): int
+    {
+        return $this->xp;
     }
     
 }

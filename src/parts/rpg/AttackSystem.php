@@ -18,15 +18,22 @@
  * limitations under the License.
  */
 
-namespace hiro\parts\monster;
+namespace hiro\parts\rpg;
 
-class Wolf extends DemonBeast {
+/**
+ * AttackSystem
+ */
+class AttackSystem {
 
-    public function __construct()
+    /**
+     * getAttackDamage
+     * 
+     * @var int $level
+     * @return ?int
+     */
+    public static function getAttackDamage(int $level): ?int
     {
-        $this->health = 15;
-        $this->damage = 5;
-        $this->xp = 5;
+        return $level * random_int(1, 3) + 5;
     }
 
 }

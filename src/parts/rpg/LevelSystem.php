@@ -18,15 +18,22 @@
  * limitations under the License.
  */
 
-namespace hiro\parts\monster;
+namespace hiro\parts\rpg;
 
-class Wolf extends DemonBeast {
+/**
+ * LevelSystem
+ */
+class LevelSystem {
 
-    public function __construct()
+    /**
+     * getRequiredExperiences
+     * 
+     * @var int $level
+     * @return ?int
+     */
+    public static function getRequiredExperiences(int $level): ?int
     {
-        $this->health = 15;
-        $this->damage = 5;
-        $this->xp = 5;
+        return $level * 100;
     }
 
 }

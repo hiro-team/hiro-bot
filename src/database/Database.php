@@ -326,6 +326,42 @@ class Database extends PDO
     }
 
     /**
+     * setUserExperience
+     *
+     * @param  integer $user_id
+     * @param  integer $xp
+     * @return boolean
+     */
+    public function setUserExperience(int $user_id, int $xp): bool
+    {
+        $query = $this->prepare('UPDATE users SET experience = :experience WHERE id = :id');
+        return $query->execute(
+            [
+            "experience" => $xp,
+            "id" => $user_id
+            ]
+        );
+    }
+
+    /**
+     * setUserLevel
+     *
+     * @param  integer $user_id
+     * @param  integer $level
+     * @return boolean
+     */
+    public function setUserLevel(int $user_id, int $level): bool
+    {
+        $query = $this->prepare('UPDATE users SET level = :level WHERE id = :id');
+        return $query->execute(
+            [
+            "level" => $level,
+            "id" => $user_id
+            ]
+        );
+    }
+
+    /**
      * setServerRPGChannel
      *
      * @param  integer $server_id
