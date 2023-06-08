@@ -60,17 +60,14 @@ class Money extends Command
         if (!$user) $user = $msg->author;
         $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
         if (!is_numeric($user_money)) {
-            echo "money is empty" . PHP_EOL;
             if (!$database->addUser([
                 "discord_id" => $user->id
             ])) {
                 $embed = new Embed($this->discord);
                 $embed->setTitle('You are couldnt added to database.');
                 $msg->channel->sendEmbed($embed);
-                echo "cant added" . PHP_EOL;
                 return;
             } else {
-                echo "User added" . PHP_EOL;
                 $user_money = 0;
             }
         }
