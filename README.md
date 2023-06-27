@@ -3,7 +3,7 @@
 [![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/hiro-team/hiro-bot/releases/latest)
 [![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=1074961668074905662&permissions=8&scope=bot)
 
-A discord bot written in PHP
+A Discord bot written in PHP
 
 |Project Name|Author|Minimum PHP Version|
 |--|--|--|
