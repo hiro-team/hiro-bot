@@ -1,7 +1,7 @@
-<?php
+ <?php
 
 /**
- * Copyright 2021 bariscodefx
+ * Copyright 2023 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -45,6 +45,16 @@ $bot = new Hiro([
     'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS
 ]);
 
+function getPresenceState(): ?array
+{
+	global $bot, $shard_id, $shard_count;
+	return [
+        "{$_ENV['PREFIX']}help | " . $bot->formatNumber(sizeof($bot->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
+        "⚔️ RPG System coming soon!",
+        "Music System coming soon!"
+    ];
+}
+
 $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Info));
     echo "Bot is ready!", PHP_EOL;
@@ -54,21 +64,13 @@ $bot->on('ready', function($discord) use ($shard_id, $shard_count) {
     $presenceManager = new PresenceManager($discord);
     $presenceManager->setLoopTime(15.0)
     ->setPresenceType(Activity::TYPE_WATCHING)
-    ->setPresences([
-        "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
-        "⚔️ RPG System coming soon!",
-        "Music System coming soon!"
-    ])
+    ->setPresences(getPresenceState())
     ->startThread();
 
     /** fix discord guild count */
     $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord, $shard_id, $shard_count)
     {
-        $presenceManager->setPresences([
-            "{$_ENV['PREFIX']}help | " . $discord->formatNumber(sizeof($discord->guilds)) . " guilds | Shard " . $shard_id + 1 . " of $shard_count",
-            "⚔️ RPG System coming soon!",
-            "Music System coming soon!"
-        ]);
+        $presenceManager->setPresences(getPresenceState());
     });
 
 });
