@@ -41,9 +41,6 @@ class Database extends PDO
      */
     public function __construct()
     {
-        if (!file_exists(dirname(__DIR__, 2) . "/db-settings.inc")) {
-            return false;
-        }
         if (!isset($_ENV['DB_USER']) || !isset($_ENV['DB_PASS']) || !isset($_ENV['DB_HOST']) || !isset($_ENV['DB_NAME'])) {
             return false;
         }
