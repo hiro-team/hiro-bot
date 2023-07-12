@@ -41,15 +41,11 @@ class Database extends PDO
      */
     public function __construct()
     {
-        if (!file_exists(dirname(__DIR__, 2) . "/db-settings.inc")) {
-            return false;
-        }
-        include dirname(__DIR__, 2) . "/db-settings.inc";
-        if (!isset($db_user) || !isset($db_pass) || !isset($db_host) || !isset($db_dbname)) {
+        if (!isset($_ENV['DB_USER']) || !isset($_ENV['DB_PASS']) || !isset($_ENV['DB_HOST']) || !isset($_ENV['DB_NAME'])) {
             return false;
         }
         try {
-            parent::__construct("mysql:host=$db_host;dbname=$db_dbname;charset=utf8", $db_user, $db_pass);
+            parent::__construct("mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8", $_ENV['DB_USER'], $_ENV['DB_PASS']);
         } catch (PDOException $e) {
             echo $e . PHP_EOL;
             return false;
