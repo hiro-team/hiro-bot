@@ -145,7 +145,7 @@ EOF)
                     {
                         if (!str_starts_with($interaction->data->custom_id, "for-{$interaction->user->id}"))
                             return;
-                        $this->attackHandle($interaction, $monster, $interaction->message);
+                        $this->attackHandle($interaction, $monster, null);
                         $interaction->message->delete();
                     },
                     $this->discord
