@@ -177,8 +177,9 @@ EOF)
                             ->setCustomId(sprintf("for-%s", $user->id))
                             ->setListener(
                                 function (Interaction $interaction) use ($user) {
-                                    if ($interaction->data->custom_id != sprintf("for-%s", $user->id))
+                                    if (!str_starts_with($interaction->data->custom_id, "for-{$user->id}")) {
                                         return;
+                                    }
                                     $generator = new MonsterGenerator();
                                     $monster = $generator->generateRandom();
                                     $this->attackHandle($interaction, $monster);
