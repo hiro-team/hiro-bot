@@ -116,7 +116,7 @@ EOF)
                     $epheralMessage->channel->sendMessage("Level up !");
                 }
 
-                $epheralMessage->edit(
+                $interaction->message->edit(
                     MessageBuilder::new()
                     ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
                     ->setEmbeds([])
