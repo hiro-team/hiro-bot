@@ -113,7 +113,7 @@ EOF)
                     $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
                     $database->setUserLevel($uId, $uLvl + 1);
 
-                    $epheralMessage->channel->sendMessage("Level up !");
+                    $interaction->channel->sendMessage("Level up !");
                 }
 
                 $interaction->message->edit(
