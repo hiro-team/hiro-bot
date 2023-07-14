@@ -147,7 +147,7 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $this->attackHandle($i, $monster, false);
+                        $this->attackHandle($i, $monster);
                     },
                     $this->discord
                 )
