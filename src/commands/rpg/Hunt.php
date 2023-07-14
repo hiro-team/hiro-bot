@@ -96,45 +96,6 @@ EOF)
             $uId
         );
 
-        // attack event
-        if($interaction->message)
-        {
-            if($monster->getHealth() <= 0)
-            {
-                $exp = $uLvl * $monster->getXp();
-
-                $database->setUserExperience(
-                    $uId,
-                    $uExp + $exp
-                );
-
-                if( $uExp + $exp >= LevelSystem::getRequiredExperiences($uLvl) )
-                {
-                    $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
-                    $database->setUserLevel($uId, $uLvl + 1);
-
-                    $interaction->channel->sendMessage("Level up !");
-                }
-
-                $interaction->message->edit(
-                    MessageBuilder::new()
-                    ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
-                    ->setEmbeds([])
-                    ->setComponents([])
-                )->then(function($msg) use ($interaction) {
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $interaction) {
-                        $msg->edit($this->getStartMessage($interaction->user));
-                    });
-                });
-
-                return;
-            }
-
-            $monster->setHealth(
-                $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
-            );
-        }
-
         $buildedMsg = MessageBuilder::new()
         ->addComponent(
             ActionRow::new()->addComponent(
@@ -143,8 +104,9 @@ EOF)
                 ->setListener(
                     function(Interaction $i) use ($monster)
                     {
-                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}"))
+                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
+                        }
                         $this->attackHandle($i, $monster);
                     },
                     $this->discord
@@ -155,9 +117,8 @@ EOF)
 
         if($interaction->message) {
             $interaction->message->edit($buildedMsg);
-            $interaction->channel->sendMessage($interaction->message->id);
         } else {
-            $interaction->channel->sendMessage($buildedMsg);
+            $interaction->respondWithMessage($buildedMsg);
         }
     }
 
