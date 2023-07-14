@@ -76,7 +76,6 @@ class Hunt extends Command
      */
     public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
     {
-        echo debug_backtrace()[1]['function'] . PHP_EOL;
         $embed = new Embed($this->discord);
         $embed
             ->setTitle($monster->getName())
@@ -101,6 +100,10 @@ EOF)
         // attack event
         if($interaction->message && $attack)
         {
+            $monster->setHealth(
+                $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
+            );
+            
             if($monster->getHealth() <= 0)
             {
                 $exp = $monster->getXp();
@@ -131,10 +134,6 @@ EOF)
 
                 return;
             }
-
-            $monster->setHealth(
-                $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
-            );
         }
 
         $buildedMsg = MessageBuilder::new()
