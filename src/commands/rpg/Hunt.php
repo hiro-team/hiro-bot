@@ -125,7 +125,7 @@ EOF)
                     ->setComponents([])
                 )->then(function($msg) use ($interaction) {
                     $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $interaction) {
-                        $msg->channel->sendMessage($this->getStartMessage($interaction->user));
+                        $msg->edit($this->getStartMessage($interaction->user));
                     });
                 });
 
@@ -158,10 +158,10 @@ EOF)
         ->addEmbed($embed);
 
         if($interaction->message) {
-            $interaction->message->delete();
+            $interaction->message->edit($buildedMsg);
+        } else {
+            $interaction->respondWithMessage($buildedMsg);
         }
-        
-        $interaction->respondWithMessage($buildedMsg);
     }
 
     /**
