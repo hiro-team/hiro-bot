@@ -85,7 +85,7 @@ EOF)
             ->setTimestamp();
 
         $database = new \hiro\database\Database();
-        print_r($interaction->user);
+        
         $uId = $database->getUserIdByDiscordId(
             $interaction->user->id
         );
@@ -183,7 +183,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle(null, $monster);
+                                $this->attackHandle($interaction, $monster);
                                 $interaction->message->delete();
                             },
                             $this->discord
