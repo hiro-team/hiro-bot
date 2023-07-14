@@ -153,6 +153,14 @@ EOF)
         )
         ->addEmbed($embed);
 
+        if ( $epheralMessage )
+        {
+            $epheralMessage->edit(
+                $buildedMsg
+            );
+            return;
+        }
+
         $interaction->channel->sendMessage($buildedMsg);
     }
 
