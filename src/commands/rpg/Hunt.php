@@ -72,8 +72,9 @@ class Hunt extends Command
      * 
      * @var Interaction $interaction
      * @var GeneratorReturn $monster
+     * @var bool $attack
      */
-    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster)
+    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
     {
         $embed = new Embed($this->discord);
         $embed
@@ -97,7 +98,7 @@ EOF)
         );
 
         // attack event
-        if($interaction->message)
+        if($interaction->message && $attack)
         {
             if($monster->getHealth() <= 0)
             {
@@ -187,7 +188,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle($interaction, $monster);
+                                $this->attackHandle($interaction, $monster, false);
                             },
                             $this->discord
                         )
