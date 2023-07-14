@@ -76,6 +76,7 @@ class Hunt extends Command
      */
     public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
     {
+        echo debug_backtrace()[1]['function'] . PHP_EOL;
         $embed = new Embed($this->discord);
         $embed
             ->setTitle($monster->getName())
