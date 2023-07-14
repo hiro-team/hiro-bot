@@ -143,7 +143,7 @@ EOF)
                 ->setListener(
                     function(Interaction $interaction) use ($monster)
                     {
-                        if ($interaction->data->custom_id != sprintf("for-%s", $interaction->user->id))
+                        if (!str_starts_with($interaction->data->custom_id, "for-{$interaction->user->id}"))
                             return;
                         $this->attackHandle($interaction, $monster, $interaction->message);
                     },
