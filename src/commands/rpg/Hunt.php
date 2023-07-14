@@ -72,9 +72,8 @@ class Hunt extends Command
      * 
      * @var Interaction $interaction
      * @var GeneratorReturn $monster
-     * @var Message $epheralMessage = null
      */
-    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, Message $epheralMessage = null)
+    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster)
     {
         $embed = new Embed($this->discord);
         $embed
@@ -97,7 +96,7 @@ EOF)
         );
 
         // attack event
-        if($epheralMessage)
+        if($interaction->message)
         {
             if($monster->getHealth() <= 0)
             {
@@ -141,12 +140,12 @@ EOF)
                 Button::new(Button::STYLE_DANGER)->setLabel("Attack")
                 ->setCustomId(sprintf("for-%s", $interaction->user->id))
                 ->setListener(
-                    function(Interaction $interaction) use ($monster)
+                    function(Interaction $i) use ($monster)
                     {
-                        if (!str_starts_with($interaction->data->custom_id, "for-{$interaction->user->id}"))
+                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}"))
                             return;
-                        $this->attackHandle($interaction, $monster, null);
-                        if ($interaction) $interaction->message->delete();
+                        $this->attackHandle($i, $monster);
+                        print($interaction);
                     },
                     $this->discord
                 )
@@ -183,7 +182,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle($interaction, $monster);
+                                $this->attackHandle(null, $monster);
                                 $interaction->message->delete();
                             },
                             $this->discord
