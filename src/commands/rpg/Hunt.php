@@ -118,14 +118,14 @@ EOF)
                     $interaction->channel->sendMessage("Level up !");
                 }
 
-                $interaction->channel->sendMessage(
+                $interaction->updateMessage(
                     MessageBuilder::new()
                     ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
                     ->setEmbeds([])
                     ->setComponents([])
                 )->then(function($msg) use ($interaction) {
                     $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $interaction) {
-                        $msg->edit($this->getStartMessage($interaction->user));
+                        $msg->channel->sendMessage($this->getStartMessage($interaction->user));
                     });
                 });
 
