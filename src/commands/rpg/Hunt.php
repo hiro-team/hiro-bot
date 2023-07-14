@@ -143,7 +143,6 @@ EOF)
                 ->setListener(
                     function(Interaction $interaction) use ($monster)
                     {
-                        echo $interaction->data->custom_id . "sj" . PHP_EOL;
                         if ($interaction->data->custom_id != sprintf("for-%s", $interaction->user->id))
                             return;
                         $this->attackHandle($interaction, $monster, $interaction->message);
@@ -178,7 +177,6 @@ EOF)
                             ->setCustomId(sprintf("for-%s", $user->id))
                             ->setListener(
                                 function (Interaction $interaction) use ($user) {
-                                    echo $interaction->data->custom_id . PHP_EOL;
                                     if ($interaction->data->custom_id != sprintf("for-%s", $user->id))
                                         return;
                                     $generator = new MonsterGenerator();
