@@ -123,10 +123,10 @@ EOF)
                     ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
                     ->setEmbeds([])
                     ->setComponents([])
-                )->then(function($msg) use ($interaction) {
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $interaction) {
-                        $msg->channel->sendMessage($this->getStartMessage($interaction->user));
-                    });
+                );
+                
+                $this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
+                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
                 });
 
                 return;
