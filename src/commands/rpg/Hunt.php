@@ -150,7 +150,8 @@ EOF)
                         }
                         $this->attackHandle($i, $monster);
                     },
-                    $this->discord
+                    $this->discord,
+                    true
                 )
             )
         )
@@ -191,7 +192,8 @@ EOF)
                                 $monster = $generator->generateRandom();
                                 $this->attackHandle($interaction, $monster, false);
                             },
-                            $this->discord
+                            $this->discord,
+                            true
                         )
                     )
         );
