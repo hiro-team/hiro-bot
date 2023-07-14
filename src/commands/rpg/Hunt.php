@@ -85,6 +85,7 @@ EOF)
             ->setTimestamp();
 
         $database = new \hiro\database\Database();
+        print_r($interaction->user);
         $uId = $database->getUserIdByDiscordId(
             $interaction->user->id
         );
