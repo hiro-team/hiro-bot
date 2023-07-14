@@ -146,7 +146,6 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}"))
                             return;
                         $this->attackHandle($i, $monster);
-                        print($interaction);
                     },
                     $this->discord
                 )
@@ -154,7 +153,12 @@ EOF)
         )
         ->addEmbed($embed);
 
-        if($interaction) $interaction->channel->sendMessage($buildedMsg);
+        if($interaction->message) {
+            $interaction->message->edit($buildedMsg);
+            $interaction->channel->sendMessage($interaction->message->id);
+        } else {
+            $interaction->channel->sendMessage($buildedMsg);
+        }
     }
 
     /**
