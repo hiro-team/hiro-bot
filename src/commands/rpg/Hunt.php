@@ -76,6 +76,15 @@ class Hunt extends Command
      */
     public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
     {
+        $embed = new Embed($this->discord);
+        $embed
+            ->setTitle($monster->getName())
+            ->setDescription(<<<EOF
+Monster HP {$monster->getHealth()}
+EOF)
+            ->setImage(GithubImageGenerator::generate($monster->getName()))
+            ->setTimestamp();
+        
         $database = new \hiro\database\Database();
         
         $uId = $database->getUserIdByDiscordId(
@@ -93,7 +102,7 @@ class Hunt extends Command
         {
             if($monster->getHealth() <= 0)
             {
-                $exp = $uLvl * $monster->getXp();
+                $exp = $monster->getXp();
 
                 $database->setUserExperience(
                     $uId,
@@ -126,15 +135,6 @@ class Hunt extends Command
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
         }
-
-        $embed = new Embed($this->discord);
-        $embed
-            ->setTitle($monster->getName())
-            ->setDescription(<<<EOF
-Monster HP {$monster->getHealth()}
-EOF)
-            ->setImage(GithubImageGenerator::generate($monster->getName()))
-            ->setTimestamp();
 
         $buildedMsg = MessageBuilder::new()
         ->addComponent(
