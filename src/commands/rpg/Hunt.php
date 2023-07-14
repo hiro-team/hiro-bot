@@ -146,7 +146,7 @@ EOF)
                         if (!str_starts_with($interaction->data->custom_id, "for-{$interaction->user->id}"))
                             return;
                         $this->attackHandle($interaction, $monster, null);
-                        $interaction->message->delete();
+                        if ($interaction) $interaction->message->delete();
                     },
                     $this->discord
                 )
@@ -154,8 +154,7 @@ EOF)
         )
         ->addEmbed($embed);
 
-        
-        $interaction->channel->sendMessage($buildedMsg);
+        if($interaction) $interaction->channel->sendMessage($buildedMsg);
     }
 
     /**
