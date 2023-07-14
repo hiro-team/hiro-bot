@@ -149,7 +149,6 @@ EOF)
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
                                 $this->attackHandle($interaction, $monster);
-                                $interaction->message->delete();
                             },
                             $this->discord
                         )
