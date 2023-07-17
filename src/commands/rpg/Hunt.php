@@ -63,13 +63,13 @@ class Hunt extends Command
         }
 
         $msg->channel->sendMessage(
-            $this->getStartMessage($msg->author)->then(
-                function($msg){
-                    $this->discord->addTimer(2.0, function() use ($msg) {
-                        print_r($msg->components);
-                    })
-                }
-            )
+            $this->getStartMessage($msg->author)
+        )->then(
+            function($msg){
+                $this->discord->addTimer(2.0, function() use ($msg) {
+                    print_r($msg->components);
+                })
+            }
         );
     }
 
