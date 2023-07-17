@@ -194,7 +194,7 @@ EOF)
                 ActionRow::new()->addComponent(
                     $btn = Button::new(Button::STYLE_DANGER)
                         ->setLabel("Start Hunting")
-                        ->setCustomId("")
+                        ->setCustomId($custom_id)
                         ->setListener(
                             function (Interaction $interaction) use ($custom_id, $user) {
                                 if (!str_starts_with($interaction->data->custom_id, $custom_id)) {
