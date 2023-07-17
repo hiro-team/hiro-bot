@@ -185,7 +185,8 @@ EOF)
         $embed->setTitle("Hunting");
         $embed->setDescription("Click to the button for starting hunting");
         $embed->setTimestamp();
-        $custom_id = bin2hex(random_bytes(6));
+        $random_hex = bin2hex(random_bytes(6));
+        $custom_id = "hunting-{$random_hex}-{$user->id}";
 
         $buildedMsg = MessageBuilder::new()
             ->addEmbed($embed)
@@ -193,10 +194,10 @@ EOF)
                 ActionRow::new()->addComponent(
                     $btn = Button::new(Button::STYLE_DANGER)
                         ->setLabel("Start Hunting")
-                        ->setCustomId("hunting-{$custom_id}-{$user->id}")
+                        ->setCustomId("")
                         ->setListener(
                             function (Interaction $interaction) use ($custom_id, $user) {
-                                if (!str_starts_with($interaction->data->custom_id, "hunting-{$custom_id}-{$user->id}")) {
+                                if (!str_starts_with($interaction->data->custom_id, $custom_id)) {
                                     return;
                                 }
                                 $generator = new MonsterGenerator();
