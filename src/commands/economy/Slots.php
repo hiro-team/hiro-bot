@@ -52,10 +52,9 @@ class Slots extends Command
     public function handle($msg, $args): void
     {
         $items = [
-            ":strawberry:",
-            ":fireworks:",
-            ":gem:",
-            ":heart:"
+            "<:hiroslotsheart:1130403063203627080>",
+            "<:hiroslotseggplant:1130403026318921848>",
+            "<:hiroslotscherry:1130402988519850136>"
         ];
         $database = new Database();
         if (!$database->isConnected) {
@@ -121,13 +120,13 @@ class Slots extends Command
                 $items[$rand_emotes[2]]
             ];
         }
-        $msg->reply("Slot is spinning... :arrows_clockwise: \n:cd: :cd: :cd:")->then(function ($msg) use ($chance, $choosed, $payamount) {
+        $msg->reply("Slot is spinning... \n<:hiroslotspinning:1130399548523679754> <:hiroslotspinning:1130399548523679754> <:hiroslotspinning:1130399548523679754>")->then(function ($msg) use ($chance, $choosed, $payamount) {
             if (!($msg instanceof Message)) {
                 $msg->reply("An error excepted.");
                 return;
             }
             $this->discord->getLoop()->addTimer(3.0, function () use ($msg, $chance, $choosed, $payamount) {
-                if ($chance === 1) $text = "**YOU WON!!! $ " . $payamount * 3 . "**";
+                if ($chance === 1) $text = "**YOU WON!!! <:hirocoin:1130392530677157898> " . $payamount * 3 . "**";
                 else $text = "You lose all of your pay :(";
                 $msg->edit(\Discord\Builders\MessageBuilder::new()->setContent("Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text"));
             });

@@ -53,7 +53,7 @@ class Money extends Command
     {
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->reply("Couldn't connect to database.");
             return;
         }
         $user = $msg->mentions->first();
@@ -63,9 +63,7 @@ class Money extends Command
             if (!$database->addUser([
                 "discord_id" => $user->id
             ])) {
-                $embed = new Embed($this->discord);
-                $embed->setTitle('You are couldnt added to database.');
-                $msg->channel->sendEmbed($embed);
+                $msg->reply("You're couldnt added to database.");
                 return;
             } else {
                 $user_money = 0;
@@ -73,11 +71,7 @@ class Money extends Command
         }
         setlocale(LC_MONETARY, 'en_US');
         $user_money = number_format($user_money, 2, ',', '.');
-        $embed = new Embed($this->discord);
-        $embed->setTitle("Money: $" . $user_money);
-        $embed->setTimestamp();
-        $embed->setColor('#7CFC00');
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($user == $msg->author ? "You" : $user->username . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
         $database = NULL;
     }
 }
