@@ -69,7 +69,7 @@ class Hunt extends Command
                         print_r($msg->components);
                     })
                 }
-            );
+            )
         );
     }
 
