@@ -147,7 +147,7 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $i->message->edit($this->attackHandle($i, $user, $monster));
+                        $i->updateMessage($this->attackHandle($i, $user, $monster));
                     },
                     $this->discord,
                     true
@@ -157,7 +157,7 @@ EOF)
         ->addEmbed($embed);
 
         if(isset($interaction->message)) {
-            $interaction->message->edit($buildedMsg);
+            $interaction->updateMessage($buildedMsg);
         }
 
         return $buildedMsg;
