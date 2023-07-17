@@ -84,7 +84,7 @@ class Coinflip extends Command
                 $usermoney -= $payamount;
 
                 $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount){
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $rand, $database, $usermoney, $payamount){
+                    $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount){
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
