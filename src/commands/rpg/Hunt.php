@@ -62,15 +62,19 @@ class Hunt extends Command
             return;
         }
 
-        $msg->channel->sendMessage($this->getStartMessage($msg->author))->then(function ($msg) {
-            $this->discord->getLoop()->addTimer(10.0, function () use ($msg) {
+        $startMessage = $this->getStartMessage($msg->author);
+        $custom_id = $startMessage[1];
+        $btn = $startMessage[2];
+
+        $msg->channel->sendMessage($startMessage[0])->then(function ($msg) use ($custom_id, $btn) {
+            $this->discord->getLoop()->addTimer(10.0, function () use ($msg, $custom_id, $btn) {
                 foreach($msg->components as $collection)
                 {
                     foreach($collection->components as $component)
                     {
-                        if($component['custom_id'] == $msg->custom_id)
+                        if($component['custom_id'] == $custom_id)
                         {
-                            $msg->btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
+                            $btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
                             $msg->channel->sendMessage("Listener nulled.");
                         }
                     }
@@ -138,7 +142,7 @@ EOF)
                 );
 
                 $this->discord->getLoop()->addTimer(2.0, function () use ($interaction) {
-                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
+                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user)[0]);
                 });
 
                 return;
@@ -210,9 +214,6 @@ EOF)
                 )
             );
 
-        $buildedMsg->custom_id = $custom_id;
-        $buildedMsg->btn = $btn;
-
-        return $buildedMsg;
+        return [$buildedMsg, $custom_id, $btn];
     }
 }
