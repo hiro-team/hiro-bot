@@ -62,8 +62,8 @@ class Hunt extends Command
             return;
         }
 
-        $msg->channel->sendMessage($this->getStartMessage($msg->author))->then(function($msg) {
-            $this->discord->addTimer(2.0, function() use ($msg) {
+        $msg->channel->sendMessage($this->getStartMessage($msg->author))->then(function ($msg) {
+            $this->discord->addTimer(2.0, function () use ($msg) {
                 print_r($msg->components);
             });
         });
@@ -86,9 +86,9 @@ Monster HP {$monster->getHealth()}
 EOF)
             ->setImage(GithubImageGenerator::generate($monster->getName()))
             ->setTimestamp();
-        
+
         $database = new \hiro\database\Database();
-        
+
         $uId = $database->getUserIdByDiscordId(
             $user->id
         );
@@ -100,14 +100,12 @@ EOF)
         );
 
         // attack event
-        if($interaction && $attack)
-        {
+        if ($interaction && $attack) {
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
-            
-            if($monster->getHealth() <= 0)
-            {
+
+            if ($monster->getHealth() <= 0) {
                 $exp = $monster->getXp();
 
                 $database->setUserExperience(
@@ -115,8 +113,7 @@ EOF)
                     $uExp + $exp
                 );
 
-                if( $uExp + $exp >= LevelSystem::getRequiredExperiences($uLvl) )
-                {
+                if ($uExp + $exp >= LevelSystem::getRequiredExperiences($uLvl)) {
                     $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
                     $database->setUserLevel($uId, $uLvl + 1);
 
@@ -125,12 +122,12 @@ EOF)
 
                 $interaction->updateMessage(
                     MessageBuilder::new()
-                    ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
-                    ->setEmbeds([])
-                    ->setComponents([])
+                        ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
+                        ->setEmbeds([])
+                        ->setComponents([])
                 );
 
-                $this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
+                $this->discord->getLoop()->addTimer(2.0, function () use ($interaction) {
                     $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
                 });
 
@@ -139,29 +136,28 @@ EOF)
         }
 
         $buildedMsg = MessageBuilder::new()
-        ->addComponent(
-            ActionRow::new()->addComponent(
-                Button::new(Button::STYLE_DANGER)->setLabel("Attack")
-                ->setCustomId(sprintf("for-%s", $user->id))
-                ->setListener(
-                    function(Interaction $i) use ($user, $monster)
-                    {
-                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
-                            return;
-                        }
-                        $buildedMsg = $this->attackHandle($i, $user, $monster, true);
-                        if($buildedMsg) {
-                            $i->updateMessage();
-                        }
-                    },
-                    $this->discord,
-                    true
+            ->addComponent(
+                ActionRow::new()->addComponent(
+                    Button::new(Button::STYLE_DANGER)->setLabel("Attack")
+                        ->setCustomId(sprintf("for-%s", $user->id))
+                        ->setListener(
+                            function (Interaction $i) use ($user, $monster) {
+                                if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
+                                    return;
+                                }
+                                $buildedMsg = $this->attackHandle($i, $user, $monster, true);
+                                if ($buildedMsg) {
+                                    $i->updateMessage();
+                                }
+                            },
+                            $this->discord,
+                            true
+                        )
                 )
             )
-        )
-        ->addEmbed($embed);
+            ->addEmbed($embed);
 
-        if($interaction) {
+        if ($interaction) {
             $interaction->updateMessage($buildedMsg);
         }
 
@@ -186,21 +182,22 @@ EOF)
             ->addComponent(
                 ActionRow::new()->addComponent(
                     Button::new(Button::STYLE_DANGER)
-                    ->setLabel("Start Hunting")
-                    ->setCustomId("hunting-{$custom_id}-{$user->id}"))
-                    ->setListener(
-                        function (Interaction $interaction) use ($custom_id, $user) {
-                            if (!str_starts_with($interaction->data->custom_id, "hunting-{$custom_id}-{$user->id}")) {
-                                return;
-                            }
-                            $generator = new MonsterGenerator();
-                            $monster = $generator->generateRandom();
-                            $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
-                        },
-                        $this->discord,
-                        true
-                    )
-                );
+                        ->setLabel("Start Hunting")
+                        ->setCustomId("hunting-{$custom_id}-{$user->id}")
+                        ->setListener(
+                            function (Interaction $interaction) use ($custom_id, $user) {
+                                if (!str_starts_with($interaction->data->custom_id, "hunting-{$custom_id}-{$user->id}")) {
+                                    return;
+                                }
+                                $generator = new MonsterGenerator();
+                                $monster = $generator->generateRandom();
+                                $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
+                            },
+                            $this->discord,
+                            true
+                        )
+                )
+            );
 
         $buildedMsg->custom_id = $custom_id;
 
