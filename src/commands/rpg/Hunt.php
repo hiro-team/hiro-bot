@@ -147,7 +147,7 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $this->attackHandle($i, $user, $monster);
+                        $i->message->edit($this->attackHandle($i, $user, $monster));
                     },
                     $this->discord,
                     true
@@ -158,9 +158,9 @@ EOF)
 
         if(isset($interaction->message)) {
             $interaction->message->edit($buildedMsg);
-        } else {
-            $interaction->respondWithMessage($buildedMsg);
         }
+
+        return $buildMsg;
     }
 
     /**
@@ -189,7 +189,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle(null, $user, $monster, true);
+                                $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
                             },
                             $this->discord,
                             true
