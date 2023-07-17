@@ -33,7 +33,7 @@ class AttackSystem {
      */
     public static function getAttackDamage(int $level): ?int
     {
-        return $level * random_int(1, 3) + 5;
+        return random_int(1, 3) + 5;
     }
 
 }
