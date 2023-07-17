@@ -97,17 +97,12 @@ EOF)
             $uId
         );
 
-        print_r($interaction->message);
-        print_r($attack);
-
         // attack event
-        if(isset($interaction->message) && $attack)
+        if(!isset($interaction->message) && $attack)
         {
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
-
-            echo $monster->getHealth() . PHP_EOL;
             
             if($monster->getHealth() <= 0)
             {
