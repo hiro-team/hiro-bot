@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use hiro\database\Database;
 use Discord\Parts\Channel\Message;
+use Discord\Builders\MessageBuilder;
 
 /**
  * Slots
@@ -128,7 +129,7 @@ class Slots extends Command
             $this->discord->getLoop()->addTimer(3.0, function () use ($msg, $chance, $choosed, $payamount) {
                 if ($chance === 1) $text = "**YOU WON!!! <:hirocoin:1130392530677157898> " . $payamount * 3 . "**";
                 else $text = "You lose all of your pay :(";
-                $msg->edit(\Discord\Builders\MessageBuilder::new()->setContent("Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text"));
+                $msg->edit(MessageBuilder::new()->setContent("Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text"));
             });
         });
     }
