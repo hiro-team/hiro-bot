@@ -26,10 +26,17 @@ use hiro\CommandLoader;
 use hiro\ArgumentParser;
 use hiro\PresenceManager;
 use Discord\WebSockets\Intents;
+use hiro\Version;
 
 if ( !isset( $_ENV['TOKEN'] ) ) {
 	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 	$dotenv->load();
+}
+
+if ( Version::TYPE == 'development' )
+{
+    error_reporting(E_ALL);
+    @ini_set('display_errors', 'On');
 }
 
 $ArgumentParser = new ArgumentParser($argv);
