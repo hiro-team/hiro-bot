@@ -64,6 +64,7 @@ class Hunt extends Command
 
         $msg->channel->sendMessage($this->getStartMessage($msg->author))->then(function ($msg) {
             $this->discord->addTimer(2.0, function () use ($msg) {
+                echo "wtf amigo \n";
                 print_r($msg);
             });
         });
