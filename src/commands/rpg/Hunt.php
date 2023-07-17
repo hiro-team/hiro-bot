@@ -97,12 +97,9 @@ EOF)
             $uId
         );
 
-        print_r($interaction);
-
         // attack event
         if(isset($interaction->message) && $attack)
         {
-            echo "debug test attacked" . PHP_EOL;
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
@@ -150,7 +147,7 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $i->updateMessage($this->attackHandle($i, $user, $monster));
+                        $i->updateMessage($this->attackHandle($i, $user, $monster, true));
                     },
                     $this->discord,
                     true
