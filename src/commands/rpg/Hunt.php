@@ -98,7 +98,7 @@ EOF)
         );
 
         // attack event
-        if($interaction->message && $attack)
+        if(isset($interaction->message) && $attack)
         {
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
@@ -140,7 +140,7 @@ EOF)
         ->addComponent(
             ActionRow::new()->addComponent(
                 Button::new(Button::STYLE_DANGER)->setLabel("Attack")
-                ->setCustomId(sprintf("for-%s", $interaction->user->id))
+                ->setCustomId(sprintf("for-%s", $user->id))
                 ->setListener(
                     function(Interaction $i) use ($user, $monster)
                     {
@@ -156,7 +156,7 @@ EOF)
         )
         ->addEmbed($embed);
 
-        if($interaction->message) {
+        if(isset($interaction->message)) {
             $interaction->message->edit($buildedMsg);
         } else {
             $interaction->respondWithMessage($buildedMsg);
