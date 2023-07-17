@@ -127,10 +127,11 @@ EOF)
                     ->setEmbeds([])
                     ->setComponents([])
                 );
-                
-                $this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
+
+                // buggy
+                /*$this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
                     $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
-                });
+                });*/
 
                 return;
             }
