@@ -87,7 +87,7 @@ class Coinflip extends Command
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney + $payamount * 2);
-                            $msg->edit("You win :) <:hirocoin:1130392530677157898>");
+                            $msg->edit(\Discord\Builders\MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
                         } else {
                             $msg->reply("You lose :( <:hirocoin:1130392530677157898>");
                         }
