@@ -74,7 +74,7 @@ class Hunt extends Command
      * @var GeneratorReturn $monster
      * @var bool $attack
      */
-    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
+    public function attackHandle(Interaction $interaction = null, User $user, GeneratorReturn $monster, bool $attack = true)
     {
         $embed = new Embed($this->discord);
         $embed
@@ -88,7 +88,7 @@ EOF)
         $database = new \hiro\database\Database();
         
         $uId = $database->getUserIdByDiscordId(
-            $interaction->user->id
+            $user->id
         );
         $uLvl = $database->getUserLevel(
             $uId
@@ -142,12 +142,12 @@ EOF)
                 Button::new(Button::STYLE_DANGER)->setLabel("Attack")
                 ->setCustomId(sprintf("for-%s", $interaction->user->id))
                 ->setListener(
-                    function(Interaction $i) use ($monster)
+                    function(Interaction $i) use ($user, $monster)
                     {
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $this->attackHandle($i, $monster);
+                        $this->attackHandle($i, $user, $monster);
                     },
                     $this->discord,
                     true
@@ -189,7 +189,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle(null, $monster, true);
+                                $this->attackHandle(null, $user, $monster, true);
                             },
                             $this->discord,
                             true
