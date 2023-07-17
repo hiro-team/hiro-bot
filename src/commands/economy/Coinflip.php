@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
+use Discord\Builders\MessageBuilder;
 
 /**
  * Coinflip
@@ -56,54 +57,44 @@ class Coinflip extends Command
             $msg->channel->sendMessage("Couldn't connect to database.");
             return;
         }
-        $embed = new Embed($this->discord);
-        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
+        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
         if (!is_numeric($usermoney)) {
-            echo "money is empty" . PHP_EOL;
             if (!$database->addUser([
-                "discord_id" => $msg->member->id
+                "discord_id" => $msg->author->id
             ])) {
-                $embed->setTitle('You are couldnt added to database.');
-                $msg->channel->sendEmbed($embed);
-                echo "cant added" . PHP_EOL;
+                $msg->reply("You are couldnt added to database.");
                 return;
             } else {
-                echo "User added" . PHP_EOL;
                 $usermoney = 0;
             }
         }
         if (!$args[0] || !is_numeric($args[0])) {
-            $embed->setColor('#ff0000');
-            $embed->setDescription('You should type payment amount.');
+            $msg->reply("You should type payment amount.");
         } else {
             if ($args[0] <= 0) {
-                $embed->setDescription("You should give a value greater than zero.");
-                $embed->setColor('#ff0000');
+                $msg->reply("You should give a value greater than zero.");
             } else if ($args[0] > $usermoney) {
-                $embed->setDescription("Your money isn't enough.");
-                $embed->setColor('#ff0000');
+                $msg->reply("Your money isn't enough.");
             } else {
                 $payamount = $args[0];
                 $rand = random_int(0, 1);
 
                 // delete user money from payamount
-                $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney - $payamount);
-                $usermoney = $usermoney - $payamount;
+                $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
+                $usermoney -= $payamount;
 
-                setlocale(LC_MONETARY, 'en_US');
-                if ($rand) {
-                    $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney + $payamount * 2);
-                    $embed->setTitle("You Won!");
-                    $embed->setDescription("$ " . number_format($payamount * 2, 2, ',', '.'));
-                    $embed->setColor('#7CFC00');
-                } else {
-                    $embed->setTitle("You Lose!");
-                    $embed->setDescription("$ " . number_format($payamount, 2, ',', '.'));
-                    $embed->setColor('#ff0000');
-                }
+                $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount){
+                    $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount){
+                        setlocale(LC_MONETARY, 'en_US');
+                        if ($rand) {
+                            $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
+                            $botreply->edit(MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
+                        } else {
+                            $botreply->edit(MessageBuilder::new()->setContent("You lose :( <:hirocoin:1130392530677157898>"));
+                        }
+                    });
+                });
             }
         }
-        $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
     }
 }

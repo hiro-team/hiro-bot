@@ -50,56 +50,41 @@ class Pay extends Command
     {
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->reply("Couldn't connect to database.");
             return;
         }
         $embed = new Embed($this->discord);
         $user = $msg->mentions->first();
         if (!$user) {
-            $embed->setDescription("You should select a user for send money.");
-            $embed->setColor('#ff0000');
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("You should select a user for send money.");
             return;
         }
         if ($user->id === $msg->author->id) {
-            $embed->setDescription("You can't send your money to yourself.");
-            $embed->setColor('#ff0000');
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("You can't send your money to yourself.");
             return;
         }
         if (!isset($args[1]) && !is_numeric($args[1])) {
-            $embed->setDescription('You should give a numeric money.');
-            $embed->setColor('#ff0000');
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("You should give a numeric money.");
             return;
         }
         if (!$database->getUser($database->getUserIdByDiscordId($msg->author->id))) {
             if (!$database->addUser(["discord_id" => $user->id])) {
-                $embed->setDescription('An error excepted when registering you to database :(');
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
+                $msg->reply("An error excepted while registering you to database :(");
                 return;
             }
         }
         if (!$database->getUser($database->getUserIdByDiscordId($user->id))) {
             if (!$database->addUser(["discord_id" => $user->id])) {
-                $embed->setDescription('An error excepted when registering user to database :(');
-                $embed->setColor('#ff0000');
-                $msg->channel->sendEmbed($embed);
+                $msg->reply("An error excepted while registering you to database :(");
                 return;
             }
         }
         if (!$database->pay($database->getUserIdByDiscordId($msg->author->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
-            $embed->setDescription('An error excepted when sending money :(');
-            $embed->setColor('#ff0000');
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("An error excepted when sending money :(");
             return;
         }
         setlocale(LC_MONETARY, 'en_US');
-        $embed->setTitle("Money Sent!");
-        $embed->setDescription($msg->user . " - $ " . number_format($args[1], 2, ',', '.') . "  -->  " . $user . " + $ " . number_format($args[1], 2, ',', '.'));
-        $embed->setColor('#7CFC00');
-        $msg->channel->sendEmbed($embed);
+        $msg->reply("Money Sent!\n\n" . $msg->user->username . " - <:hirocoin:1130392530677157898> " . number_format($args[1], 2, ',', '.') . "  -->  " . $user->username . " + <:hirocoin:1130392530677157898> " . number_format($args[1], 2, ',', '.'));
         return;
     }
 }

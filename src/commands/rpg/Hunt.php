@@ -113,7 +113,8 @@ EOF)
         );
 
         // attack event
-        if ($interaction && $attack) {
+        if($interaction && $attack)
+        {
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );

@@ -52,40 +52,31 @@ class Daily extends Command
     {
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->reply("Couldn't connect to database.");
             return;
         }
         $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
         $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
         if (time() - $last_daily < 86400) {
-            $msg->channel->sendMessage('You must wait 24 hours.');
+            $msg->reply('You must wait 24 hours.');
             return;
         }
         if (!is_numeric($user_money)) {
-            echo "money is empty" . PHP_EOL;
             if (!$database->addUser([
                 "discord_id" => $msg->member->id
             ])) {
-                $embed = new Embed($this->discord);
-                $embed->setTitle('You are couldnt added to database.');
-                $msg->channel->sendEmbed($embed);
-                echo "cant added" . PHP_EOL;
+                $msg->reply("You are couldn't added to database.");
                 return;
             } else {
-                echo "User added" . PHP_EOL;
                 $user_money = 0;
             }
         }
         setlocale(LC_MONETARY, 'en_US');
         $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
         if ($daily) {
-            $embed = new Embed($this->discord);
-            $embed->setTitle("You Gained $" . number_format($daily, 2, ',', '.'));
-            $embed->setTimestamp();
-            $embed->setColor('#7CFC00');
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("You gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
         } else {
-            $msg->channel->sendMessage('Cant give daily');
+            $msg->reply("Couldn't give daily");
         }
         $database = NULL;
     }
