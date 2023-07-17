@@ -100,6 +100,7 @@ EOF)
         // attack event
         if(isset($interaction->message) && $attack)
         {
+            echo "debug test attacked" . PHP_EOL;
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
