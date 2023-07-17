@@ -106,6 +106,8 @@ EOF)
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
+
+            echo $monster->getHealth() . PHP_EOL;
             
             if($monster->getHealth() <= 0)
             {
