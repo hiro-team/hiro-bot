@@ -63,7 +63,13 @@ class Hunt extends Command
         }
 
         $msg->channel->sendMessage(
-            $this->getStartMessage($msg->author)
+            $this->getStartMessage($msg->author)->then(
+                function($msg){
+                    $this->discord->addTimer(2.0, function() use ($msg) {
+                        print_r($msg->components);
+                    })
+                }
+            );
         );
     }
 
@@ -128,10 +134,9 @@ EOF)
                     ->setComponents([])
                 );
 
-                // buggy
-                /*$this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
+                $this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
                     $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
-                });*/
+                });
 
                 return;
             }
@@ -178,27 +183,31 @@ EOF)
         $embed->setTitle("Hunting");
         $embed->setDescription("Click to the button for starting hunting");
         $embed->setTimestamp();
+        $custom_id = bin2hex(random_bytes(6));
 
-        return MessageBuilder::new()
-                ->addEmbed($embed)
-                ->addComponent(
-                    ActionRow::new()->addComponent(
-                        Button::new(Button::STYLE_DANGER)
-                            ->setLabel("Start Hunting")
-                            ->setCustomId(sprintf("for-%s", $user->id))
-                            ->setListener(
-                            function (Interaction $interaction) use ($user) {
-                                if (!str_starts_with($interaction->data->custom_id, "for-{$user->id}")) {
-                                    return;
-                                }
-                                $generator = new MonsterGenerator();
-                                $monster = $generator->generateRandom();
-                                $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
-                            },
-                            $this->discord,
-                            true
-                        )
+        $buildedMsg = MessageBuilder::new()
+            ->addEmbed($embed)
+            ->addComponent(
+                ActionRow::new()->addComponent(
+                    Button::new(Button::STYLE_DANGER)
+                    ->setLabel("Start Hunting")
+                    ->setCustomId("hunting-{$custom_id}-{$user->id}"))
+                    ->setListener(
+                        function (Interaction $interaction) use ($custom_id, $user) {
+                            if (!str_starts_with($interaction->data->custom_id, "hunting-{$custom_id}-{$user->id}")) {
+                                return;
+                            }
+                            $generator = new MonsterGenerator();
+                            $monster = $generator->generateRandom();
+                            $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
+                        },
+                        $this->discord,
+                        true
                     )
-        );
+                );
+
+        $buildedMsg->custom_id = $custom_id;
+
+        return $buildedMsg;
     }
 }
