@@ -160,7 +160,7 @@ EOF)
             $interaction->message->edit($buildedMsg);
         }
 
-        return $buildMsg;
+        return $buildedMsg;
     }
 
     /**
