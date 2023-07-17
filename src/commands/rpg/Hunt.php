@@ -189,7 +189,7 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle($interaction, $monster, true);
+                                $this->attackHandle(null, $monster, true);
                             },
                             $this->discord,
                             true
