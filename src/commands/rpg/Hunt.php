@@ -67,7 +67,7 @@ class Hunt extends Command
         $btn = $startMessage[2];
 
         $msg->channel->sendMessage($startMessage[0])->then(function ($msg) use ($custom_id, $btn) {
-            $this->discord->getLoop()->addTimer(10.0, function () use ($msg, $custom_id, $btn) {
+            $this->discord->getLoop()->addTimer(5.0, function () use ($msg, $custom_id, $btn) {
                 foreach($msg->components as $collection)
                 {
                     foreach($collection->components as $component)
@@ -75,7 +75,6 @@ class Hunt extends Command
                         if($component['custom_id'] == $custom_id)
                         {
                             $btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
-                            $msg->channel->sendMessage("Listener nulled.");
                         }
                     }
                 }
@@ -142,7 +141,24 @@ EOF)
                 );
 
                 $this->discord->getLoop()->addTimer(2.0, function () use ($interaction) {
-                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user)[0]);
+                    $startMessage = $this->getStartMessage($interaction->user);
+                    $custom_id = $startMessage[1];
+                    $btn = $startMessage[2];
+
+                    $interaction->channel->sendMessage($startMessage[0])->then(function ($msg) use ($custom_id, $btn) {
+                        $this->discord->getLoop()->addTimer(5.0, function () use ($msg, $custom_id, $btn) {
+                            foreach($msg->components as $collection)
+                            {
+                                foreach($collection->components as $component)
+                                {
+                                    if($component['custom_id'] == $custom_id)
+                                    {
+                                        $btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
+                                    }
+                                }
+                            }
+                        });
+                    });
                 });
 
                 return;
