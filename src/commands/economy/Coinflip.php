@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
+use Discord\Builders\MessageBuilder;
 
 /**
  * Coinflip
@@ -56,10 +57,10 @@ class Coinflip extends Command
             $msg->channel->sendMessage("Couldn't connect to database.");
             return;
         }
-        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
+        $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
         if (!is_numeric($usermoney)) {
             if (!$database->addUser([
-                "discord_id" => $msg->member->id
+                "discord_id" => $msg->author->id
             ])) {
                 $msg->reply("You are couldnt added to database.");
                 return;
@@ -79,15 +80,15 @@ class Coinflip extends Command
                 $rand = random_int(0, 1);
 
                 // delete user money from payamount
-                $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney - $payamount);
+                $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
                 $usermoney = $usermoney - $payamount;
 
                 $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($msg) use ($rand, $database, $usermoney, $payamount){
                     $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $rand, $database, $usermoney, $payamount){
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
-                            $database->setUserMoney($database->getUserIdByDiscordId($msg->member->id), $usermoney + $payamount * 2);
-                            $msg->edit(\Discord\Builders\MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
+                            $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
+                            $msg->edit(MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
                         } else {
                             $msg->reply("You lose :( <:hirocoin:1130392530677157898>");
                         }
