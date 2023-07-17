@@ -81,16 +81,16 @@ class Coinflip extends Command
 
                 // delete user money from payamount
                 $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
-                $usermoney = $usermoney - $payamount;
+                $usermoney -= $payamount;
 
-                $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($msg) use ($rand, $database, $usermoney, $payamount){
+                $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount){
                     $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $rand, $database, $usermoney, $payamount){
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                            $msg->edit(MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
                         } else {
-                            $msg->reply("You lose :( <:hirocoin:1130392530677157898>");
+                            $botreply->edit(MessageBuilder::new()->setContent("You lose :( <:hirocoin:1130392530677157898>"));
                         }
                     });
                 });
