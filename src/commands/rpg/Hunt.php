@@ -72,9 +72,9 @@ class Hunt extends Command
      * 
      * @var Interaction $interaction
      * @var GeneratorReturn $monster
-     * @var Message $epheralMessage = null
+     * @var bool $attack
      */
-    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, Message $epheralMessage = null)
+    public function attackHandle(Interaction $interaction = null, GeneratorReturn $monster, bool $attack = true)
     {
         $embed = new Embed($this->discord);
         $embed
@@ -84,8 +84,9 @@ Monster HP {$monster->getHealth()}
 EOF)
             ->setImage(GithubImageGenerator::generate($monster->getName()))
             ->setTimestamp();
-
+        
         $database = new \hiro\database\Database();
+        
         $uId = $database->getUserIdByDiscordId(
             $interaction->user->id
         );
@@ -97,11 +98,15 @@ EOF)
         );
 
         // attack event
-        if($epheralMessage)
+        if($interaction->message && $attack)
         {
+            $monster->setHealth(
+                $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
+            );
+            
             if($monster->getHealth() <= 0)
             {
-                $exp = $uLvl * $monster->getXp();
+                $exp = $monster->getXp();
 
                 $database->setUserExperience(
                     $uId,
@@ -113,26 +118,22 @@ EOF)
                     $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
                     $database->setUserLevel($uId, $uLvl + 1);
 
-                    $epheralMessage->channel->sendMessage("Level up !");
+                    $interaction->channel->sendMessage("Level up !");
                 }
 
-                $epheralMessage->edit(
+                $interaction->updateMessage(
                     MessageBuilder::new()
                     ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
                     ->setEmbeds([])
                     ->setComponents([])
-                )->then(function($msg) use ($interaction) {
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($msg, $interaction) {
-                        $msg->edit($this->getStartMessage($interaction->user));
-                    });
+                );
+                
+                $this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
+                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
                 });
 
                 return;
             }
-
-            $monster->setHealth(
-                $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
-            );
         }
 
         $buildedMsg = MessageBuilder::new()
@@ -141,19 +142,25 @@ EOF)
                 Button::new(Button::STYLE_DANGER)->setLabel("Attack")
                 ->setCustomId(sprintf("for-%s", $interaction->user->id))
                 ->setListener(
-                    function(Interaction $interaction) use ($monster)
+                    function(Interaction $i) use ($monster)
                     {
-                        if (!str_starts_with($interaction->data->custom_id, "for-{$interaction->user->id}"))
+                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
-                        $this->attackHandle($interaction, $monster, $interaction->message);
+                        }
+                        $this->attackHandle($i, $monster);
                     },
-                    $this->discord
+                    $this->discord,
+                    true
                 )
             )
         )
         ->addEmbed($embed);
 
-        $interaction->channel->sendMessage($buildedMsg);
+        if($interaction->message) {
+            $interaction->message->edit($buildedMsg);
+        } else {
+            $interaction->respondWithMessage($buildedMsg);
+        }
     }
 
     /**
@@ -182,10 +189,10 @@ EOF)
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $this->attackHandle($interaction, $monster);
-                                $interaction->message->delete();
+                                $this->attackHandle($interaction, $monster, true);
                             },
-                            $this->discord
+                            $this->discord,
+                            true
                         )
                     )
         );
