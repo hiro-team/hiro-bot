@@ -98,7 +98,7 @@ EOF)
         );
 
         // attack event
-        if(!isset($interaction->message) && $attack)
+        if(!isset($interaction) && $attack)
         {
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
@@ -156,7 +156,7 @@ EOF)
         )
         ->addEmbed($embed);
 
-        if(isset($interaction->message)) {
+        if(isset($interaction)) {
             $interaction->updateMessage($buildedMsg);
         }
 
