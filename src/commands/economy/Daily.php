@@ -74,7 +74,7 @@ class Daily extends Command
         setlocale(LC_MONETARY, 'en_US');
         $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
         if ($daily) {
-            $msg->reply("You Gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
+            $msg->reply("You gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
         } else {
             $msg->reply("Couldn't give daily");
         }

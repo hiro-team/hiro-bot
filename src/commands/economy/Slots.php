@@ -120,7 +120,7 @@ class Slots extends Command
                 $items[$rand_emotes[2]]
             ];
         }
-        $msg->reply("Slot is spinning... \n<:hiroslotspinning:1130399548523679754> <:hiroslotspinning:1130399548523679754> <:hiroslotspinning:1130399548523679754>")->then(function ($msg) use ($chance, $choosed, $payamount) {
+        $msg->reply("Slot is spinning... \n<a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754>")->then(function ($msg) use ($chance, $choosed, $payamount) {
             if (!($msg instanceof Message)) {
                 $msg->reply("An error excepted.");
                 return;
