@@ -97,6 +97,8 @@ EOF)
             $uId
         );
 
+        print_r($interaction);
+
         // attack event
         if(isset($interaction->message) && $attack)
         {
