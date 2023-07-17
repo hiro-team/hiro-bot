@@ -147,7 +147,10 @@ EOF)
                         if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                             return;
                         }
-                        $i->updateMessage($this->attackHandle($i, $user, $monster, true));
+                        $buildedMsg = $this->attackHandle($i, $user, $monster, true);
+                        if($buildedMsg) {
+                            $i->updateMessage();
+                        }
                     },
                     $this->discord,
                     true
