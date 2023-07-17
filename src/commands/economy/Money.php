@@ -69,9 +69,12 @@ class Money extends Command
                 $user_money = 0;
             }
         }
+
+        $pronoun = $user == $msg->author ? "You" : $user->username;
+
         setlocale(LC_MONETARY, 'en_US');
         $user_money = number_format($user_money, 2, ',', '.');
-        $msg->reply($user == $msg->author ? "You" : $user->username . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
+        $msg->reply($pronoun . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
         $database = NULL;
     }
 }
