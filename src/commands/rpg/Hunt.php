@@ -183,7 +183,7 @@ EOF)
      * 
      * @return MessageBuilder
      */
-    public function getStartMessage(User $user): MessageBuilder
+    public function getStartMessage(User $user): array
     {
         $embed = new Embed($this->discord);
         $embed->setTitle("Hunting");
