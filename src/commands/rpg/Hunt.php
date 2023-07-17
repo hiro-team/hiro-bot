@@ -63,8 +63,18 @@ class Hunt extends Command
         }
 
         $msg->channel->sendMessage($this->getStartMessage($msg->author))->then(function ($msg) {
-            $this->discord->getLoop()->addTimer(2.0, function () use ($msg) {
-                print_r($msg->components);
+            $this->discord->getLoop()->addTimer(10.0, function () use ($msg) {
+                foreach($msg->components as $collection)
+                {
+                    foreach($collection->components as $component)
+                    {
+                        if($component['custom_id'] == $msg->custom_id)
+                        {
+                            $msg->btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
+                            $msg->channel->sendMessage("Listener nulled.");
+                        }
+                    }
+                }
             });
         });
     }
@@ -181,7 +191,7 @@ EOF)
             ->addEmbed($embed)
             ->addComponent(
                 ActionRow::new()->addComponent(
-                    Button::new(Button::STYLE_DANGER)
+                    $btn = Button::new(Button::STYLE_DANGER)
                         ->setLabel("Start Hunting")
                         ->setCustomId("hunting-{$custom_id}-{$user->id}")
                         ->setListener(
@@ -200,6 +210,7 @@ EOF)
             );
 
         $buildedMsg->custom_id = $custom_id;
+        $buildedMsg->btn = $btn;
 
         return $buildedMsg;
     }
