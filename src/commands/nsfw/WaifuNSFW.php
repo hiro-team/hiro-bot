@@ -38,7 +38,7 @@ class WaifuNSFW extends Command
     {
         $this->command = "waifunsfw";
         $this->description = "Find your own *horny* waifu!";
-        $this->aliases = [];
+        $this->aliases = ["wnsfw", "wn"];
         $this->category = "nsfw";
         $this->browser = new Browser(null, $this->discord->getLoop());
     }
