@@ -62,7 +62,7 @@ class Coinflip extends Command
             if (!$database->addUser([
                 "discord_id" => $msg->author->id
             ])) {
-                $msg->reply("You are couldnt added to database.");
+                $msg->reply("You are couldn't added to database.");
                 return;
             } else {
                 $usermoney = 0;

@@ -62,9 +62,24 @@ class Hunt extends Command
             return;
         }
 
-        $msg->channel->sendMessage(
-            $this->getStartMessage($msg->author)
-        );
+        $startMessage = $this->getStartMessage($msg->author);
+        $custom_id = $startMessage[1];
+        $btn = $startMessage[2];
+
+        $msg->channel->sendMessage($startMessage[0])->then(function ($msg) use ($custom_id, $btn) {
+            $this->discord->getLoop()->addTimer(5.0, function () use ($msg, $custom_id, $btn) {
+                foreach($msg->components as $collection)
+                {
+                    foreach($collection->components as $component)
+                    {
+                        if($component['custom_id'] == $custom_id)
+                        {
+                            $btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
+                        }
+                    }
+                }
+            });
+        });
     }
 
     /**
@@ -84,9 +99,9 @@ Monster HP {$monster->getHealth()}
 EOF)
             ->setImage(GithubImageGenerator::generate($monster->getName()))
             ->setTimestamp();
-        
+
         $database = new \hiro\database\Database();
-        
+
         $uId = $database->getUserIdByDiscordId(
             $user->id
         );
@@ -103,9 +118,8 @@ EOF)
             $monster->setHealth(
                 $monster->getHealth() - AttackSystem::getAttackDamage($uLvl)
             );
-            
-            if($monster->getHealth() <= 0)
-            {
+
+            if ($monster->getHealth() <= 0) {
                 $exp = $monster->getXp();
 
                 $database->setUserExperience(
@@ -113,8 +127,7 @@ EOF)
                     $uExp + $exp
                 );
 
-                if( $uExp + $exp >= LevelSystem::getRequiredExperiences($uLvl) )
-                {
+                if ($uExp + $exp >= LevelSystem::getRequiredExperiences($uLvl)) {
                     $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
                     $database->setUserLevel($uId, $uLvl + 1);
 
@@ -123,44 +136,59 @@ EOF)
 
                 $interaction->updateMessage(
                     MessageBuilder::new()
-                    ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
-                    ->setEmbeds([])
-                    ->setComponents([])
+                        ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
+                        ->setEmbeds([])
+                        ->setComponents([])
                 );
 
-                // buggy
-                /*$this->discord->getLoop()->addTimer(2.0, function() use ($interaction) {
-                    $interaction->channel->sendMessage($this->getStartMessage($interaction->user));
-                });*/
+                $this->discord->getLoop()->addTimer(2.0, function () use ($interaction) {
+                    $startMessage = $this->getStartMessage($interaction->user);
+                    $custom_id = $startMessage[1];
+                    $btn = $startMessage[2];
+
+                    $interaction->channel->sendMessage($startMessage[0])->then(function ($msg) use ($custom_id, $btn) {
+                        $this->discord->getLoop()->addTimer(5.0, function () use ($msg, $custom_id, $btn) {
+                            foreach($msg->components as $collection)
+                            {
+                                foreach($collection->components as $component)
+                                {
+                                    if($component['custom_id'] == $custom_id)
+                                    {
+                                        $btn->setListener(null, $this->discord); // fill null listener if user didnt contact with button
+                                    }
+                                }
+                            }
+                        });
+                    });
+                });
 
                 return;
             }
         }
 
         $buildedMsg = MessageBuilder::new()
-        ->addComponent(
-            ActionRow::new()->addComponent(
-                Button::new(Button::STYLE_DANGER)->setLabel("Attack")
-                ->setCustomId(sprintf("for-%s", $user->id))
-                ->setListener(
-                    function(Interaction $i) use ($user, $monster)
-                    {
-                        if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
-                            return;
-                        }
-                        $buildedMsg = $this->attackHandle($i, $user, $monster, true);
-                        if($buildedMsg) {
-                            $i->updateMessage();
-                        }
-                    },
-                    $this->discord,
-                    true
+            ->addComponent(
+                ActionRow::new()->addComponent(
+                    Button::new(Button::STYLE_DANGER)->setLabel("Attack")
+                        ->setCustomId(sprintf("for-%s", $user->id))
+                        ->setListener(
+                            function (Interaction $i) use ($user, $monster) {
+                                if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
+                                    return;
+                                }
+                                $buildedMsg = $this->attackHandle($i, $user, $monster, true);
+                                if ($buildedMsg) {
+                                    $i->updateMessage();
+                                }
+                            },
+                            $this->discord,
+                            true
+                        )
                 )
             )
-        )
-        ->addEmbed($embed);
+            ->addEmbed($embed);
 
-        if($interaction) {
+        if ($interaction) {
             $interaction->updateMessage($buildedMsg);
         }
 
@@ -172,23 +200,25 @@ EOF)
      * 
      * @return MessageBuilder
      */
-    public function getStartMessage(User $user): MessageBuilder
+    public function getStartMessage(User $user): array
     {
         $embed = new Embed($this->discord);
         $embed->setTitle("Hunting");
         $embed->setDescription("Click to the button for starting hunting");
         $embed->setTimestamp();
+        $random_hex = bin2hex(random_bytes(6));
+        $custom_id = "hunting-{$random_hex}-{$user->id}";
 
-        return MessageBuilder::new()
-                ->addEmbed($embed)
-                ->addComponent(
-                    ActionRow::new()->addComponent(
-                        Button::new(Button::STYLE_DANGER)
-                            ->setLabel("Start Hunting")
-                            ->setCustomId(sprintf("for-%s", $user->id))
-                            ->setListener(
-                            function (Interaction $interaction) use ($user) {
-                                if (!str_starts_with($interaction->data->custom_id, "for-{$user->id}")) {
+        $buildedMsg = MessageBuilder::new()
+            ->addEmbed($embed)
+            ->addComponent(
+                ActionRow::new()->addComponent(
+                    $btn = Button::new(Button::STYLE_DANGER)
+                        ->setLabel("Start Hunting")
+                        ->setCustomId($custom_id)
+                        ->setListener(
+                            function (Interaction $interaction) use ($custom_id, $user) {
+                                if (!str_starts_with($interaction->data->custom_id, $custom_id)) {
                                     return;
                                 }
                                 $generator = new MonsterGenerator();
@@ -198,7 +228,9 @@ EOF)
                             $this->discord,
                             true
                         )
-                    )
-        );
+                )
+            );
+
+        return [$buildedMsg, $custom_id, $btn];
     }
 }
