@@ -29,7 +29,7 @@ use Discord\WebSockets\Intents;
 use hiro\Version;
 
 if ( !isset( $_ENV['TOKEN'] ) ) {
-	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+	$dotenv = Dotenv\Dotenv::createImmutable("./");
 	$dotenv->load();
 }
 
