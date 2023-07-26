@@ -49,7 +49,7 @@ $bot = new Hiro([
     'shardCount' => $shard_count,
     'caseInsensitiveCommands' => true,
     'loadAllMembers' => true,
-    'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS
+    'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS | Intents::MESSAGE_CONTENT
 ]);
 
 function getPresenceState(): ?array

@@ -50,9 +50,10 @@ class Join extends Command
 
         if (!$channel) {
             $msg->channel->sendMessage("You must be in a voice channel.");
+            return;
         }
 
-        $this->discord->joinVoiceChannel($channel)->done(function (VoiceClient $vc) {
+        $this->discord->joinVoiceChannel($channel, false, true, null, true)->done(function (VoiceClient $vc) {
         }, function ($e) use ($msg) {
             $msg->channel->sendMessage("There was an error joining the voice channel: {$e->getMessage()}"); 
         });
