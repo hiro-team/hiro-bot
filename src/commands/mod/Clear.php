@@ -85,16 +85,19 @@ class Clear extends Command
             $msg->channel->sendEmbed($embed);
             return;
         }
-        $msg->channel->limitDelete($limit);
-        $embed = new Embed($this->discord);
-        $embed->setTitle("Clear Command");
-        $embed->setDescription($limit . " messages was deleted.");
-        $embed->setColor("#5558E0");
-        $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed)->then(function ($msg) {
-            $this->discord->getLoop()->addTimer(3.0, function () use ($msg) {
-                $msg->delete();
+        $msg->channel->limitDelete($limit)->then(function() use ($msg, $limit) {
+            $embed = new Embed($this->discord);
+            $embed->setTitle("Clear Command");
+            $embed->setDescription($limit . " messages was deleted.");
+            $embed->setColor("#5558E0");
+            $embed->setTimestamp();
+            $msg->channel->sendEmbed($embed)->then(function ($msg) {
+                $this->discord->getLoop()->addTimer(3.0, function () use ($msg) {
+                    $msg->delete();
+                });
             });
+        }, function (\Throwable $reason) use ($msg) {
+            $msg->reply($reason->getCode() === 50013 ? "I don't have permission to delete messages." : "Unknown error excepted.");
         });
     }
 }

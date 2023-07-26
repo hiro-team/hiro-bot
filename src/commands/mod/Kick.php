@@ -62,8 +62,20 @@ class Kick extends Command
                     $msg->channel->sendEmbed($embed);
                     return;
                 }
-                $roles_men = max($this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles));
-                $roles_self = max($this->rolePositionsMap($msg->member->roles));
+                $roles_men = $this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles);
+                $roles_self = $this->rolePositionsMap($msg->member->roles);
+                if( $roles_men )
+                {
+                    $roles_men = max($roles_men);
+                } else {
+                    $roles_men = 0;
+                }
+                if( $roles_self )
+                {
+                    $roles_self = max($roles_self);
+                } else {
+                    $roles_men = 0;
+                }
                 if($kicker->id == $user->id)
                 {
                     $embed = new Embed($this->discord);
@@ -73,7 +85,7 @@ class Kick extends Command
                     $msg->channel->sendEmbed($embed);
                     return;
                 }else {
-                    if( $roles_self < $roles_men )
+                    if( ($roles_self < $roles_men) && !($msg->channel->guild->owner_id == $msg->member->id) )
                     {
                         $embed = new Embed($this->discord);
                         $embed->setColor('#ff0000');
@@ -89,7 +101,7 @@ class Kick extends Command
                                 $embed->setTimestamp();
                                 $msg->channel->sendEmbed($embed);
                             }, function (\Throwable $reason) use ( $msg ) {
-                                $msg->reply($reason->getMessage());
+                                $msg->reply($reason->getCode() === 50013 ? "I don't have permission to kick users. Check my role position or permission." : "Unknown error excepted.");
                             });
                     }
                 }
@@ -103,7 +115,7 @@ class Kick extends Command
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
-            $embed->setDescription("If you want kick a user u must have `kick_members` permission.");
+            $embed->setDescription("If you want kick a user, you must have `kick_members` permission.");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
         }

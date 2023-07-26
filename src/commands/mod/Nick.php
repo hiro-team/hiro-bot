@@ -53,26 +53,17 @@ class Nick extends Command
         if ($msg->member->getPermissions()['manage_nicknames']) {
             $user = $msg->mentions->first();
             if ($user) {
-                $newname = explode("$user ", implode(' ', $args))[1];
-                $msg->channel->guild->members[$user->id]->setNickname($newname);
-                $embed = new Embed($this->discord);
-                $embed->setColor('#ff0000');
-                $embed->setDescription("Nickname was changed.");
-                $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
+                $newname = explode("$user ", implode(' ', $args))[1] ?? ""; // else set to default
+                $msg->channel->guild->members[$user->id]->setNickname($newname)->then(function() use ($msg) {
+                    $msg->reply("Nickname changed.");
+                }, function( \Throwable $reason ) use ($msg) {
+                    $msg->reply($reason->getCode() === 50013 ? "I don't have permission to manage nicknames." : "Unknown error excepted.");
+                });
             } else {
-                $embed = new Embed($this->discord);
-                $embed->setColor('#ff0000');
-                $embed->setDescription("If you want change name a user you must mention a user.");
-                $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
+                $msg->reply("If you wanna change name for a user, you must mention a user.");
             }
         } else {
-            $embed = new Embed($this->discord);
-            $embed->setColor('#ff0000');
-            $embed->setDescription("If you want change name a user u must have `manage_nicknames` permission.");
-            $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply("If you wanna change name for a user, you must have `manage_nicknames` permission.");
         }
     }
 }
