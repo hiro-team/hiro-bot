@@ -100,7 +100,7 @@ class Play extends Command
         
         $processBuilder = new ProcessBuilder();
         $yt = new YoutubeDl($processBuilder);
-        $yt->setBinPath('yt-dlp');
+        $yt->setBinPath('./yt-dlp');
 
         $collection = $yt->download(
             Options::create()
