@@ -83,6 +83,7 @@ EOF
             "economy" => ":dollar:",
             "nasa" => ":rocket:",
             "rpg" => ":crossed_swords:",
+            "music" => ":notes:",
         ];
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
