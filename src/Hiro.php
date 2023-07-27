@@ -23,6 +23,7 @@ namespace hiro;
 use Discord\Discord;
 use hiro\interfaces\HiroInterface;
 use hiro\CommandClient\Command;
+use hiro\database\Database;
 use Discord\Parts\Embed\Embed;
 use Discord\WebSockets\Intents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -109,8 +110,15 @@ class Hiro extends Discord implements HiroInterface
                         // $message->react('⛔');
                         // $message->reply("Command not found for **$command**");
                         return;
-                    }
-                    $message->react('✅');
+		    }
+
+		    $database = new Database();
+		    if(!$database->isUserBannedFromBot($message->author->id))
+		    {
+			    $message->react('✅');
+		    } else {
+			    $message->react('⛔');
+		    }
 
                     $result = $command->handle($message, $args);
 

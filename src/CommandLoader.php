@@ -193,9 +193,14 @@ class CommandLoader
                                 }
                             }
                         }
-                    }
+		    }
 
-                    $cmd->handle($msg, $args);
+		    $database = new Database();
+
+		    if( !$database->isUserBannedFromBot($msg->author->id) )
+		    {
+			    $cmd->handle($msg, $args);
+		    }
                 } catch (\Throwable $e) {
                     if( \hiro\Version::TYPE == 'development' )
                     {

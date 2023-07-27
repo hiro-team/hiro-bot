@@ -730,6 +730,47 @@ class Database extends PDO
     }
 
     /**
+     * banUserFromBot
+     *
+     * @param integer $discord_id
+     * @return \PDOStatement
+     */
+    public function banUserFromBot(int $discord_id): ?\PDOStatement
+    {
+	return $this->query(
+		sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
+	);
+    }
+
+    /**
+     * unbanUserFromBot
+     *
+     * @param integer $discord_id
+     * @return \PDOStatement
+     */
+    public function unbanUserFromBot(int $discord_id): ?\PDOStatement
+    {
+    	return $this->query(
+		sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
+	);
+    }
+
+    /**
+     * isUserBannedFromBot
+     *
+     * @param integer $discord_id
+     * @return boolean
+     */
+    public function isUserBannedFromBot(int $discord_id): bool
+    {
+    	return $this->query(
+		sprintf(
+			"SELECT * FROM bans WHERE discord_id = %d", $discord_id
+		)
+	)->fetch() ? true : false;
+    }
+
+    /**
      * createTables
      *
      * @return void
@@ -747,6 +788,9 @@ class Database extends PDO
         CREATE TABLE IF NOT EXISTS `rpg_items` (
             `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        CREATE TABLE IF NOT EXISTS `bans` (
+            `id` bigint(21) NOT NULL AUTO_INCREMENT PRIMARY KEY
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         EOF
         );
 
@@ -776,7 +820,10 @@ class Database extends PDO
                 "item_slot" => "int(11) NOT NULL",
                 "item_count" => "int(11) DEFAULT NULL",
                 "item_using" => "int(11) DEFAULT NULL",
-            ]
+	    ],
+	    "bans" => [
+	    	"discord_id" => "bigint(21) NOT NULL",
+	    ],
         ];
 
         foreach ($columns as $table_key => $table) {
