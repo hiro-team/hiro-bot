@@ -197,6 +197,10 @@ class CommandLoader
 
                     $cmd->handle($msg, $args);
                 } catch (\Throwable $e) {
+                    if( \hiro\Version::TYPE == 'development' )
+                    {
+                        echo $e;
+                    }
                     $msg->reply("ERROR: `".$e->getMessage()."`");
                 }
             },

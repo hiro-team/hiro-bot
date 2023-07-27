@@ -46,6 +46,7 @@ class Join extends Command
      */
     public function handle($msg, $args): void
     {
+        global $voiceClients;
         $channel = $msg->member->getVoiceChannel();
 
         if (!$channel) {
@@ -53,7 +54,9 @@ class Join extends Command
             return;
         }
 
-        $this->discord->joinVoiceChannel($channel, false, true, null, true)->done(function (VoiceClient $vc) {
+        $this->discord->joinVoiceChannel($channel, false, true, null, true)->done(function (VoiceClient $vc) use ($channel) {
+            global $voiceClients;
+            $voiceClients[$channel->guild_id] = $vc;
         }, function ($e) use ($msg) {
             $msg->channel->sendMessage("There was an error joining the voice channel: {$e->getMessage()}"); 
         });

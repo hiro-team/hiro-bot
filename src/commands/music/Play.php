@@ -22,7 +22,24 @@ namespace hiro\commands;
 
 use Discord\Voice\VoiceClient;
 use Madcoda\Youtube\Youtube;
-use Yt\Dlp\YtDlp;
+use Symfony\Component\Process\Process;
+use YoutubeDl\Process\ProcessBuilderInterface;
+use YoutubeDl\YoutubeDl;
+use YoutubeDl\Options;
+
+class ProcessBuilder implements ProcessBuilderInterface
+{
+    public function build(?string $binPath, ?string $pythonPath, array $arguments = []): Process
+    {
+        array_unshift($arguments, '-f bestaudio[ext=m4a]');
+        print_r([$binPath, $pythonPath, ...$arguments]);
+        $process = new Process([$binPath, $pythonPath, ...$arguments]);
+        // Set custom timeout or customize other things..
+        $process->setTimeout(10);
+
+        return $process;
+    }
+}
 
 class Play extends Command
 {
@@ -48,7 +65,7 @@ class Play extends Command
      */
     public function handle($msg, $args): void
     {
-        $youtube = new Youtube(array('key' => $_ENV['YT_API_KEY']));
+        global $voiceClients;
         $channel = $msg->member->getVoiceChannel();
 
         if (!$channel) {
@@ -56,35 +73,20 @@ class Play extends Command
             return;
         }
         
-        $keyword = implode(' ', $args);
+        $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
         
-        if(!$keyword)
+        if(!$url)
         {
-            $msg->reply("You should write a keyword!");
+            $msg->reply("You should write a URL!");
             return;
         }
-        
-        $videos = $youtube->searchVideos($keyword, 1);
-        if(!$videos)
-        {
-            $msg->reply("Couldn't found a video on youtube.");
-            return;
-        }
-        
-        $video = $videos[0]; // best match
 
-        $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
+        $voiceClient = $voiceClients[$msg->channel->guild_id];
         
         if(!$voiceClient)
         {
-            if($channel = $msg->member->getVoiceChannel())
-            {
-                $this->discord->joinVoiceChannel($channel, false, true, null, true)->done(function (VoiceClient $vc) use ($msg, $keyword) {
-                    
-                }, function ($e) use ($msg) {
-                    $msg->channel->sendMessage("There was an error joining the voice channel: {$e->getMessage()}"); 
-                });
-            }
+            $msg->reply("Use join command first.\n" . sizeof($voiceClients));
+            return;
         }
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id)
@@ -93,24 +95,29 @@ class Play extends Command
             return;
         }
         
-        $yt = new YtDlp();
+        @unlink("./" . $msg->author->id . ".m4a");
+        @unlink("./" . $msg->author->id . ".m4a.json");
+        
+        $processBuilder = new ProcessBuilder();
+        $yt = new YoutubeDl($processBuilder);
+        $yt->setBinPath('yt-dlp');
 
-        $yt->getInfo("https://youtube.com/watch?v=" . $video->id->videoId)->then(static function (stdClass $video) use ($voiceClient) {
-          foreach ($video->formats as $format) {
-            if ($bestFormat === null) {
-              $bestFormat = $format;
-
-              continue;
-            }
-
-            if ($format->abr > $bestFormat->abr) {
-              $bestFormat = $format;
-            }
-
-            $stream = $voiceClient->ffmpegEncode($bestFormat->url);
-            $stream->start();
-            $voiceClient->playOggStream($stream);
-          }
+        $collection = $yt->download(
+            Options::create()
+                ->downloadPath('.')
+                ->audioQuality('0') // best
+                ->output($msg->author->id . '.%(ext)s')
+                ->url($url)
+        );
+        
+        $this->discord->getLoop()->addTimer( 0.5, function() use ($msg, $voiceClient)
+        {
+            $voiceClient->playFile($msg->author->id . ".m4a");
+            $this->discord->getLoop()->addTimer( 0.5, function() use ($msg)
+            {
+                @unlink("./" . $msg->author->id . ".m4a");
+                @unlink("./" . $msg->author->id . ".m4a.json");
+            });
         });
     }
 }

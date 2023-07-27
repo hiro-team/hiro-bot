@@ -46,6 +46,7 @@ class Leave extends Command
      */
     public function handle($msg, $args): void
     {
+        global $voiceClients;
         $channel = $msg->member->getVoiceChannel();
 
         $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
@@ -57,6 +58,10 @@ class Leave extends Command
 
         if ($voiceClient) {
             $voiceClient->close();
+            if(isset($voiceClients[$msg->guild_id]))
+            {
+                unset($voiceClients[$msg->guild_id]);
+            }
         } else {
             $msg->channel->sendMessage("I'm not in a voice channel.");
         }

@@ -51,6 +51,7 @@ $bot = new Hiro([
     'loadAllMembers' => true,
     'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS | Intents::MESSAGE_CONTENT
 ]);
+$voiceClients = [];
 
 function getPresenceState(): ?array
 {
