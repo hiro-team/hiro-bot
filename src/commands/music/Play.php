@@ -21,25 +21,8 @@
 namespace hiro\commands;
 
 use Discord\Voice\VoiceClient;
-use Madcoda\Youtube\Youtube;
-use Symfony\Component\Process\Process;
-use YoutubeDl\Process\ProcessBuilderInterface;
-use YoutubeDl\YoutubeDl;
-use YoutubeDl\Options;
-
-class ProcessBuilder implements ProcessBuilderInterface
-{
-    public function build(?string $binPath, ?string $pythonPath, array $arguments = []): Process
-    {
-        array_unshift($arguments, '-f bestaudio[ext=m4a]');
-        print_r([$binPath, $pythonPath, ...$arguments]);
-        $process = new Process([$binPath, $pythonPath, ...$arguments]);
-        // Set custom timeout or customize other things..
-        $process->setTimeout(10);
-
-        return $process;
-    }
-}
+use React\ChildProcess\Process;
+use Discord\Builders\MessageBuilder;
 
 class Play extends Command
 {
@@ -72,17 +55,17 @@ class Play extends Command
             $msg->channel->sendMessage("You must be in a voice channel.");
             return;
         }
-        
+
         $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
-        
+
         if(!$url)
         {
             $msg->reply("You should write a URL!");
             return;
         }
 
-        $voiceClient = $voiceClients[$msg->channel->guild_id];
-        
+        $voiceClient = @$voiceClients[$msg->channel->guild_id];
+
         if(!$voiceClient)
         {
             $msg->reply("Use join command first.\n");
@@ -94,29 +77,35 @@ class Play extends Command
             $msg->channel->sendMessage("You must be in same channel with me.");
             return;
         }
-        
-        @unlink("./" . $msg->author->id . ".m4a");
-        @unlink("./" . $msg->author->id . ".m4a.json");
-        
-        $processBuilder = new ProcessBuilder();
-        $yt = new YoutubeDl($processBuilder);
-        $yt->setBinPath('./yt-dlp');
 
-        $collection = $yt->download(
-            Options::create()
-                ->downloadPath('.')
-                ->audioQuality('0') // best
-                ->output($msg->author->id . '.%(ext)s')
-                ->url($url)
-        );
-        
-        $this->discord->getLoop()->addTimer( 0.5, function() use ($msg, $voiceClient)
+        @unlink($msg->author->id . ".m4a");
+        @unlink($msg->author->id . ".info.json");
+
+        $process = new Process("./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 {$url}");
+	$process->start();
+
+	$editmsg = $msg->reply("Downloading audio please wait...");
+
+        $process->on('exit', function($code, $term) use ($msg, $voiceClient, $editmsg)
         {
-            $voiceClient->playFile($msg->author->id . ".m4a");
+            if(is_file($msg->author->id . ".m4a"))
+	    {
+		$voiceClient->playFile($msg->author->id . ".m4a");
+	    }
+            $editmsg->then(function($m) use ($msg) {
+		if(!is_file($msg->author->id . ".m4a"))
+		{
+			$m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
+		} else {
+			$jsondata = json_decode(file_get_contents($msg->author->id . ".info.json"));
+
+			$m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
+		}
+            });
             $this->discord->getLoop()->addTimer( 0.5, function() use ($msg)
             {
-                @unlink("./" . $msg->author->id . ".m4a");
-                @unlink("./" . $msg->author->id . ".m4a.json");
+                @unlink($msg->author->id . ".m4a");
+                @unlink($msg->author->id . ".info.json");
             });
         });
     }

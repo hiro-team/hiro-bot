@@ -22,7 +22,7 @@ namespace hiro\commands;
 
 use Discord\Voice\VoiceClient;
 
-class Leave extends Command
+class Stop extends Command
 {
     /**
      * configure
@@ -31,9 +31,9 @@ class Leave extends Command
      */
     public function configure(): void
     {
-        $this->command = "leave";
-        $this->description = "Bot leaves from voice channel that you in";
-        $this->aliases = [];
+        $this->command = "stop";
+        $this->description = "Stoppes current sound if not playing gives error.";
+        $this->aliases = ["skip"];
         $this->category = "music";
     }
 
@@ -49,7 +49,7 @@ class Leave extends Command
         global $voiceClients;
         $channel = $msg->member->getVoiceChannel();
 
-        $voiceClient = $voiceClients[$msg->channel->guild_id];
+        $voiceClient = @$voiceClients[$msg->channel->guild_id];
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->channel->sendMessage("You must be in same channel with me.");
@@ -57,11 +57,11 @@ class Leave extends Command
         }
 
         if ($voiceClient) {
-            $voiceClient->close();
-            if(isset($voiceClients[$msg->guild_id]))
-            {
-                unset($voiceClients[$msg->guild_id]);
-            }
+            try {
+            	$voiceClient->stop();
+	    } catch (\Throwable $e) {
+		$msg->reply($e->getMessage());
+	    }
         } else {
             $msg->channel->sendMessage("I'm not in a voice channel.");
         }
