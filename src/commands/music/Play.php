@@ -85,7 +85,7 @@ class Play extends Command
         
         if(!$voiceClient)
         {
-            $msg->reply("Use join command first.\n" . sizeof($voiceClients));
+            $msg->reply("Use join command first.\n");
             return;
         }
 
