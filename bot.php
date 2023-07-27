@@ -59,7 +59,7 @@ function getPresenceState(): ?array
 	return [
         "{$_ENV['PREFIX']}help | " . $bot->formatNumber(sizeof($bot->guilds)) . " guilds | Shard " . $shard_id  + 1 . " of $shard_count",
         "⚔️ RPG System coming soon!",
-        "Music System coming soon!"
+        "🎶 Music system is working!"
     ];
 }
 
