@@ -3,7 +3,7 @@
 /**
  * Copyright 2023 bariscodefx
  * 
- * This file part of project Hiro 016 Discord Bot.
+ * This file is part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@ use Discord\Builders\MessageBuilder;
 
 class Play extends Command
 {
-    /**
-     * configure
-     *
-     * @return void
-     */
     public function configure(): void
     {
         $this->command = "play";
@@ -39,13 +34,6 @@ class Play extends Command
         $this->category = "music";
     }
 
-    /**
-     * handle
-     *
-     * @param [type] $msg
-     * @param [type] $args
-     * @return void
-     */
     public function handle($msg, $args): void
     {
         global $voiceClients;
@@ -58,23 +46,20 @@ class Play extends Command
 
         $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
 
-        if(!$url)
-        {
+        if (!$url) {
             $msg->reply("You should write a URL!");
             return;
         }
 
         $voiceClient = @$voiceClients[$msg->channel->guild_id];
 
-        if(!$voiceClient)
-        {
-            $msg->reply("Use join command first.\n");
+        if (!$voiceClient) {
+            $msg->reply("Use the join command first.\n");
             return;
         }
 
-        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id)
-        {
-            $msg->channel->sendMessage("You must be in same channel with me.");
+        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
+            $msg->channel->sendMessage("You must be in the same channel with me.");
             return;
         }
 
@@ -82,28 +67,23 @@ class Play extends Command
         @unlink($msg->author->id . ".info.json");
 
         $process = new Process("./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 {$url}");
-	$process->start();
+        $process->start();
 
-	$editmsg = $msg->reply("Downloading audio please wait...");
+        $editmsg = $msg->reply("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($msg, $voiceClient, $editmsg)
-        {
-            if(is_file($msg->author->id . ".m4a"))
-	    {
-		$voiceClient->playFile($msg->author->id . ".m4a");
-	    }
+        $process->on('exit', function($code, $term) use ($msg, $voiceClient, $editmsg) {
+            if (is_file($msg->author->id . ".m4a")) {
+                $voiceClient->playFile($msg->author->id . ".m4a");
+            }
             $editmsg->then(function($m) use ($msg) {
-		if(!is_file($msg->author->id . ".m4a"))
-		{
-			$m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
-		} else {
-			$jsondata = json_decode(file_get_contents($msg->author->id . ".info.json"));
-
-			$m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
-		}
+                if (!is_file($msg->author->id . ".m4a")) {
+                    $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
+                } else {
+                    $jsondata = json_decode(file_get_contents($msg->author->id . ".info.json"));
+                    $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
+                }
             });
-            $this->discord->getLoop()->addTimer( 0.5, function() use ($msg)
-            {
+            $this->discord->getLoop()->addTimer(0.5, function() use ($msg) {
                 @unlink($msg->author->id . ".m4a");
                 @unlink($msg->author->id . ".info.json");
             });
