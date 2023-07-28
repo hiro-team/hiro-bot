@@ -59,7 +59,7 @@ class Daily extends Command
         $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
 
         if (time() - $last_daily < 86400) {
-            $msg->reply('You must wait <t:' . ($last_daily + 86400) . ':R>.');
+            $msg->reply('You can use this command in <t:' . ($last_daily + 86400) . ':R>.');
             return;
         }
         
