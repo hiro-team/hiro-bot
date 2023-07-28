@@ -65,7 +65,8 @@ class Play extends Command
 
         @unlink($msg->author->id . ".m4a");
         @unlink($msg->author->id . ".info.json");
-
+        
+        $url = str_replace('\\', '', $url);
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             $msg->reply("The URL is not valid.");
             return;
