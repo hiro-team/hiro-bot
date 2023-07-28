@@ -1,35 +1,62 @@
-# Hiro016 Discord Bot
-[![Discord Status](https://img.shields.io/discord/1126745648407007374)](https://discord.gg/VqE5Csqkqu)
-[![Download Stable](https://img.shields.io/badge/download-stable-success)](https://github.com/hiro-team/hiro-bot/releases/latest)
-[![Invite Bot](https://img.shields.io/badge/invite-invite%20bot-success)](https://discord.com/api/oauth2/authorize?client_id=1074961668074905662&permissions=8&scope=bot)
+<p align="center">
+       <img src="https://cdn.discordapp.com/icons/1126745648407007374/1199d8b6d49130a7c4bd7cb7f357489e.png" width=128 height=128 />
+       <img src="https://github.com/bariscodefxy/Hiro-Discord-Bot/assets/85716242/55194acc-a36b-407f-b921-30b813019422" width=128 height=128 />
+       <br>
+       <a href="https://discord.gg/VqE5Csqkqu"><img src="https://img.shields.io/discord/1126745648407007374" /></a>
+       <a href="https://github.com/hiro-team/hiro-bot/releases/latest"><img src="https://img.shields.io/badge/download-stable-success" /></a>
+       <a href="https://discord.com/api/oauth2/authorize?client_id=1074961668074905662&permissions=8&scope=bot"><img src="https://img.shields.io/badge/invite-invite%20bot-success" /></a>
+</p>
 
-A Discord bot written in PHP
+## Hiro016 Discord Bot
+A Discord bot written in PHP.
+### Why Hiro Bot?
+- 100% Open-source & Secure
+- Bot is using PHP language
+  - PHP is fast learnable programming language that most using in the Web, so you can learn in average 1 week and you can fork this project and you can make your own bot
+- We're fast merging your good pull requests
+- Most features in one bot
+### Features
+- Can make your server more online with RPG commands
+  - You can set RPG channel that RPG commands only usable in there
+  - RPG system is very funny, members of your server will love that
+- Can play songs on YouTube in your voice channels
+- For anime lovers bot has commands
+  - $waifu - Sends random waifu image
+  - $hug - You can hug a member, bot will send anime hugging gif with a message
+  - $kiss - You can kiss a member, bot will send anime kissing gif with a message
+  - $marry - You can marry with a member, bot will send anime marrying gif with a message (It is won't store in database)
+  - $nekos - Just like waifu command but it's uses another API
+  - $slap - You can slap a member, bot will send anime slapping gif with a message
+- Bot has economy system
+  - $coinflip - A gambling game that you have 1/2 chance
+  - $daily - You can get daily earnings
+  - $money - You can see your current money
+  - $pay - You can give money to someone
+  - $slots - A gambling game that you know as slot machine
+- Bot also has some moderation commands
+  - $ban - Bans a member from your guild
+  - $clear - Deletes as many messages as you type
+  - $kick - Kicks a mebmer from your guild
+  - $nick - Changes or resets member display name
 
-|Project Name|Author|Minimum PHP Version|
-|--|--|--|
-|Hiro Bot|Hiro Team|8.0+|
-
-## For Contributors
-Pull Requests Only New Cool Commands and Bug Fixes!!!
-
-## Creating your bot from fork Hiro016 bot
-### Your Or PC/VPS
-#### Install Bot
-##### Clone Repository to your PC/VPS
+### Creating your bot from fork Hiro016 bot
+#### Your Or PC/VPS
+##### Install Bot
+###### Clone Repository to your PC/VPS
 ```
 git clone https://github.com/hiro-team/hiro-bot.git
 ```
-##### Manual Download
+###### Manual Download
 - Download from Code button
 - Extract to anywhere
-##### Setup
+###### Setup
 - Install PHP 8 or more
 - Install Composer
 - Make file with name `.env`
 - Put your token from Discord Developer Portal 
 to your .env file like this: `TOKEN=YOUR_BOT_TOKEN`
 - Put this command to your cmd/terminal: `composer update` or `composer install`
-##### Running
+###### Running
 - `php ./bot.php`
 Done
 
@@ -40,7 +67,8 @@ then select heroku/php module, make new environment named TOKEN and
 put your token there from Heroku Settings.
 Done!
 
-## License
+### License
+```
 Copyright 2021-2023 bariscodefx
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,3 +82,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
