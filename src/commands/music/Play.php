@@ -72,13 +72,13 @@ class Play extends Command
             return;
 	}
 
-	preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
-	if(!@$matches[0])
-	{
-	    $msg->reply("YouTube video url not found.\n");
-	    return;
-	}
-	$url = $matches[0]
+        preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
+        if(!@$matches[0])
+        {
+            $msg->reply("YouTube video url not found.\n");
+            return;
+        }
+        $url = $matches[0]
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"$url\"";
 
