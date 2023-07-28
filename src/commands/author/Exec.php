@@ -66,7 +66,7 @@ class Exec extends Command
             $msg->reply("```\n{$chunk}\n```");
         });
 
-        Loop::addTimer(20.0, function () use ($process) {
+        $this->discord->getLoop()->addTimer(20.0, function () use ($process) {
             $process->terminate();
         });
     }
