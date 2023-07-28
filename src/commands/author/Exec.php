@@ -63,15 +63,11 @@ class Exec extends Command
         $process->start();
 
         $process->stdout->on('data', function ($chunk) use ($msg) {
-            $msg->reply($chunk);
+            $msg->reply("```\n{$chunk}\n```");
         });
 
-        $process->on('exit', function ($code, $term) use ($msg) {
-            if ($term === null) {
-                $msg->reply('exit with code ' . $code);
-            } else {
-                $msg->reply('terminated with signal ' . $term);
-            }
+        Loop::addTimer(20.0, function () use ($process) {
+            $process->terminate();
         });
     }
 }
