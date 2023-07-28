@@ -23,6 +23,14 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 
+function getEpochSecondsLater($seconds) {
+    if (!is_numeric($seconds) || $seconds < 0) {
+        return time();
+    }
+
+    return time() + $seconds;
+}
+
 /**
  * Daily
  */
@@ -57,10 +65,12 @@ class Daily extends Command
         }
         $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
         $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
+
         if (time() - $last_daily < 86400) {
-            $msg->reply('You must wait 24 hours.');
+            $msg->reply('You must wait <t:' . getEpochSecondsLater($last_daily + 86400) . ':R>.');
             return;
         }
+        
         if (!is_numeric($user_money)) {
             if (!$database->addUser([
                 "discord_id" => $msg->member->id
