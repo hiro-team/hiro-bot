@@ -2657,12 +2657,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "5ef9909a9aff184906ad6e69b991313154c4d4ca"
+                "reference": "90526c9c8938a48a86af2ecc887737976091782f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/5ef9909a9aff184906ad6e69b991313154c4d4ca",
-                "reference": "5ef9909a9aff184906ad6e69b991313154c4d4ca",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/90526c9c8938a48a86af2ecc887737976091782f",
+                "reference": "90526c9c8938a48a86af2ecc887737976091782f",
                 "shasum": ""
             },
             "require": {
@@ -2743,7 +2743,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-25T15:08:44+00:00"
+            "time": "2023-07-27T06:52:43+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -4036,12 +4036,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0c5825044173bb2577aadca0cc6afcefec3b9277"
+                "reference": "0c37cbcbfdc72425c984460660ac4514918b112e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0c5825044173bb2577aadca0cc6afcefec3b9277",
-                "reference": "0c5825044173bb2577aadca0cc6afcefec3b9277",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0c37cbcbfdc72425c984460660ac4514918b112e",
+                "reference": "0c37cbcbfdc72425c984460660ac4514918b112e",
                 "shasum": ""
             },
             "require": {
@@ -4130,7 +4130,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-26T14:45:40+00:00"
+            "time": "2023-07-27T06:46:15+00:00"
         },
         {
             "name": "psr/container",
@@ -5587,12 +5587,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f073957f12f594323ac71727df7264d8fb5f8511"
+                "reference": "03f3913fe163a7fe8f346c465369e78f0bc5c239"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f073957f12f594323ac71727df7264d8fb5f8511",
-                "reference": "f073957f12f594323ac71727df7264d8fb5f8511",
+                "url": "https://api.github.com/repos/symfony/string/zipball/03f3913fe163a7fe8f346c465369e78f0bc5c239",
+                "reference": "03f3913fe163a7fe8f346c465369e78f0bc5c239",
                 "shasum": ""
             },
             "require": {
@@ -5665,7 +5665,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-25T15:42:22+00:00"
+            "time": "2023-07-27T07:02:19+00:00"
         },
         {
             "name": "theseer/tokenizer",
