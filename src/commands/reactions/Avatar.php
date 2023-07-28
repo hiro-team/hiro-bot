@@ -22,10 +22,7 @@ namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 
-/**
- * Howgay
- */
-class Howgay extends Command
+class Avatar extends Command
 {
     /**
      * configure
@@ -34,10 +31,10 @@ class Howgay extends Command
      */
     public function configure(): void
     {
-        $this->command = "howgay";
-        $this->description = "How much u are gay?";
-        $this->aliases = ["gay"];
-        $this->category = "fun";
+        $this->command = "avatar";
+        $this->description = "Shows your avatar.";
+        $this->aliases = [];
+        $this->category = "reactions";
     }
 
     /**
@@ -50,11 +47,19 @@ class Howgay extends Command
     public function handle($msg, $args): void
     {
         $user = $msg->mentions->first();
-        if (!$user) $user = $msg->author;
-        $random = rand(0, 100);
+        if($user)
+        {
+            $avatar = $user->avatar;
+        }else {
+            $avatar = $msg->author->avatar;
+        }
+        if (strpos($avatar, 'a_') !== false){
+            $avatar= str_replace('jpg', 'gif', $avatar);
+        }
         $embed = new Embed($this->discord);
-        $embed->setColor("#EB00EA");
-        $embed->setDescription("$user you are $random% gay. :gay_pride_flag:");
+        $embed->setColor("#ff0000");
+        $embed->setTitle("Avatar");
+        $embed->setImage($avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

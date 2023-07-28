@@ -23,9 +23,9 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 
 /**
- * ServerAvatar
+ * Ping
  */
-class ServerAvatar extends Command
+class Ping extends Command
 {
     /**
      * configure
@@ -34,10 +34,10 @@ class ServerAvatar extends Command
      */
     public function configure(): void
     {
-        $this->command = "serveravatar";
-        $this->description = "Returns server pfp.";
-        $this->aliases = ["server_avatar", "server-avatar", "svavatar", "savatar", "getserveravatar"];
-        $this->category = "bot";
+        $this->command = "ping";
+        $this->description = "Displays bot's latency.";
+        $this->aliases = ["latency", "ms"];
+        $this->category = "utility";
     }
 
     /**
@@ -49,15 +49,7 @@ class ServerAvatar extends Command
      */
     public function handle($msg, $args): void
     {
-        if (!@$msg->channel->guild) {
-            $msg->reply("You can only use in a guild!");
-            return;
-        }
-        $embed = new Embed($this->discord);
-        $embed->setColor("#ff0000");
-        $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . "'s Avatar");
-        $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
-        $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
+        $msg->channel->sendMessage("Your ping took {$diff}ms to arrive.");
     }
 }

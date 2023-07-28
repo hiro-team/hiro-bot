@@ -24,9 +24,9 @@ use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 
 /**
- * Daily
+ * Money
  */
-class Daily extends Command
+class Money extends Command
 {
     /**
      * configure
@@ -35,10 +35,11 @@ class Daily extends Command
      */
     public function configure(): void
     {
-        $this->command = "daily";
-        $this->description = "Daily moneys.";
-        $this->aliases = [];
-        $this->category = "economy";
+        $this->command = "money";
+        $this->description = "Displays your money.";
+        $this->aliases = ["cash"];
+        $this->category = "utility";
+        $this->cooldown = 10 * 1000;
     }
 
     /**
@@ -55,31 +56,25 @@ class Daily extends Command
             $msg->reply("Couldn't connect to database.");
             return;
         }
-        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
-        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
-
-        if (time() - $last_daily < 86400) {
-            $msg->reply('You can use this command in <t:' . ($last_daily + 86400) . ':R>.');
-            return;
-        }
-        
+        $user = $msg->mentions->first();
+        if (!$user) $user = $msg->author;
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
         if (!is_numeric($user_money)) {
             if (!$database->addUser([
-                "discord_id" => $msg->member->id
+                "discord_id" => $user->id
             ])) {
-                $msg->reply("You are couldn't added to database.");
+                $msg->reply("You're couldnt added to database.");
                 return;
             } else {
                 $user_money = 0;
             }
         }
+
+        $pronoun = $user == $msg->author ? "You" : $user->username;
+
         setlocale(LC_MONETARY, 'en_US');
-        $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
-        if ($daily) {
-            $msg->reply("You gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
-        } else {
-            $msg->reply("Couldn't give daily");
-        }
+        $user_money = number_format($user_money, 2, ',', '.');
+        $msg->reply($pronoun . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
         $database = NULL;
     }
 }

@@ -37,7 +37,7 @@ class Nick extends Command
         $this->command = "nick";
         $this->description = "Change users nick.";
         $this->aliases = ["nickname"];
-        $this->category = "mod";
+        $this->category = "utility";
         $this->cooldown = 10 * 1000;
     }
 

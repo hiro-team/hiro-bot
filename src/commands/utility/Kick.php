@@ -22,7 +22,7 @@ namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 
-class Ban extends Command
+class Kick extends Command
 {
 
     /**
@@ -32,10 +32,10 @@ class Ban extends Command
      */
     public function configure(): void
     {
-        $this->command = "ban";
-        $this->description = "Bans mentioned user.";
+        $this->command = "kick";
+        $this->description = "Kicks mentioned user.";
         $this->aliases = [];
-        $this->category = "mod";
+        $this->category = "utility";
     }
     
     /**
@@ -47,12 +47,12 @@ class Ban extends Command
      */
     public function handle($msg, $args): void
     {
-        if(@$msg->member->getPermissions()['ban_members'])
+        if(@$msg->member->getPermissions()['kick_members'])
         {
             $user = @$msg->mentions->first();
             if($user)
             {
-                $banner = $msg->author;
+                $kicker = $msg->author;
                 if(!isset($msg->channel->guild->members[$user->id])) 
                 {
                     $embed = new Embed($this->discord);
@@ -76,11 +76,11 @@ class Ban extends Command
                 } else {
                     $roles_men = 0;
                 }
-                if($banner->id == $user->id)
+                if($kicker->id == $user->id)
                 {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("You can't ban yourself");
+                    $embed->setDescription("You can't kick yourself");
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                     return;
@@ -92,30 +92,30 @@ class Ban extends Command
                         $embed->setDescription("Your role position too low!");
                         $embed->setTimestamp();
                         $msg->channel->sendEmbed($embed);
-                    }else {
-                        $msg->channel->guild->members[$user->id]->ban(null, null)
-                            ->then(function() use ( $msg, $user, $banner ) {
+                    } else {
+                        $msg->channel->guild->members->delete($msg->channel->guild->members[$user->id])
+                            ->then(function() use ( $msg, $user, $kicker ) {
                                 $embed = new Embed($this->discord);
                                 $embed->setColor('#ff0000');
-                                $embed->setDescription("$user banned by $banner.");
+                                $embed->setDescription("$user kicked by $kicker.");
                                 $embed->setTimestamp();
                                 $msg->channel->sendEmbed($embed);
                             }, function (\Throwable $reason) use ( $msg ) {
-                                $msg->reply($reason->getCode() === 50013 ? "I don't have permission to ban users. Check my role position or permission." : "Unknown error excepted.");
-                            }); 
+                                $msg->reply($reason->getCode() === 50013 ? "I don't have permission to kick users. Check my role position or permission." : "Unknown error excepted.");
+                            });
                     }
                 }
             }else {
                 $embed = new Embed($this->discord);
                 $embed->setColor('#ff0000');
-                $embed->setDescription("If you want ban a user you must mention a user.");
+                $embed->setDescription("If you want kick a user you must mention a user.");
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             }
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
-            $embed->setDescription("If you want ban a user u must have `ban_members` permission.");
+            $embed->setDescription("If you want kick a user, you must have `kick_members` permission.");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
         }

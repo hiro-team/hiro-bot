@@ -24,9 +24,9 @@ use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 
 /**
- * Money
+ * Daily
  */
-class Money extends Command
+class Daily extends Command
 {
     /**
      * configure
@@ -35,11 +35,10 @@ class Money extends Command
      */
     public function configure(): void
     {
-        $this->command = "money";
-        $this->description = "Displays your money.";
-        $this->aliases = ["cash"];
-        $this->category = "economy";
-        $this->cooldown = 10 * 1000;
+        $this->command = "daily";
+        $this->description = "Daily moneys.";
+        $this->aliases = [];
+        $this->category = "utility";
     }
 
     /**
@@ -56,25 +55,31 @@ class Money extends Command
             $msg->reply("Couldn't connect to database.");
             return;
         }
-        $user = $msg->mentions->first();
-        if (!$user) $user = $msg->author;
-        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($user->id));
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
+
+        if (time() - $last_daily < 86400) {
+            $msg->reply('You can use this command in <t:' . ($last_daily + 86400) . ':R>.');
+            return;
+        }
+        
         if (!is_numeric($user_money)) {
             if (!$database->addUser([
-                "discord_id" => $user->id
+                "discord_id" => $msg->member->id
             ])) {
-                $msg->reply("You're couldnt added to database.");
+                $msg->reply("You are couldn't added to database.");
                 return;
             } else {
                 $user_money = 0;
             }
         }
-
-        $pronoun = $user == $msg->author ? "You" : $user->username;
-
         setlocale(LC_MONETARY, 'en_US');
-        $user_money = number_format($user_money, 2, ',', '.');
-        $msg->reply($pronoun . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
+        if ($daily) {
+            $msg->reply("You gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
+        } else {
+            $msg->reply("Couldn't give daily");
+        }
         $database = NULL;
     }
 }

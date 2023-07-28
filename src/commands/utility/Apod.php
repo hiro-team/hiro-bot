@@ -40,7 +40,7 @@ class Apod extends Command
         $this->command = "apod";
         $this->description = "Shows some pictures from today by Nasa.";
         $this->aliases = [];
-        $this->category = "nasa";
+        $this->category = "utility";
         $this->browser = new Browser(null, $this->discord->getLoop());
     }
 
@@ -58,7 +58,7 @@ class Apod extends Command
 
             $result = json_decode((string)$response->getBody());
 
-            $embed->setAuthor($result->copyright, $msg->author->avatar);
+            $embed->setAuthor(null, $msg->author->avatar);
             $embed->setTitle($result->title);
             $embed->setImage($result->hdurl);
             $embed->setDescription($result->explanation);

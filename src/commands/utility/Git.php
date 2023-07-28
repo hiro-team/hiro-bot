@@ -22,7 +22,10 @@ namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
 
-class Avatar extends Command
+/**
+ * Git
+ */
+class Git extends Command
 {
     /**
      * configure
@@ -31,12 +34,12 @@ class Avatar extends Command
      */
     public function configure(): void
     {
-        $this->command = "avatar";
-        $this->description = "Shows your avatar.";
-        $this->aliases = [];
-        $this->category = "fun";
+        $this->command = "git";
+        $this->description = "URL of bot's source code.";
+        $this->aliases = ["source","opensource","open-source","github"];
+        $this->category = "utility";
     }
-
+    
     /**
      * handle
      *
@@ -46,21 +49,13 @@ class Avatar extends Command
      */
     public function handle($msg, $args): void
     {
-        $user = $msg->mentions->first();
-        if($user)
-        {
-            $avatar = $user->avatar;
-        }else {
-            $avatar = $msg->author->avatar;
-        }
-        if (strpos($avatar, 'a_') !== false){
-            $avatar= str_replace('jpg', 'gif', $avatar);
-        }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setTitle("Avatar");
-        $embed->setImage($avatar);
+        $embed->setTitle("Git (Github)");
+        $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
+        $embed->setDescription("I'm open source!\nClick to go to the link.");
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }
+    
 }

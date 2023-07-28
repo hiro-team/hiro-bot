@@ -38,7 +38,7 @@ class Botinfo extends Command
         $this->command = "botinfo";
         $this->description = "Bans mentioned user.";
         $this->aliases = [];
-        $this->category = "bot";
+        $this->category = "utility";
     }
 
     /**

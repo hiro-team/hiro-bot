@@ -39,7 +39,7 @@ class Help extends Command
         $this->command = "help";
         $this->description = "Displays commands.";
         $this->aliases = ["?"];
-        $this->category = "bot";
+        $this->category = "utility";
     }
 
     /**
@@ -76,18 +76,14 @@ EOF
         }
         $prefix = $this->discord->getCommandClientOptions()['prefix'];
         $emotes = [
-            "mod" => ":tools:",
-            "fun" => ":smiley:",
-            "bot" => ":robot:",
-            "nsfw" => ":underage:",
-            "economy" => ":dollar:",
-            "nasa" => ":rocket:",
+            "reactions" => ":wink:",
             "rpg" => ":crossed_swords:",
-            "music" => ":notes:",
+	    "music" => ":notes:",
+	    "utility" => ":tools:",
         ];
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setTitle("Usages");
+        $embed->setTitle("Bot Commands");
         $embed->setDescription(
             <<<EOF
 Here is the list of commands!
@@ -95,7 +91,8 @@ For more info on a specific command, use {$prefix}help {command}
 Need more help? Checkout [Github](https://github.com/hiro-team/hiro-bot)
 EOF
         );
-        $embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
+	$embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
+	$embed->setThumbnail($this->discord->avatar);
         foreach ($this->loader->categories as $category) {
             $category_name = array_search($category, $this->loader->categories);
             if ($category_name == "author") continue;

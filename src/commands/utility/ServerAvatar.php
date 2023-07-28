@@ -23,9 +23,9 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 
 /**
- * Git
+ * ServerAvatar
  */
-class Git extends Command
+class ServerAvatar extends Command
 {
     /**
      * configure
@@ -34,12 +34,12 @@ class Git extends Command
      */
     public function configure(): void
     {
-        $this->command = "git";
-        $this->description = "URL of bot's source code.";
-        $this->aliases = ["source","opensource","open-source","github"];
-        $this->category = "bot";
+        $this->command = "serveravatar";
+        $this->description = "Returns server pfp.";
+        $this->aliases = ["server_avatar", "server-avatar", "svavatar", "savatar", "getserveravatar"];
+        $this->category = "utility";
     }
-    
+
     /**
      * handle
      *
@@ -49,13 +49,15 @@ class Git extends Command
      */
     public function handle($msg, $args): void
     {
+        if (!@$msg->channel->guild) {
+            $msg->reply("You can only use in a guild!");
+            return;
+        }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setTitle("Git (Github)");
-        $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
-        $embed->setDescription("I'm open source!\nClick to go to the link.");
+        $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . "'s Avatar");
+        $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }
-    
 }

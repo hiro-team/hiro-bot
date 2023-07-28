@@ -39,7 +39,7 @@ class Slots extends Command
         $this->command = "slots";
         $this->description = "An economy game.";
         $this->aliases = ["slot"];
-        $this->category = "economy";
+        $this->category = "utility";
         $this->cooldown = 10 * 1000;
     }
 

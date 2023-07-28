@@ -23,9 +23,9 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 
 /**
- * Ping
+ * Howgay
  */
-class Ping extends Command
+class Howgay extends Command
 {
     /**
      * configure
@@ -34,10 +34,10 @@ class Ping extends Command
      */
     public function configure(): void
     {
-        $this->command = "ping";
-        $this->description = "Displays bot's latency.";
-        $this->aliases = ["latency", "ms"];
-        $this->category = "bot";
+        $this->command = "howgay";
+        $this->description = "How much u are gay?";
+        $this->aliases = ["gay"];
+        $this->category = "reactions";
     }
 
     /**
@@ -49,7 +49,13 @@ class Ping extends Command
      */
     public function handle($msg, $args): void
     {
-        $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
-        $msg->channel->sendMessage("Your ping took {$diff}ms to arrive.");
+        $user = $msg->mentions->first();
+        if (!$user) $user = $msg->author;
+        $random = rand(0, 100);
+        $embed = new Embed($this->discord);
+        $embed->setColor("#EB00EA");
+        $embed->setDescription("$user you are $random% gay. :gay_pride_flag:");
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
 }

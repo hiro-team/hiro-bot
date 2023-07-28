@@ -39,7 +39,7 @@ class Nekos extends Command
         $this->command = "nekos";
         $this->description = "Nekos API anime pictures & gifs.";
         $this->aliases = ["neko"];
-        $this->category = "fun";
+        $this->category = "reactions";
         $this->browser = new Browser(null, $this->discord->getLoop());
     }
 

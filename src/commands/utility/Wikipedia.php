@@ -40,7 +40,7 @@ class Wikipedia extends Command
         $this->command = "wikipedia";
         $this->description = "Searches for a Wikipedia page.";
         $this->aliases = ["wiki", "w"];
-        $this->category = "wikipedia";
+        $this->category = "utility";
     }
 
     /**
