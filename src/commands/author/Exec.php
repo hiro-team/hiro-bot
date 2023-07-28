@@ -21,6 +21,7 @@
 namespace hiro\commands;
 
 use hiro\interfaces\HiroInterface;
+use React\ChildProcess\Process;
 
 /**
  * Exec
@@ -53,9 +54,20 @@ class Exec extends Command
             $msg->channel->sendMessage("No");
             return;
         }
+        
         $ex = implode(' ', $args);
+        
         if (!$ex) $ex = " ";
-        $output = shell_exec($ex);
-        $msg->channel->sendMessage("```\n" . $output . "\n```");
+        
+        $process = new Process($ex);
+        $process->start();
+
+        $process->stdout->on('data', function ($chunk) use ($msg) {
+            $msg->reply("```\n{$chunk}\n```");
+        });
+
+        $this->discord->getLoop()->addTimer(20.0, function () use ($process) {
+            $process->terminate();
+        });
     }
 }
