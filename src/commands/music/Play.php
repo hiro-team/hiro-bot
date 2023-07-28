@@ -71,10 +71,10 @@ class Play extends Command
             $msg->reply("The URL is not valid.");
             return;
         }
+        
+        $command = escapeshellcmd("./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"$url\"");
 
-        $sanitizedUrl = escapeshellarg($url);
-
-        $process = new Process("./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"{$sanitizedUrl}\"");
+        $process = new Process($command);
         $process->start();
 
         $editmsg = $msg->reply("Downloading audio, please wait...");
