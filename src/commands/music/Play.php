@@ -78,7 +78,7 @@ class Play extends Command
             $msg->reply("YouTube video url not found.\n");
             return;
         }
-        $url = $matches[0]
+        $url = $matches[0];
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"$url\"";
         $process = new Process($command);
