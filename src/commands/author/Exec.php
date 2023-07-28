@@ -62,7 +62,7 @@ class Exec extends Command
         $process = new Process($ex);
         $process->start();
 
-        $process->stdout->on('data', function ($chunk) {
+        $process->stdout->on('data', function ($chunk) use ($msg) {
             $msg->reply($chunk);
         });
 
