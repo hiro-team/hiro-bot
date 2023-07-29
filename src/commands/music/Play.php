@@ -76,7 +76,7 @@ class Play extends Command
 
                 if (!$settings->getLoopEnabled())
                 {
-                    unset($settings->getQueue()[0])
+                    unset($settings->getQueue()[0]);
                 }
 
                 $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
