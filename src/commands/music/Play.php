@@ -48,7 +48,7 @@ class Play extends Command
         $process->on('exit', function($code, $term) use ($textChannel, $voiceClient, $editmsg, $settings, $url, $author_id) {
             if (is_file($author_id . ".m4a")) {
                 $settings->queue[0] = $url;
-                $voiceClient->playFile($author_id . ".m4a")->then(function() use ($msg, $settings, $author_id, $voiceClient) {
+                $voiceClient->playFile($author_id . ".m4a")->then(function() use ($settings, $author_id, $voiceClient) {
     		    	if (
                         $settings->loopEnabled
                         &&
@@ -59,7 +59,7 @@ class Play extends Command
         			}
     		    });
             }
-            $editmsg->then(function($m) use ($msg, $author_id) {
+            $editmsg->then(function($m) use ($author_id) {
                 if (!is_file($author_id . ".m4a")) {
                     $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
                 } else {
@@ -68,7 +68,7 @@ class Play extends Command
                     $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
                 }
             });
-            $this->discord->getLoop()->addTimer(0.5, function() use ($msg, $author_id) {
+            $this->discord->getLoop()->addTimer(0.5, function() use ($author_id) {
                 @unlink($author_id . ".m4a");
                 @unlink($author_id . ".info.json");
             });
