@@ -53,7 +53,7 @@ class Play extends Command
 
         $editmsg = $text_channel->sendMessage("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings, $text_channel) {
+        $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
