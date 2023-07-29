@@ -24,12 +24,12 @@ use Discord\Voice\VoiceClient;
 use React\ChildProcess\Process;
 use Discord\Builders\MessageBuilder;
 
-class Play extends Command
+class Loop extends Command
 {
     public function configure(): void
     {
-        $this->command = "play";
-        $this->description = "Plays music from youtube.";
+        $this->command = "Loop";
+        $this->description = "Enables or disables looping in music.";
         $this->aliases = [];
         $this->category = "music";
     }
