@@ -58,7 +58,7 @@ class Play extends Command
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
             
-            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise) {
+            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings) {
                 
                 if (!is_file($author_id . ".m4a")) {
                     $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
@@ -79,7 +79,11 @@ class Play extends Command
                     unset($settings->getQueue()[0]);
                 }
 
-                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
+                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise){
+                    $play_file_promise->then(function() use ($m) {
+                        $m->delete();
+                    });
+                });
                 
             });
             
