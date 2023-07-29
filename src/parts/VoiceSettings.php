@@ -70,14 +70,12 @@ class VoiceSettings
     
     public function nextSong(): void
     {
-        print_r($this->queue);
         if(@$this->queue[0])
         {
             $queue = $this->queue;
             array_shift($queue);
             $this->setQueue($queue);
         }
-        print_r($this->queue);
     }
 
 }
