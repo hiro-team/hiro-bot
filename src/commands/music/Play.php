@@ -146,10 +146,10 @@ class Play extends Command
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
-        
+
         $settings->addToQueue(new VoiceFile($url, $msg->author->id));
 
-        if( $settings->getQueue()[0] )
+        if( @$settings->getQueue()[1] )
         {
             $msg->reply("Song added to queue.\n");
         } else {
