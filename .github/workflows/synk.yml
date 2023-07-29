@@ -1,6 +1,7 @@
 name: "Snyk PHP"
 description: "Check your PHP application for vulnerabilties using Snyk"
 author: "Gareth Rushgrove"
+on: push
 branding:
   icon: "alert-triangle"
   color: "yellow"
