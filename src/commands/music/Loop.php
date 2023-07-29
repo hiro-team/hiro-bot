@@ -28,51 +28,10 @@ class Loop extends Command
 {
     public function configure(): void
     {
-        $this->command = "Loop";
+        $this->command = "loop";
         $this->description = "Enables or disables looping in music.";
         $this->aliases = [];
         $this->category = "music";
-    }
-
-    public function playMusic($url, $textChannel, $settings, $voiceClient, $author_id)
-    {
-        @unlink($author_id . ".m4a");
-        @unlink($author_id . ".info.json");
-        
-        $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"$url\"";
-        $process = new Process($command);
-        $process->start();
-
-        $editmsg = $textChannel->sendMessage("Downloading audio, please wait...");
-
-        $process->on('exit', function($code, $term) use ($textChannel, $voiceClient, $editmsg, $settings, $url, $author_id) {
-            if (is_file($author_id . ".m4a")) {
-                $settings->queue[0] = $url;
-                $voiceClient->playFile($author_id . ".m4a")->then(function() use ($msg, $settings, $author_id, $voiceClient) {
-    		    	if (
-                        $settings->loopEnabled
-                        &&
-                        $settings->queue[$settings->currentSong]
-                    )
-        			{
-        				$this->playMusic($settings->queue[$settings->currentSong], $textChannel, $settings, $voiceClient, $author_id);
-        			}
-    		    });
-            }
-            $editmsg->then(function($m) use ($msg, $author_id) {
-                if (!is_file($author_id . ".m4a")) {
-                    $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
-                } else {
-			        $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
-
-                    $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
-                }
-            });
-            $this->discord->getLoop()->addTimer(0.5, function() use ($msg, $author_id) {
-                @unlink($author_id . ".m4a");
-                @unlink($author_id . ".info.json");
-            });
-        });
     }
 
     public function handle($msg, $args): void
@@ -104,12 +63,12 @@ class Loop extends Command
 		    return;
 	    }
 
-        if ($settings->loopEnabled)
+        if ($settings->getLoopEnabled())
         {
-            $settings->loopEnabled = false;
+            $settings->setLoopEnabled(false);
             $msg->reply("Loop is **disabled** now.");
         } else {
-            $settings->loopEnabled = true;
+             $settings->setLoopEnabled(true);
             $msg->reply("Loop is **enabled** now.");
         }
     }

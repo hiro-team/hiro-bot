@@ -23,6 +23,7 @@ namespace hiro\commands;
 use Discord\Voice\VoiceClient;
 use React\ChildProcess\Process;
 use Discord\Builders\MessageBuilder;
+use hiro\parts\VoiceFile;
 
 class Play extends Command
 {
@@ -34,44 +35,56 @@ class Play extends Command
         $this->category = "music";
     }
 
-    public function playMusic($url, $textChannel, $settings, $voiceClient, $author_id)
+    public function playMusic($text_channel, $settings)
     {
+        $voice_client = $settings->getVoiceClient();
+        $author_id = $settings->getAuthorId();
+        
         @unlink($author_id . ".m4a");
         @unlink($author_id . ".info.json");
         
-        $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"$url\"";
+        $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"{$settings->getQueue()[0]}\"";
         $process = new Process($command);
         $process->start();
 
         $editmsg = $textChannel->sendMessage("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($textChannel, $voiceClient, $editmsg, $settings, $url, $author_id) {
+        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings, $author_id) {
+            
             if (is_file($author_id . ".m4a")) {
-                $settings->queue[0] = $url;
-                $voiceClient->playFile($author_id . ".m4a")->then(function() use ($settings, $author_id, $voiceClient, $textChannel) {
-    		    	if (
-                        $settings->loopEnabled
-                        &&
-                        $settings->queue[$settings->currentSong]
-                    )
-        			{
-        				$this->playMusic($settings->queue[$settings->currentSong], $textChannel, $settings, $voiceClient, $author_id);
-        			}
-    		    });
+                $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
-            $editmsg->then(function($m) use ($author_id) {
+            
+            $editmsg->then(function($m) use ($author_id, $play_file_promise) {
+                
                 if (!is_file($author_id . ".m4a")) {
                     $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
-                } else {
-			        $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
-
-                    $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
+                    return;
                 }
+                
+                $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
+
+                if($settings->getQueue()[$settings->currentSong])
+                {
+                    $this->playMusic($textChannel, $settings);
+                } else {
+                    $m->edit(MessageBuilder::new()->setContent("Music not found on queue."));
+                }
+
+                if (!$settings->getLoopEnabled())
+                {
+                    $settings->setCurrentSong( $settings->getCurrentSong() + 1 );
+                }
+
+                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
+                
             });
+            
             $this->discord->getLoop()->addTimer(0.5, function() use ($author_id) {
                 @unlink($author_id . ".m4a");
                 @unlink($author_id . ".info.json");
             });
+            
         });
     }
 
@@ -126,6 +139,8 @@ class Play extends Command
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
+        
+        $settings->addToQueue(new VoiceFile($url, $msg->author->id));
 
         $this->playMusic($url, $msg->channel, $settings, $voiceClient, $msg->author->id);
     }

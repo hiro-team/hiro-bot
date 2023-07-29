@@ -49,12 +49,12 @@ class Leave extends Command
         global $voiceSettings;
         $channel = $msg->member->getVoiceChannel();
 
-	$voiceClient = $this->discord->getVoiceClient($msg->guild_id);
+        $voiceClient = $this->discord->getVoiceClient($msg->guild_id);
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->channel->sendMessage("You must be in same channel with me.");
             return;
-	}
+        }
 
         if ($voiceClient) {
             $voiceClient->close();
