@@ -59,6 +59,10 @@ class Play extends Command
         $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
+                if (!$settings->getLoopEnabled())
+                {
+                    $settings->nextSong();
+                }
             }
             
             $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings) {
@@ -75,10 +79,6 @@ class Play extends Command
                         if(@$settings->getQueue()[0])
                         {
                             $this->playMusic($text_channel, $settings);
-                            if (!$settings->getLoopEnabled())
-                            {
-                                $settings->nextSong();
-                            }
                         } else {
                             $m->channel->sendMessage(MessageBuilder::new()->setContent("Music not found on queue."));
                         }
