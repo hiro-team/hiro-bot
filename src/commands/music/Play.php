@@ -133,7 +133,7 @@ class Play extends Command
 
         $url = str_replace('\\', '', $url);
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            $msg->sendMessage("The URL is not valid.");
+            $msg->reply("The URL is not valid.");
             return;
         }
 
@@ -149,6 +149,11 @@ class Play extends Command
         
         $settings->addToQueue(new VoiceFile($url, $msg->author->id));
 
-        $this->playMusic($msg->channel, $settings);
+        if( $settings->getQueue()[0] )
+        {
+            $msg->reply("Song added to queue.\n");
+        } else {
+            $this->playMusic($msg->channel, $settings);
+        }
     }
 }
