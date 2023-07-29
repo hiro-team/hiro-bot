@@ -79,15 +79,6 @@ class Play extends Command
             return;
         }
 
-<<<<<<< HEAD
-        preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
-        if(!@$matches[0])
-        {
-            $msg->reply("YouTube video url not found.\n");
-            return;
-        }
-        $url = $matches[0];
-=======
 	preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
 	preg_match('/https?:\/\/(www\.)?youtu\.be\/([A-Za-z0-9-_]+)/', $url, $matches2);
 	preg_match('/https?:\/\/(www\.)?youtube\.com\/([A-Za-z0-9-_]+)/', $url, $matches3);
@@ -97,7 +88,6 @@ class Play extends Command
 	    return;
 	}
 	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
->>>>>>> eb1f93e (unfinished music commands)
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"$url\"";
         $process = new Process($command);
