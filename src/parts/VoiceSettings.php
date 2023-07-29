@@ -75,7 +75,6 @@ class VoiceSettings
         {
             $queue = $this->queue;
             array_shift($queue);
-            $queue = array_values($queue);
             $this->setQueue($queue);
         }
         print_r($this->queue);

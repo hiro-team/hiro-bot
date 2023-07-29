@@ -47,6 +47,9 @@ class Play extends Command
         }
         $author_id = $settings->getQueue()[0]->getAuthorId();
         
+        @unlink($author_id . ".m4a");
+        @unlink($author_id . ".info.json");
+        
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"{$settings->getQueue()[0]->getUrl()}\"";
         $process = new Process($command);
         $process->start();
