@@ -47,15 +47,15 @@ class Play extends Command
 
         $process->on('exit', function($code, $term) use ($textChannel, $voiceClient, $editmsg, $settings, $url, $author_id) {
             if (is_file($author_id . ".m4a")) {
-                $settings["queue"] = $url;
+                $settings->queue[0] = $url;
                 $voiceClient->playFile($author_id . ".m4a")->then(function() use ($msg, $settings, $author_id, $voiceClient) {
     		    	if (
-                        $settings["loopEnabled"]
+                        $settings->loopEnabled
                         &&
-                        $settings["queue"][$settings["currentSong"]]
+                        $settings->queue[$settings->currentSong]
                     )
         			{
-        				$this->playMusic($settings["currentSong"], $textChannel, $settings, $voiceClient, $author_id);
+        				$this->playMusic($settings->queue[$settings->currentSong], $textChannel, $settings, $voiceClient, $author_id);
         			}
     		    });
             }
