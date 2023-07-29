@@ -43,7 +43,7 @@ class Play extends Command
         $process = new Process($command);
         $process->start();
 
-        $editmsg = $channel->sendMessage("Downloading audio, please wait...");
+        $editmsg = $textChannel->sendMessage("Downloading audio, please wait...");
 
         $process->on('exit', function($code, $term) use ($textChannel, $voiceClient, $editmsg, $settings, $url, $author_id) {
             if (is_file($author_id . ".m4a")) {
@@ -113,7 +113,7 @@ class Play extends Command
 
         $url = str_replace('\\', '', $url);
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            $textChannel->sendMessage("The URL is not valid.");
+            $msg->sendMessage("The URL is not valid.");
             return;
         }
 
@@ -122,7 +122,7 @@ class Play extends Command
     	preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
     	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
     	{
-    	    $textChannel->sendMessage("YouTube video URL not found.\n");
+    	    $msg->sendMessage("YouTube video URL not found.\n");
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
