@@ -23,7 +23,8 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 use hiro\commands\Command;
 use hiro\Version;
-use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
+use React\Http\Browser;
 
 /**
  * Wikipedia
@@ -41,6 +42,7 @@ class Wikipedia extends Command
         $this->description = "Searches for a Wikipedia page.";
         $this->aliases = ["wiki", "w"];
         $this->category = "utility";
+        $this->browser = new Browser(null, $this->discord->getLoop());
     }
 
     /**
@@ -61,45 +63,33 @@ class Wikipedia extends Command
         // Get the search query
         $query = implode(" ", $args);
 
-        // Create a Guzzle client
-        $client = new Client([
-            "base_uri" => "https://en.wikipedia.org/w/api.php",
-            "timeout"  => 5.0,
-        ]);
+        $this->browser->get("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srprop=snippet&srsearch=$query")->then(
+            function( ResponseInterface $response ) use ( $msg ) {
+                $body = (string)$response->getBody();
+                $json = json_decode($body);
 
-        // Make a request to the Wikipedia API
-        $response = $client->request("GET", "", [
-            "query" => [
-                "action"  => "query",
-                "format"  => "json",
-                "list"    => "search",
-                "srprop"  => "snippet",
-                "srsearch" => $query,
-            ],
-        ]);
+                if (empty($json->query->search)) {
+                    $msg->channel->sendMessage("No results found.");
+                    return;
+                }
 
-        // Decode the JSON response
-        $json = json_decode($response->getBody());
+                $result = $json->query->search[0];
 
-        // Check if there are any results
-        if (empty($json->query->search)) {
-            $msg->channel->sendMessage("No results found.");
-            return;
-        }
-
-        // Get the first result
-        $result = $json->query->search[0];
-
-        // Create an embed with the result information
-        $embed = new Embed($this->discord);
-        $embed->setTitle($result->title);
-        $embed->setDescription($result->snippet);
-        $embed->setURL("https://en.wikipedia.org/wiki/" . urlencode($result->title));
-        $embed->setThumbnail("https://en.wikipedia.org/static/favicon/wikipedia.ico");
-        $embed->setAuthor($msg->member->username, $msg->author->avatar);
-        $embed->setTimestamp();
-
-        // Send the embed
-        $msg->channel->sendEmbed($embed);
+                // Create an embed with the result information
+                $embed = new Embed($this->discord);
+                $embed->setTitle($result->title);
+                $embed->setDescription($result->snippet);
+                $embed->setURL("https://en.wikipedia.org/wiki/" . urlencode($result->title));
+                $embed->setThumbnail("https://en.wikipedia.org/static/favicon/wikipedia.ico");
+                $embed->setAuthor($msg->member->username, $msg->author->avatar);
+                $embed->setTimestamp();
+        
+                // Send the embed
+                $msg->channel->sendEmbed($embed);
+            },
+            function (Exception $e) use ($msg) {
+                $msg->reply('Unable to acesss the Wikipedia API :(');
+            }
+        );
     }
 }
