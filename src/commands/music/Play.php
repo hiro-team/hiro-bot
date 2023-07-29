@@ -45,7 +45,7 @@ class Play extends Command
             $text_channel->sendMessage("Current voice file not found.");
             return;
         }
-        $author_id = $settings->getQueue()[0]getAuthorId();
+        $author_id = $settings->getQueue()[0]->getAuthorId();
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"{$settings->getQueue()[0]}\"";
         $process = new Process($command);
