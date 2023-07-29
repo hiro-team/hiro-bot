@@ -67,20 +67,20 @@ class Play extends Command
                 
                 $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
 
-                if($settings->getQueue()[0])
-                {
-                    $this->playMusic($text_channel, $settings);
-                } else {
-                    $m->edit(MessageBuilder::new()->setContent("Music not found on queue."));
-                }
-
                 if (!$settings->getLoopEnabled())
                 {
                     unset($settings->getQueue()[0]);
                 }
 
-                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise){
+                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel){
                     $play_file_promise->then(function() use ($m) {
+                        if($settings->getQueue()[0])
+                        {
+                            $this->playMusic($text_channel, $settings);
+                        } else {
+                            $m->channel->sendMessage(MessageBuilder::new()->setContent("Music not found on queue."));
+                        }
+                        
                         $m->delete();
                     });
                 });
