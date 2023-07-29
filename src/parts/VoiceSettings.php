@@ -58,9 +58,25 @@ class VoiceSettings
         $this->queue[] = $voice_file;
     }
     
+    public function setQueue(array $queue): void
+    {
+        $this->queue = $queue;
+    }
+    
     public function setLoopEnabled(bool $loop): void
     {
         $this->loopEnabled = $loop;
+    }
+    
+    public function nextSong(): void
+    {
+        if($this->queue[0])
+        {
+            $queue = $this->queue;
+            array_shift($queue);
+            $queue = array_values($queue);
+            $this->setQueue($queue);
+        }
     }
 
 }
