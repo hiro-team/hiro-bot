@@ -54,7 +54,7 @@ class VoiceSettings
         return $this->currentSong;
     }
     
-    public function setVoiceClient(?VoiceClient $voiceClient): VoiceClient
+    public function setVoiceClient(?VoiceClient $voiceClient): void
     {
         $this->voiceClient = $voiceClient;
     }
