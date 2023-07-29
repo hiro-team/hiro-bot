@@ -32,8 +32,8 @@ class Stop extends Command
     public function configure(): void
     {
         $this->command = "stop";
-        $this->description = "Stoppes current sound if not playing gives error.";
-        $this->aliases = ["skip"];
+        $this->description = "Stoppes current sound and clears the queue if not playing gives error.";
+        $this->aliases = [];
         $this->category = "music";
     }
 
@@ -46,10 +46,10 @@ class Stop extends Command
      */
     public function handle($msg, $args): void
     {
-        global $voiceClients;
+        global $voiceSettings;
         $channel = $msg->member->getVoiceChannel();
 
-        $voiceClient = @$voiceClients[$msg->channel->guild_id];
+        $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->channel->sendMessage("You must be in same channel with me.");
@@ -59,9 +59,13 @@ class Stop extends Command
         if ($voiceClient) {
             try {
             	$voiceClient->stop();
-	    } catch (\Throwable $e) {
-		$msg->reply($e->getMessage());
-	    }
+                if(@$voiceSettings[$msg->guild_id])
+                {
+                    $voiceSettings[$msg->guild_id]->setQueue([]);
+                }
+            } catch (\Throwable $e) {
+                $msg->reply($e->getMessage());
+            }
         } else {
             $msg->channel->sendMessage("I'm not in a voice channel.");
         }

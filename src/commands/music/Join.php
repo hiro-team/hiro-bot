@@ -21,6 +21,7 @@
 namespace hiro\commands;
 
 use Discord\Voice\VoiceClient;
+use hiro\parts\VoiceSettings;
 
 class Join extends Command
 {
@@ -46,17 +47,22 @@ class Join extends Command
      */
     public function handle($msg, $args): void
     {
-        global $voiceClients;
         $channel = $msg->member->getVoiceChannel();
 
         if (!$channel) {
             $msg->channel->sendMessage("You must be in a voice channel.");
-            return;
         }
 
-        $this->discord->joinVoiceChannel($channel, false, true, null, true)->done(function (VoiceClient $vc) use ($channel) {
-            global $voiceClients;
-            $voiceClients[$channel->guild_id] = $vc;
+        $this->discord->joinVoiceChannel($channel, false, false, null, true)->done(function (VoiceClient $vc) use ($channel) {
+            global $voiceSettings;
+            
+            $settings = new VoiceSettings($vc);
+            
+            $voiceSettings[$channel->guild_id] = $settings;
+            
+            $vc->on('exit', function() use ($voiceSettings) {
+                unset($voiceSettings[$channel->guild_id]);
+            });
         }, function ($e) use ($msg) {
             $msg->channel->sendMessage("There was an error joining the voice channel: {$e->getMessage()}"); 
         });
