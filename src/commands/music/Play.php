@@ -142,6 +142,6 @@ class Play extends Command
         
         $settings->addToQueue(new VoiceFile($url, $msg->author->id));
 
-        $this->playMusic($url, $msg->channel, $settings, $voiceClient, $msg->author->id);
+        $this->playMusic($msg->channel, $settings);
     }
 }
