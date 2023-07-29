@@ -122,7 +122,7 @@ class Play extends Command
     	preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
     	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
     	{
-    	    $msg->sendMessage("YouTube video URL not found.\n");
+    	    $msg->reply("YouTube video URL not found.\n");
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
