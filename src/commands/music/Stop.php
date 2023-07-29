@@ -32,8 +32,8 @@ class Stop extends Command
     public function configure(): void
     {
         $this->command = "stop";
-        $this->description = "Stoppes current sound if not playing gives error.";
-        $this->aliases = ["skip"];
+        $this->description = "Stoppes current sound and clears the queue if not playing gives error.";
+        $this->aliases = [];
         $this->category = "music";
     }
 
@@ -59,9 +59,13 @@ class Stop extends Command
         if ($voiceClient) {
             try {
             	$voiceClient->stop();
-	    } catch (\Throwable $e) {
-		$msg->reply($e->getMessage());
-	    }
+                if(@$voiceSettings[$msg->guild_id])
+                {
+                    $voiceSettings[$msg->guild_id]->setQueue([]);
+                }
+            } catch (\Throwable $e) {
+                $msg->reply($e->getMessage());
+            }
         } else {
             $msg->channel->sendMessage("I'm not in a voice channel.");
         }
