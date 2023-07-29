@@ -74,7 +74,7 @@ class Play extends Command
 
                 $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel){
                     $play_file_promise->then(function() use ($m, $settings, $text_channel) {
-                        if($settings->getQueue()[0])
+                        if(@$settings->getQueue()[0])
                         {
                             $this->playMusic($text_channel, $settings);
                         } else {

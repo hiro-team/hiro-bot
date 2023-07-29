@@ -24,7 +24,7 @@ use Discord\Voice\VoiceClient;
 
 class VoiceSettings
 {
-    public $voiceClient;
+    public ?VoiceClient $voiceClient;
 	public array $queue = [];
 	public bool $loopEnabled = false;
     
@@ -70,13 +70,15 @@ class VoiceSettings
     
     public function nextSong(): void
     {
-        if($this->queue[0])
+        print_r($this->queue);
+        if(@$this->queue[0])
         {
             $queue = $this->queue;
             array_shift($queue);
             $queue = array_values($queue);
             $this->setQueue($queue);
         }
+        print_r($this->queue);
     }
 
 }
