@@ -46,10 +46,10 @@ class Stop extends Command
      */
     public function handle($msg, $args): void
     {
-        global $voiceClients;
+        global $voiceSettings;
         $channel = $msg->member->getVoiceChannel();
 
-        $voiceClient = @$voiceClients[$msg->channel->guild_id];
+        $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->channel->sendMessage("You must be in same channel with me.");

@@ -36,8 +36,9 @@ class Play extends Command
 
     public function handle($msg, $args): void
     {
-        global $voiceClients;
-        $channel = $msg->member->getVoiceChannel();
+        global $voiceSettings;
+	$channel = $msg->member->getVoiceChannel();
+	$voiceClient = $this->discord->getVoiceClient($msg->guild_id);
 
         if (!$channel) {
             $msg->channel->sendMessage("You must be in a voice channel.");
@@ -51,7 +52,7 @@ class Play extends Command
             return;
         }
 
-        $voiceClient = @$voiceClients[$msg->channel->guild_id];
+        $options = @$voiceSettings[$msg->channel->guild_id];
 
         if (!$voiceClient) {
             $msg->reply("Use the join command first.\n");
@@ -61,7 +62,13 @@ class Play extends Command
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->reply("You must be in the same channel with me.");
             return;
-        }
+	}
+
+	if (!$options)
+	{
+		$msg->reply("Voice options couldn't found.");
+		return;
+	}
 
         @unlink($msg->author->id . ".m4a");
         @unlink($msg->author->id . ".info.json");
@@ -72,6 +79,7 @@ class Play extends Command
             return;
         }
 
+<<<<<<< HEAD
         preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
         if(!@$matches[0])
         {
@@ -79,6 +87,17 @@ class Play extends Command
             return;
         }
         $url = $matches[0];
+=======
+	preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
+	preg_match('/https?:\/\/(www\.)?youtu\.be\/([A-Za-z0-9-_]+)/', $url, $matches2);
+	preg_match('/https?:\/\/(www\.)?youtube\.com\/([A-Za-z0-9-_]+)/', $url, $matches3);
+	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
+	{
+	    $msg->reply("YouTube video url not found.\n");
+	    return;
+	}
+	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
+>>>>>>> eb1f93e (unfinished music commands)
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$msg->author->id}.m4a --audio-quality=0 \"$url\"";
         $process = new Process($command);
@@ -86,15 +105,22 @@ class Play extends Command
 
         $editmsg = $msg->reply("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($msg, $voiceClient, $editmsg) {
-            if (is_file($msg->author->id . ".m4a")) {
-                $voiceClient->playFile($msg->author->id . ".m4a");
+        $process->on('exit', function($code, $term) use ($msg, $voiceClient, $editmsg, $voiceSettings, $url) {
+		if (is_file($msg->author->id . ".m4a")) {
+			$voiceSettings[$msg->guild_id]["queue"] = $url;
+		    $voiceClient->playFile($msg->author->id . ".m4a")->then(function() use ($msg, $voiceSettings) {
+		    	if ($voiceSettings[$msg->guild_id]["loopEnabled"] && $voiceSettings[$msg->guild_id]["queue"][$voiceSettings["currentSong"]])
+			{
+				
+			}
+		    });
             }
             $editmsg->then(function($m) use ($msg) {
                 if (!is_file($msg->author->id . ".m4a")) {
                     $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
                 } else {
-                    $jsondata = json_decode(file_get_contents($msg->author->id . ".info.json"));
+			$jsondata = json_decode(file_get_contents($msg->author->id . ".info.json"));
+
                     $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
                 }
             });

@@ -25,6 +25,7 @@ use Discord\Parts\User\Activity;
 use hiro\CommandLoader;
 use hiro\ArgumentParser;
 use hiro\PresenceManager;
+use hiro\parts\VoiceSettings;
 use Discord\WebSockets\Intents;
 use hiro\Version;
 
@@ -51,7 +52,7 @@ $bot = new Hiro([
     'loadAllMembers' => true,
     'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS | Intents::MESSAGE_CONTENT
 ]);
-$voiceClients = [];
+$voiceSettings = [];
 
 function getPresenceState(): ?array
 {

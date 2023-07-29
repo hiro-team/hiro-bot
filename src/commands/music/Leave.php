@@ -46,21 +46,21 @@ class Leave extends Command
      */
     public function handle($msg, $args): void
     {
-        global $voiceClients;
+        global $voiceSettings;
         $channel = $msg->member->getVoiceChannel();
 
-        $voiceClient = $voiceClients[$msg->channel->guild_id];
+	$voiceClient = $this->discord->getVoiceClient($msg->guild_id);
 
         if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
             $msg->channel->sendMessage("You must be in same channel with me.");
             return;
-        }
+	}
 
         if ($voiceClient) {
             $voiceClient->close();
-            if(isset($voiceClients[$msg->guild_id]))
+            if(isset($voiceSettings[$msg->guild_id]))
             {
-                unset($voiceClients[$msg->guild_id]);
+                unset($voiceSettings[$msg->guild_id]);
             }
         } else {
             $msg->channel->sendMessage("I'm not in a voice channel.");
