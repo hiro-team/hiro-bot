@@ -4,9 +4,9 @@ namespace hiro\parts;
 
 class VoiceSettings {
 
-	private array $queue = [];
-	private int $currentQueue = 0;
-	private bool $loopEnabled = false;
+	public array $queue = [];
+	public int $currentSong = 0;
+	public bool $loopEnabled = false;
 
 	public function __get($var)
 	{
