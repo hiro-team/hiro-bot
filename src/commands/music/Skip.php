@@ -67,10 +67,7 @@ class Skip extends Command
             $voiceClient->stop();
             if($cmd = $this->loader->getCmd("play"))
             {
-                if (!$settings->getLoopEnabled())
-                {
-                    $settings->nextSong();
-                }
+                $settings->nextSong();
                 $cmd->playMusic($msg->channel, $settings);
             }
         } catch (\Throwable $e) {
