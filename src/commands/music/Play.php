@@ -51,14 +51,14 @@ class Play extends Command
         $process = new Process($command);
         $process->start();
 
-        $editmsg = $textChannel->sendMessage("Downloading audio, please wait...");
+        $editmsg = $text_channel->sendMessage("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings) {
+        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings, $text_channel) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
             
-            $editmsg->then(function($m) use ($author_id, $play_file_promise) {
+            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise) {
                 
                 if (!is_file($author_id . ".m4a")) {
                     $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
@@ -69,7 +69,7 @@ class Play extends Command
 
                 if($settings->getQueue()[0])
                 {
-                    $this->playMusic($textChannel, $settings);
+                    $this->playMusic($text_channel, $settings);
                 } else {
                     $m->edit(MessageBuilder::new()->setContent("Music not found on queue."));
                 }
