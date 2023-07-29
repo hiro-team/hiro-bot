@@ -27,7 +27,6 @@ class VoiceSettings
     public $voiceClient;
 	public array $queue = [];
 	public bool $loopEnabled = false;
-    public int $currentSong = 0;
     
     public function __construct(VoiceClient $vc)
     {
@@ -49,11 +48,6 @@ class VoiceSettings
         return $this->loopEnabled;
     }
     
-    public function getCurrentSong(): int
-    {
-        return $this->currentSong;
-    }
-    
     public function setVoiceClient(?VoiceClient $voiceClient): void
     {
         $this->voiceClient = $voiceClient;
@@ -67,11 +61,6 @@ class VoiceSettings
     public function setLoopEnabled(bool $loop): void
     {
         $this->loopEnabled = $loop;
-    }
-    
-    public function setCurrentSong(int $currentSong): void
-    {
-        $this->currentSong = $currentSong;
     }
 
 }

@@ -38,10 +38,14 @@ class Play extends Command
     public function playMusic($text_channel, $settings)
     {
         $voice_client = $settings->getVoiceClient();
-        $author_id = $settings->getAuthorId();
+        $current_voice_file = $settings->getQueue()[0];
         
-        @unlink($author_id . ".m4a");
-        @unlink($author_id . ".info.json");
+        if (!$current_voice_file)
+        {
+            $text_channel->sendMessage("Current voice file not found.");
+            return;
+        }
+        $author_id = $settings->getQueue()[0]getAuthorId();
         
         $command = "./yt-dlp -f bestaudio[ext=m4a] --ignore-config --ignore-errors --write-info-json --output=./{$author_id}.m4a --audio-quality=0 \"{$settings->getQueue()[0]}\"";
         $process = new Process($command);
@@ -49,8 +53,7 @@ class Play extends Command
 
         $editmsg = $textChannel->sendMessage("Downloading audio, please wait...");
 
-        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings, $author_id) {
-            
+        $process->on('exit', function($code, $term) use ($voice_client, $editmsg, $settings) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
@@ -64,7 +67,7 @@ class Play extends Command
                 
                 $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
 
-                if($settings->getQueue()[$settings->currentSong])
+                if($settings->getQueue()[0])
                 {
                     $this->playMusic($textChannel, $settings);
                 } else {
@@ -73,7 +76,7 @@ class Play extends Command
 
                 if (!$settings->getLoopEnabled())
                 {
-                    $settings->setCurrentSong( $settings->getCurrentSong() + 1 );
+                    unset($settings->getQueue()[0])
                 }
 
                 $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"));
