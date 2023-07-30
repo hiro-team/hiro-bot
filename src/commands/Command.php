@@ -64,6 +64,13 @@ class Command implements CommandInterface {
      * @var Discord
      */
     public $discord;
+
+    /**
+     * cooldown
+     *
+     * @var int
+     */
+    public $cooldown = 0;
     
     /**
      * __construct
@@ -72,6 +79,7 @@ class Command implements CommandInterface {
     {
         $this->discord = $client;
         $this->loader = $loader;
+        $this->cooldown = 3 * 1000;
 
         $this->configure(); // we can use like this on child classes
     }
