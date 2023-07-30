@@ -30,6 +30,13 @@ use React\Http\Browser;
 class Nekos extends Command
 {
     /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+
+    /**
      * configure
      *
      * @return void

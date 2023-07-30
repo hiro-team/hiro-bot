@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f43bf97aae1a49cdd4abee244a16b945",
+    "content-hash": "0401b7c8a834c711806d5809cc0941db",
     "packages": [
         {
             "name": "commandstring/utils",
@@ -3034,6 +3034,52 @@
                 }
             ],
             "time": "2022-10-16T01:01:54+00:00"
+        },
+        {
+            "name": "wujunze/php-cli-color",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wujunze/php-cli-color.git",
+                "reference": "3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wujunze/php-cli-color/zipball/3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1",
+                "reference": "3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.5",
+                "overtrue/phplint": "^0.2",
+                "phpunit/phpunit": "^5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wujunze\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "wujunze",
+                    "email": "itwujunze@163.com"
+                }
+            ],
+            "description": "Simple and easy to use the PHP command-line output of color",
+            "support": {
+                "issues": "https://github.com/wujunze/php-cli-color/issues",
+                "source": "https://github.com/wujunze/php-cli-color/tree/master"
+            },
+            "time": "2018-12-12T12:32:42+00:00"
         }
     ],
     "packages-dev": [

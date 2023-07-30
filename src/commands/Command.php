@@ -59,6 +59,13 @@ class Command implements CommandInterface {
     public $aliases = [];
 
     /**
+     * CommandLoader
+     *
+     * @var \hiro\parts\CommandLoader
+     */
+    public $loader;
+
+    /**
      * discord
      * 
      * @var Discord

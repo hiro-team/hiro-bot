@@ -31,7 +31,8 @@
         "vlucas/phpdotenv": "^5.3",
         "madcoda/php-youtube-api": "dev-master",
         "norkunas/youtube-dl-php": "dev-master",
-        "commandstring/yt-dlp": "dev-main"
+        "commandstring/yt-dlp": "dev-main",
+        "wujunze/php-cli-color": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",

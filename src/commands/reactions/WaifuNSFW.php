@@ -30,6 +30,13 @@ use React\Http\Browser;
 class WaifuNSFW extends Command
 {
     /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+
+    /**
      * configure
      *
      * @return void

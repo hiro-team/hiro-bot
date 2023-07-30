@@ -31,6 +31,13 @@ class Apod extends Command
 {
 
     /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+
+    /**
      * configure
      *
      * @return void

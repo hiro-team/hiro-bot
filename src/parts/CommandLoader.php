@@ -22,7 +22,7 @@ namespace hiro\parts;
 
 use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
-use Discord\Builders\MessageBuilder;
+use Wujunze\Colors;
 
 /**
  * CommandLoader
@@ -35,6 +35,13 @@ class CommandLoader
      * @var HiroInterface
      */
     protected HiroInterface $client;
+
+    /**
+     * CLI Colors
+     *
+     * @var Colors
+     */
+    protected Colors $colors;
 
     /**
      * Command categories
@@ -57,6 +64,7 @@ class CommandLoader
     public function __construct(HiroInterface $client)
     {
         $this->client = $client;
+        $this->colors = new Colors();
         $this->dir = dirname(__DIR__, 1) . "/commands";
         $this->loadAllCommands();
     }
@@ -68,12 +76,13 @@ class CommandLoader
      */
     public function loadAllCommands()
     {
-        $this->clearConsole();
         $this->loaderInfo();
 
-        print "Loading Commands" . PHP_EOL;
+        $this->print_color("Loading commands...", "yellow");
         $this->loadDir($this->dir);
-        print "All Commands Are Loaded." . PHP_EOL;
+        $this->print_color("All commands has been loaded.", "green");
+
+        $this->print_color("Bot is ready for use!", "green");
     }
 
     /**
@@ -129,9 +138,7 @@ class CommandLoader
                 array_push($kategori, $cmd);
                 $this->categories[$cmd->category] = $kategori;
 
-                print "====================" . PHP_EOL;
-                print "Loaded : $class" . PHP_EOL;
-                print "====================" . PHP_EOL;
+                $this->print_color("{$class} loaded.", "green");
             } elseif ($file != '.' && $file != '..' && is_dir($dir . "/" . $file)) {
                 $this->loadDir($dir . "/" . $file);
             }
@@ -234,31 +241,26 @@ class CommandLoader
     }
 
     /**
-     * clearConsole
-     *
-     * This function clears the console/terminal.
-     *
-     * @return void
-     */
-    private function clearConsole()
-    {
-        for ($i = 0; $i < 100; $i++) {
-            print PHP_EOL;
-        }
-    }
-
-    /**
      * loaderInfo
      *
      * @return void
      */
     private function loaderInfo()
     {
-        exec("figlet \"Command\nLoader\nv$this->version\"", $figlet);
-        foreach ($figlet as $line) {
-            print $line . PHP_EOL;
-        }
-        print PHP_EOL . PHP_EOL;
+        $this->print_color("CommandLoader v{$this->version}", "yellow");
+    }
+
+    /**
+     * prints colored text
+     *
+     * @param string $text
+     * @param string $color1
+     * @param string $color2
+     * @return void
+     */
+    public function print_color(string $text, ?string $color1 = null, ?string $color2 = null): void
+    {
+        print $this->colors->getColoredString("[ HIRO BOT ] ", "blue") . $this->colors->getColoredString($text, $color1, $color2) . PHP_EOL;
     }
 
     /**

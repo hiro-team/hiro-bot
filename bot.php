@@ -63,9 +63,10 @@ function getPresenceState(): ?array
     ];
 }
 
-$bot->on('ready', function($discord) use ($shard_id, $shard_count) {
-    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Info));
-    echo "Bot is ready!", PHP_EOL;
+$bot->on('ready', function($discord) {
+    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('bot.log', \Monolog\Level::Info));
+    $colors = new Wujunze\Colors;
+    echo $colors->getColoredString("Bot's ready event hooked.", "black", "green"), PHP_EOL;
     
     $commandLoader = new CommandLoader($discord);
 
