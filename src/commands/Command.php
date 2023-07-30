@@ -23,7 +23,7 @@ namespace hiro\commands;
 use hiro\interfaces\CommandInterface;
 use hiro\interfaces\HiroInterface;
 use Discord\Discord;
-use hiro\CommandLoader;
+use hiro\parts\CommandLoader;
 
 /**
  * Command

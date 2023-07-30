@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace hiro;
+namespace hiro\parts;
 
 use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
