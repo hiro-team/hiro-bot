@@ -28,11 +28,11 @@ class Version {
     /**
      * VERSION
      */
-    const VERSION = "v1.0.3";
+    const VERSION = "v1.0.2";
 
     /**
      * TYPE
      */
-    const TYPE = "production";
+    const TYPE = "development";
 
 }
