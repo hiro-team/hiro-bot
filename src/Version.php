@@ -33,6 +33,6 @@ class Version {
     /**
      * TYPE
      */
-    const TYPE = "production";
+    const TYPE = "development";
 
 }
