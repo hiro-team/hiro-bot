@@ -142,11 +142,9 @@ class CommandLoader
      */
     public function getCmd($cmd_name)
     {
-        foreach($this->categories as $category)
-        {
-            foreach($category as $cmd)
-            {
-                if($cmd_name === $cmd->command) return $cmd;
+        foreach ($this->categories as $category) {
+            foreach ($category as $cmd) {
+                if ($cmd_name === $cmd->command) return $cmd;
             }
         }
         return null;
@@ -168,7 +166,7 @@ class CommandLoader
                             $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($msg->guild->id));
                             $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($msg->guild->id));
 
-                            if($cmd->command != "setrpgchannel" && $cmd->command != "setrpgenabled") {
+                            if ($cmd->command != "setrpgchannel" && $cmd->command != "setrpgenabled") {
                                 if (!$rpgenabled) {
                                     $msg->reply('RPG commands is not enabled in this server.');
                                     return;
@@ -179,7 +177,7 @@ class CommandLoader
                                     $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
                                     return;
                                 }
-                                    
+
 
                                 if ($cmd->command != "createchar") {
                                     $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
@@ -193,27 +191,25 @@ class CommandLoader
                                 }
                             }
                         }
-		    }
+                    }
 
-		    $database = new Database();
+                    $database = new Database();
 
-		    if( !$database->isUserBannedFromBot($msg->author->id) )
-		    {
-			    $cmd->handle($msg, $args);
-		    }
+                    if (!$database->isUserBannedFromBot($msg->author->id)) {
+                        $cmd->handle($msg, $args);
+                    }
                 } catch (\Throwable $e) {
-                    if( \hiro\Version::TYPE == 'development' )
-                    {
+                    if (\hiro\Version::TYPE == 'development') {
                         echo $e;
                     }
-                    $msg->reply("ERROR: `".$e->getMessage()."`");
+                    $msg->reply("ERROR: `" . $e->getMessage() . "`");
                 }
             },
             [
-                        'aliases' => $cmd->aliases,
-                        'description' => $cmd->description,
-                        'cooldown' => $cmd->cooldown ?? 0
-                    ]
+                'aliases' => $cmd->aliases,
+                'description' => $cmd->description,
+                'cooldown' => $cmd->cooldown ?? 0
+            ]
         );
     }
 
