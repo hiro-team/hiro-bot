@@ -25,7 +25,6 @@ use Discord\Parts\User\Activity;
 use hiro\parts\CommandLoader;
 use hiro\parts\ArgumentParser;
 use hiro\parts\PresenceManager;
-use hiro\parts\voice\VoiceSettings;
 use Discord\WebSockets\Intents;
 use hiro\Version;
 

@@ -22,7 +22,7 @@ namespace hiro;
 
 use Discord\Discord;
 use hiro\interfaces\HiroInterface;
-use Discord\CommandClient\Command;
+use hiro\parts\Command;
 use hiro\database\Database;
 use Discord\Parts\Embed\Embed;
 use Discord\WebSockets\Intents;
