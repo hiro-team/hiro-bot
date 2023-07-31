@@ -92,14 +92,17 @@ class Waifu extends Command
             "dance",
             "cringe"
         ];
-        if (!isset($args[0])) $type = "waifu";
-        if (isset($args[0])) {
-            if (!in_array($args[0], $type_array)) {
-                $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
-                return;
-            }
-            $type = $args[0];
+        if (!isset($args[0]))
+        {
+            $type = "waifu";
         }
+
+        if (!in_array($args[0], $type_array)) {
+            $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+            return;
+        }
+        $type = $args[0];
+
         $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
             function (ResponseInterface $response) use ($msg) {
                 $result = (string)$response->getBody();
