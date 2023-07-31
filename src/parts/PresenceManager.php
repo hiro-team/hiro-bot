@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace hiro;
+namespace hiro\parts;
 
 use hiro\interfaces\PresenceManagerInterface;
 use hiro\interfaces\HiroInterface;

@@ -23,7 +23,7 @@ namespace hiro\commands;
 use Discord\Voice\VoiceClient;
 use React\ChildProcess\Process;
 use Discord\Builders\MessageBuilder;
-use hiro\parts\VoiceFile;
+use hiro\parts\voice\VoiceFile;
 
 class Play extends Command
 {

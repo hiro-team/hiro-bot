@@ -21,7 +21,7 @@
 namespace hiro\commands;
 
 use Discord\Voice\VoiceClient;
-use hiro\parts\VoiceSettings;
+use hiro\parts\voice\VoiceSettings;
 
 class Join extends Command
 {

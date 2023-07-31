@@ -8,3 +8,4 @@ phpDocumentor.php
 db-settings.inc
 .phpunit*
 build/
+bot.log

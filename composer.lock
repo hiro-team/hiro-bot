@@ -4,91 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f43bf97aae1a49cdd4abee244a16b945",
+    "content-hash": "abf6da274a5dcf423841b907372ba71c",
     "packages": [
-        {
-            "name": "commandstring/utils",
-            "version": "v1.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CommandString/Utils.git",
-                "reference": "b07ae426455c34ce654f266779a2f52bb9134432"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CommandString/Utils/zipball/b07ae426455c34ce654f266779a2f52bb9134432",
-                "reference": "b07ae426455c34ce654f266779a2f52bb9134432",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10",
-                "squizlabs/php_codesniffer": "^3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CommandString\\Utils\\": "src/",
-                    "Tests\\CommandString\\Utils\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A collection of useful PHP utilities",
-            "support": {
-                "issues": "https://github.com/CommandString/Utils/issues",
-                "source": "https://github.com/CommandString/Utils/tree/v1.7.2"
-            },
-            "time": "2023-05-01T18:29:10+00:00"
-        },
-        {
-            "name": "commandstring/yt-dlp",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CommandString/YtDlp-PHP.git",
-                "reference": "ba174fffa82e756a02a3136766fc0a10d2602cc6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CommandString/YtDlp-PHP/zipball/ba174fffa82e756a02a3136766fc0a10d2602cc6",
-                "reference": "ba174fffa82e756a02a3136766fc0a10d2602cc6",
-                "shasum": ""
-            },
-            "require": {
-                "commandstring/utils": "^1.3",
-                "php": "^8.1",
-                "react/async": "^4.0",
-                "react/promise": "^2.9"
-            },
-            "require-dev": {
-                "squizlabs/php_codesniffer": "^3.7"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Yt\\Dlp\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Robert Snedeker",
-                    "email": "rsnedeker20@gmail.com.com"
-                }
-            ],
-            "description": "A PHP wrapper for yt-dlp",
-            "support": {
-                "issues": "https://github.com/CommandString/YtDlp-PHP/issues",
-                "source": "https://github.com/CommandString/YtDlp-PHP/tree/main"
-            },
-            "time": "2023-07-26T19:23:58+00:00"
-        },
         {
             "name": "discord-php/http",
             "version": "v10.2.2",
@@ -478,61 +395,6 @@
             "time": "2023-04-17T16:11:26+00:00"
         },
         {
-            "name": "madcoda/php-youtube-api",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/madcoda/php-youtube-api.git",
-                "reference": "84bc7f40a616f45d4ba3cdd499a8e67df6d02612"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/madcoda/php-youtube-api/zipball/84bc7f40a616f45d4ba3cdd499a8e67df6d02612",
-                "reference": "84bc7f40a616f45d4ba3cdd499a8e67df6d02612",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Madcoda\\Youtube\\": "src"
-                },
-                "classmap": [
-                    "src/compat.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Madcoda",
-                    "email": "jason@madcoda.com"
-                }
-            ],
-            "description": "PHP wrapper for the Youtube Data API v3",
-            "keywords": [
-                "api",
-                "madcoda",
-                "video",
-                "youtube"
-            ],
-            "support": {
-                "email": "jason@madcoda.com",
-                "issues": "https://github.com/madcoda/php-youtube-api/issues",
-                "source": "https://github.com/madcoda/php-youtube-api/tree/master"
-            },
-            "time": "2021-09-06T18:55:50+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "dev-main",
             "source": {
@@ -740,68 +602,6 @@
                 }
             ],
             "time": "2023-07-12T11:08:39+00:00"
-        },
-        {
-            "name": "norkunas/youtube-dl-php",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/norkunas/youtube-dl-php.git",
-                "reference": "173d5e4528cf55dcb6027869f5b9de8154330474"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/norkunas/youtube-dl-php/zipball/173d5e4528cf55dcb6027869f5b9de8154330474",
-                "reference": "173d5e4528cf55dcb6027869f5b9de8154330474",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=7.4.0",
-                "symfony/filesystem": "^4.4|^5.1|^6.0",
-                "symfony/polyfill-php80": "^1.26",
-                "symfony/process": "^4.4|^5.1|^6.0"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "^1.6.10",
-                "php-cs-fixer/shim": "^3.9",
-                "phpstan/phpstan": "^1.8",
-                "phpstan/phpstan-phpunit": "^1.1",
-                "symfony/phpunit-bridge": "^6.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "YoutubeDl\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tomas Norkūnas",
-                    "email": "norkunas.tom@gmail.com"
-                }
-            ],
-            "description": "youtube-dl / yt-dlp wrapper for php",
-            "keywords": [
-                "youtube",
-                "youtube-dl",
-                "yt-dlp"
-            ],
-            "support": {
-                "issues": "https://github.com/norkunas/youtube-dl-php/issues",
-                "source": "https://github.com/norkunas/youtube-dl-php/tree/v2.2.1"
-            },
-            "time": "2023-04-21T03:50:15+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -2210,69 +2010,6 @@
             "time": "2023-05-23T14:45:45+00:00"
         },
         {
-            "name": "symfony/filesystem",
-            "version": "6.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/filesystem.git",
-                "reference": "ab0c940d678a31e2f3b6607e1b15701e3a34e16b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/ab0c940d678a31e2f3b6607e1b15701e3a34e16b",
-                "reference": "ab0c940d678a31e2f3b6607e1b15701e3a34e16b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/polyfill-ctype": "~1.8",
-                "symfony/polyfill-mbstring": "~1.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Filesystem\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Provides basic utilities for the filesystem",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/filesystem/tree/6.4"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-07-25T15:08:44+00:00"
-        },
-        {
             "name": "symfony/options-resolver",
             "version": "6.4.x-dev",
             "source": {
@@ -2428,12 +2165,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f9c7affe77a00ae32ca127ca6833d034e6d33f25"
+                "reference": "42292d99c55abe617799667f454222c54c60e229"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f9c7affe77a00ae32ca127ca6833d034e6d33f25",
-                "reference": "f9c7affe77a00ae32ca127ca6833d034e6d33f25",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/42292d99c55abe617799667f454222c54c60e229",
+                "reference": "42292d99c55abe617799667f454222c54c60e229",
                 "shasum": ""
             },
             "require": {
@@ -2504,7 +2241,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-30T17:25:47+00:00"
+            "time": "2023-07-28T09:04:16+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -2591,78 +2328,17 @@
             "time": "2023-01-26T09:26:14+00:00"
         },
         {
-            "name": "symfony/process",
-            "version": "6.4.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/process.git",
-                "reference": "8f38ed0bd6164cad8f0a3b40df0dc65bd070b66b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/8f38ed0bd6164cad8f0a3b40df0dc65bd070b66b",
-                "reference": "8f38ed0bd6164cad8f0a3b40df0dc65bd070b66b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Process\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Executes commands in sub-processes",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/process/tree/6.4"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-07-25T15:08:44+00:00"
-        },
-        {
             "name": "symfony/translation",
             "version": "6.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "90526c9c8938a48a86af2ecc887737976091782f"
+                "reference": "a0bb1b99995f5e2094191a9be5012dd3cef14da0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/90526c9c8938a48a86af2ecc887737976091782f",
-                "reference": "90526c9c8938a48a86af2ecc887737976091782f",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/a0bb1b99995f5e2094191a9be5012dd3cef14da0",
+                "reference": "a0bb1b99995f5e2094191a9be5012dd3cef14da0",
                 "shasum": ""
             },
             "require": {
@@ -2743,7 +2419,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-27T06:52:43+00:00"
+            "time": "2023-07-30T09:31:53+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -2751,12 +2427,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "02c24deb352fb0d79db5486c0c79905a85e37e86"
+                "reference": "9fca65891b3305a38959d766b3bb13ef35ff0600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/02c24deb352fb0d79db5486c0c79905a85e37e86",
-                "reference": "02c24deb352fb0d79db5486c0c79905a85e37e86",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/9fca65891b3305a38959d766b3bb13ef35ff0600",
+                "reference": "9fca65891b3305a38959d766b3bb13ef35ff0600",
                 "shasum": ""
             },
             "require": {
@@ -2806,7 +2482,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/translation-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/translation-contracts/tree/main"
             },
             "funding": [
                 {
@@ -2822,7 +2498,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-30T17:17:10+00:00"
+            "time": "2023-07-29T13:12:44+00:00"
         },
         {
             "name": "team-reflex/discord-php",
@@ -2830,12 +2506,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/discord-php/DiscordPHP.git",
-                "reference": "4d32124b70623090c3355db6a1115a52b5a1ba28"
+                "reference": "5333a0aca35c10eb0df5c6503b4c95b9e0e4d098"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/4d32124b70623090c3355db6a1115a52b5a1ba28",
-                "reference": "4d32124b70623090c3355db6a1115a52b5a1ba28",
+                "url": "https://api.github.com/repos/discord-php/DiscordPHP/zipball/5333a0aca35c10eb0df5c6503b4c95b9e0e4d098",
+                "reference": "5333a0aca35c10eb0df5c6503b4c95b9e0e4d098",
                 "shasum": ""
             },
             "require": {
@@ -2900,7 +2576,7 @@
                 "source": "https://github.com/discord-php/DiscordPHP/tree/master",
                 "wiki": "https://github.com/discord-php/DiscordPHP/wiki"
             },
-            "time": "2023-07-22T11:33:34+00:00"
+            "time": "2023-07-29T05:09:56+00:00"
         },
         {
             "name": "trafficcophp/bytebuffer",
@@ -3034,6 +2710,52 @@
                 }
             ],
             "time": "2022-10-16T01:01:54+00:00"
+        },
+        {
+            "name": "wujunze/php-cli-color",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wujunze/php-cli-color.git",
+                "reference": "3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wujunze/php-cli-color/zipball/3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1",
+                "reference": "3ce1c3948efdd1d4a60be4b092cf0b1fec122fe1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.5",
+                "overtrue/phplint": "^0.2",
+                "phpunit/phpunit": "^5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wujunze\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "wujunze",
+                    "email": "itwujunze@163.com"
+                }
+            ],
+            "description": "Simple and easy to use the PHP command-line output of color",
+            "support": {
+                "issues": "https://github.com/wujunze/php-cli-color/issues",
+                "source": "https://github.com/wujunze/php-cli-color/tree/master"
+            },
+            "time": "2018-12-12T12:32:42+00:00"
         }
     ],
     "packages-dev": [
@@ -3471,12 +3193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "928a96f585b86224ebc78f8f09d0482cf15b04f5"
+                "reference": "f6f48cfecf52ab791fe18cc1b11d6345512dc4b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/928a96f585b86224ebc78f8f09d0482cf15b04f5",
-                "reference": "928a96f585b86224ebc78f8f09d0482cf15b04f5",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/f6f48cfecf52ab791fe18cc1b11d6345512dc4b8",
+                "reference": "f6f48cfecf52ab791fe18cc1b11d6345512dc4b8",
                 "shasum": ""
             },
             "require": {
@@ -3524,7 +3246,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-08T17:24:01+00:00"
+            "time": "2023-07-30T10:01:33+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -4036,12 +3758,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0c37cbcbfdc72425c984460660ac4514918b112e"
+                "reference": "23e4eac3958d0d405601dab7b8298d030506fdee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0c37cbcbfdc72425c984460660ac4514918b112e",
-                "reference": "0c37cbcbfdc72425c984460660ac4514918b112e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/23e4eac3958d0d405601dab7b8298d030506fdee",
+                "reference": "23e4eac3958d0d405601dab7b8298d030506fdee",
                 "shasum": ""
             },
             "require": {
@@ -4130,7 +3852,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-27T06:46:15+00:00"
+            "time": "2023-07-30T17:20:08+00:00"
         },
         {
             "name": "psr/container",
@@ -5183,12 +4905,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "cfa88bac6e7b2ea8813360fb0fef961fe960e1e2"
+                "reference": "95e5df3dfff8b48965b3d92e8fbcb835e1f03d0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/cfa88bac6e7b2ea8813360fb0fef961fe960e1e2",
-                "reference": "cfa88bac6e7b2ea8813360fb0fef961fe960e1e2",
+                "url": "https://api.github.com/repos/symfony/console/zipball/95e5df3dfff8b48965b3d92e8fbcb835e1f03d0a",
+                "reference": "95e5df3dfff8b48965b3d92e8fbcb835e1f03d0a",
                 "shasum": ""
             },
             "require": {
@@ -5214,6 +4936,7 @@
                 "symfony/dependency-injection": "^5.4|^6.0|^7.0",
                 "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
                 "symfony/lock": "^5.4|^6.0|^7.0",
+                "symfony/messenger": "^5.4|^6.0|^7.0",
                 "symfony/process": "^5.4|^6.0|^7.0",
                 "symfony/var-dumper": "^5.4|^6.0|^7.0"
             },
@@ -5265,7 +4988,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-25T15:08:44+00:00"
+            "time": "2023-07-30T13:24:47+00:00"
         },
         {
             "name": "symfony/finder",
@@ -5499,17 +5222,78 @@
             "time": "2023-01-26T09:26:14+00:00"
         },
         {
+            "name": "symfony/process",
+            "version": "6.4.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "1276cfea910ffa53ae4057dc77ce4101e73f5329"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/1276cfea910ffa53ae4057dc77ce4101e73f5329",
+                "reference": "1276cfea910ffa53ae4057dc77ce4101e73f5329",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/6.4"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-29T11:18:16+00:00"
+        },
+        {
             "name": "symfony/service-contracts",
             "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "40da9cc13ec349d9e4966ce18b5fbcd724ab10a4"
+                "reference": "a4025a1c812c231d88ed0780e866b0cc644f4a84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/40da9cc13ec349d9e4966ce18b5fbcd724ab10a4",
-                "reference": "40da9cc13ec349d9e4966ce18b5fbcd724ab10a4",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/a4025a1c812c231d88ed0780e866b0cc644f4a84",
+                "reference": "a4025a1c812c231d88ed0780e866b0cc644f4a84",
                 "shasum": ""
             },
             "require": {
@@ -5563,7 +5347,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/service-contracts/tree/main"
             },
             "funding": [
                 {
@@ -5579,24 +5363,24 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-23T14:45:45+00:00"
+            "time": "2023-07-29T13:12:44+00:00"
         },
         {
             "name": "symfony/string",
-            "version": "6.4.x-dev",
+            "version": "7.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "fe9228ba417441e16f31d36ddad2b3076135f453"
+                "reference": "95ff83d5a8a9f4b831cdd139e2ec10b931aa734f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/fe9228ba417441e16f31d36ddad2b3076135f453",
-                "reference": "fe9228ba417441e16f31d36ddad2b3076135f453",
+                "url": "https://api.github.com/repos/symfony/string/zipball/95ff83d5a8a9f4b831cdd139e2ec10b931aa734f",
+                "reference": "95ff83d5a8a9f4b831cdd139e2ec10b931aa734f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1",
+                "php": ">=8.2",
                 "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-intl-grapheme": "~1.0",
                 "symfony/polyfill-intl-normalizer": "~1.0",
@@ -5606,11 +5390,11 @@
                 "symfony/translation-contracts": "<2.5"
             },
             "require-dev": {
-                "symfony/error-handler": "^5.4|^6.0|^7.0",
-                "symfony/http-client": "^5.4|^6.0|^7.0",
-                "symfony/intl": "^6.2|^7.0",
+                "symfony/error-handler": "^6.4|^7.0",
+                "symfony/http-client": "^6.4|^7.0",
+                "symfony/intl": "^6.4|^7.0",
                 "symfony/translation-contracts": "^2.5|^3.0",
-                "symfony/var-exporter": "^5.4|^6.0|^7.0"
+                "symfony/var-exporter": "^6.4|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -5649,7 +5433,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/6.4"
+                "source": "https://github.com/symfony/string/tree/7.0"
             },
             "funding": [
                 {
@@ -5665,7 +5449,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-27T06:52:43+00:00"
+            "time": "2023-07-27T16:29:09+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5722,9 +5506,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "team-reflex/discord-php": 20,
-        "madcoda/php-youtube-api": 20,
-        "norkunas/youtube-dl-php": 20,
-        "commandstring/yt-dlp": 20
+        "wujunze/php-cli-color": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

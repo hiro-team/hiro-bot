@@ -22,10 +22,9 @@ include __DIR__ . '/vendor/autoload.php';
 
 use hiro\Hiro;
 use Discord\Parts\User\Activity;
-use hiro\CommandLoader;
-use hiro\ArgumentParser;
-use hiro\PresenceManager;
-use hiro\parts\VoiceSettings;
+use hiro\parts\CommandLoader;
+use hiro\parts\ArgumentParser;
+use hiro\parts\PresenceManager;
 use Discord\WebSockets\Intents;
 use hiro\Version;
 
@@ -64,9 +63,10 @@ function getPresenceState(): ?array
     ];
 }
 
-$bot->on('ready', function($discord) use ($shard_id, $shard_count) {
-    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Level::Info));
-    echo "Bot is ready!", PHP_EOL;
+$bot->on('ready', function($discord) {
+    $discord->logger->pushHandler(new \Monolog\Handler\StreamHandler('bot.log', \Monolog\Level::Info));
+    $colors = new Wujunze\Colors;
+    echo $colors->getColoredString("Bot's ready event hooked.", "black", "green"), PHP_EOL;
     
     $commandLoader = new CommandLoader($discord);
 

@@ -30,6 +30,13 @@ use React\Http\Browser;
 class WaifuNSFW extends Command
 {
     /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+
+    /**
      * configure
      *
      * @return void
@@ -62,14 +69,18 @@ class WaifuNSFW extends Command
             "trap",
             "blowjob"
         ];
-        if (!isset($args[0])) $type = "waifu";
-        if (isset($args[0])) {
-            if (!in_array($args[0], $type_array)) {
-                $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
-                return;
-            }
-            $type = $args[0];
+
+        if (!isset($args[0]))
+        {
+            $type = "waifu";
         }
+
+        if (!in_array($args[0], $type_array)) {
+            $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+            return;
+        }
+        $type = $args[0];
+
         $this->browser->get("https://api.waifu.pics/nsfw/$type")->then(
             function (ResponseInterface $response) use ($msg) {
                 $result = (string)$response->getBody();

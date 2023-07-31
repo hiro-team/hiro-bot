@@ -31,6 +31,14 @@ use React\Http\Browser;
  */
 class Wikipedia extends Command
 {
+    
+    /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+
     /**
      * configure
      *

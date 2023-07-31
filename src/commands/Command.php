@@ -23,7 +23,7 @@ namespace hiro\commands;
 use hiro\interfaces\CommandInterface;
 use hiro\interfaces\HiroInterface;
 use Discord\Discord;
-use hiro\CommandLoader;
+use hiro\parts\CommandLoader;
 
 /**
  * Command
@@ -59,11 +59,25 @@ class Command implements CommandInterface {
     public $aliases = [];
 
     /**
+     * CommandLoader
+     *
+     * @var \hiro\parts\CommandLoader
+     */
+    public $loader;
+
+    /**
      * discord
      * 
      * @var Discord
      */
     public $discord;
+
+    /**
+     * cooldown
+     *
+     * @var int
+     */
+    public $cooldown = 0;
     
     /**
      * __construct
@@ -72,6 +86,7 @@ class Command implements CommandInterface {
     {
         $this->discord = $client;
         $this->loader = $loader;
+        $this->cooldown = 3 * 1000;
 
         $this->configure(); // we can use like this on child classes
     }
