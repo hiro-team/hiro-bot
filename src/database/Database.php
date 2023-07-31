@@ -771,6 +771,32 @@ class Database extends PDO
     }
 
     /**
+     * getUserLocale
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getUserLocale(int $user_id): ?string
+    {
+        return $this->getUser($user_id)['locale'] ?? null;
+    }
+    
+    /**
+     * setUserLocale
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function setUserLocale(int $user_id, ?string $locale = null): ?bool
+    {
+        return $this->query(
+            sprintf(
+                "UPDATE users SET locale = '%s' WHERE id = '%d'", $locale, $user_id
+            )
+        ) ? true : false;
+    }
+
+    /**
      * createTables
      *
      * @return void
@@ -805,6 +831,7 @@ class Database extends PDO
                 "rpg_chargender" => "int(11) DEFAULT NULL",
                 "experience" => "int(11) DEFAULT '0'",
                 "level" => "int(11) DEFAULT '1'",
+                "locale" => "varchar(100) DEFAULT NULL"
             ],
             "servers" => [
                 "discord_id" => "bigint(21) NOT NULL",

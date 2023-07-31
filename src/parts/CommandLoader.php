@@ -214,6 +214,9 @@ class CommandLoader
                         }
                     }
 
+                    global $language;
+                    $language = new Language($database->getUserLocale($database->getUserIdByDiscordId($msg->author->id)) ?? "en_EN");
+
                     $cmd->handle($msg, $args);
                 }
             } catch (\Throwable $e) {

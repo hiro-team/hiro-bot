@@ -47,6 +47,7 @@ class Ban extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if(@$msg->member->getPermissions()['ban_members'])
         {
             $user = @$msg->mentions->first();
@@ -57,7 +58,7 @@ class Ban extends Command
                 {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("User couldn't found.");
+                    $embed->setDescription($language->getTranslator()->trans('global.user_not_found'));
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                     return;
@@ -80,7 +81,7 @@ class Ban extends Command
                 {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("You can't ban yourself");
+                    $embed->setDescription($language->getTranslator()->trans('commands.ban.selfban'));
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                     return;
@@ -89,34 +90,34 @@ class Ban extends Command
                     {
                         $embed = new Embed($this->discord);
                         $embed->setColor('#ff0000');
-                        $embed->setDescription("Your role position too low!");
+                        $embed->setDescription($language->getTranslator()->trans('commands.ban.role_pos_low'));
                         $embed->setTimestamp();
                         $msg->channel->sendEmbed($embed);
                     }else {
                         $msg->channel->guild->members[$user->id]->ban(null, null)
-                            ->then(function() use ( $msg, $user, $banner ) {
+                            ->then(function() use ( $msg, $user, $banner, $language ) {
                                 $embed = new Embed($this->discord);
                                 $embed->setColor('#ff0000');
-                                $embed->setDescription("$user banned by $banner.");
+                                $embed->setDescription(sprintf($language->getTranslator()->trans('commands.ban.banned'), $user, $banner));
                                 $embed->setTimestamp();
                                 $msg->channel->sendEmbed($embed);
-                            }, function (\Throwable $reason) use ( $msg ) {
-                                $msg->reply($reason->getCode() === 50013 ? "I don't have permission to ban users. Check my role position or permission." : "Unknown error excepted.");
+                            }, function (\Throwable $reason) use ( $msg, $language ) {
+                                $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.ban.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
                             }); 
                     }
                 }
             }else {
                 $embed = new Embed($this->discord);
                 $embed->setColor('#ff0000');
-                $embed->setDescription("If you want ban a user you must mention a user.");
+                $embed->setDescription($language->getTranslator()->trans('commands.ban.no_user'));
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             }
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
-            $embed->setDescription("If you want ban a user u must have `ban_members` permission.");
-            $embed->setTimestamp();
+            $embed->setDescription();
+            $embed->setTimestamp($language->getTranslator()->trans('commands.ban.no_perm'));
             $msg->channel->sendEmbed($embed);
         }
     }

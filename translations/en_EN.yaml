@@ -1,0 +1,111 @@
+# en_EN.yaml - English Translations
+database:
+  notconnect: "Couldn't connect to database."
+  user:
+    couldnt_added: "You are couldn't added to database."
+
+global:
+  unknown_error: "Unknown error excepted."
+  not_enough_money: "Not enough money."
+  user_not_found: "User couldn't found."
+  guild_only: "You can only use in a guild!"
+
+commands:
+  apod:
+    date: "Date"
+    media_type: "Media Type"
+    service_version: "Service Version"
+    no_api_key: "Nasa API key not available, please interact with developer..."
+    api_error: "Unable to acesss the Nasa API :("
+  ban:
+    selfban: "You can't ban yourself"
+    role_pos_low: "Your role position too low!"
+    banned: "%s banned by %s"
+    no_bot_perm: "I don't have permission to ban users. Check my role position or permission."
+    no_user: "If you want ban a user you must mention a user."
+    no_perm: "If you want ban a user u must have `ban_members` permission."
+  botinfo:
+    title: "Bot Info"
+    shard_id: "Shard ID"
+    shard_count: "Shard Count"
+    guilds: "Guilds"
+    members: "Members"
+    commands: "Commands"
+    version: "Version"
+    latency: "Latency"
+  clear:
+    error: "Error!"
+    no_perm: "You must have manage messages permission for use this"
+    no_amount: "You must give an amount"
+    no_numeric_arg: "You must give an numeric parameter"
+    limit: "Amount must be around of 1-100"
+    deleted: "%d messages was deleted."
+    no_bot_perm: "I don't have permission to delete messages."
+  coinflip:
+    no_amount: "You should type payment amount."
+    too_less_amount: "You should give a value greater than zero."
+    coin_spinning: "Coin is spinning..."
+    win: "You win :)"
+    lose: "You lose :("
+  daily:
+    cooldown_msg: "You can use this command in %s."
+    reward_msg: "You gained %s %s coins." # first is amount, second is emote
+    fail_msg: "Couldn't give daily"
+  git:
+    description: "I'm open source!\nClick to go to the link."
+  help:
+    description: "Here is the list of commands!\nFor more info on a specific command, use %shelp {command}\nNeed more help? Checkout %s"
+    specific_command:
+      no_description: "No description"
+      no_cooldown: "No cooldown"
+      seconds: "secs"
+      description:
+        name: "Name"
+        description: "Description"
+        cooldown: "Cooldown"
+      not_found: "Command not found named '%s'"
+  kick:
+    selfkick: "You can't kick yourself"
+    role_pos_low: "Your role position too low!"
+    kicked: "%s kicked by %s."
+    no_bot_perm: "I don't have permission to kick users. Check my role position or permission."
+    no_user: "If you want kick a user you must mention a user."
+    no_perm: "If you want kick a user, you must have `kick_members` permission."
+  language:
+    changed: "Your language is now **%s**."
+    notavailable: "Not available language."
+  money:
+    reply: "%s have %s %s coins." # first is pronoun (like: You or someone), second is amount, third is emote
+  nick:
+    changed: "Nickname changed."
+    no_bot_perm: "I don't have permission to manage nicknames."
+    no_user: "If you wanna change name for a user, you must mention a user."
+    no_perm: "If you wanna change name for a user, you must have `manage_nicknames` permission."
+  pay:
+    no_user: "You should select a user for send money."
+    selfsend: "You can't send your money to yourself."
+    no_numeric_arg: "You should give a numeric money."
+    fail_msg: "An error excepted when sending money :("
+    # 1: sender 2: amount 3: emote
+    # 4: reciever 5: amount 6: emote
+    pay_msg: "Money Sent!\n\n%s - %s %s  -->  %s + %s %s"
+  ping:
+    reply: "Your ping took %s ms to arrive."
+  slots:
+    no_amount: "You have to write a pay amount."
+    no_numeric_arg: "Pay amount should be numeric."
+    invalid_amount: "Invalid pay amount."
+    not_enough_money: "You can't pay this money, because u dont have it."
+    fail_msg:
+      pay: "An error excepted when trying to pay."
+      receive: "An error excepted when trying to give your money."
+    spinning: "Slot is spinning..."
+    spinned: "Slot has been spinned. \n%s%s%s \n%s"
+    win: "**YOU WON!!! %s %s**" # first is amount, second is emote
+    lose: "You lose all of your pay :("
+  wikipedia:
+    no_query: "Please provide a search query."
+    no_results: "No results found."
+    api_error: "Unable to acesss the Wikipedia API :("
+  play:
+    nourl: "You should write a URL!"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "abf6da274a5dcf423841b907372ba71c",
+    "content-hash": "4b574480b046a9ebc76fad3c9046c7d0",
     "packages": [
         {
             "name": "discord-php/http",
@@ -2333,16 +2333,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "a0bb1b99995f5e2094191a9be5012dd3cef14da0"
+                "reference": "383f2aa1c575155cbde1067810881fa8967b870c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/a0bb1b99995f5e2094191a9be5012dd3cef14da0",
-                "reference": "a0bb1b99995f5e2094191a9be5012dd3cef14da0",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/383f2aa1c575155cbde1067810881fa8967b870c",
+                "reference": "383f2aa1c575155cbde1067810881fa8967b870c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
+                "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/translation-contracts": "^2.5|^3.0"
             },
@@ -2419,7 +2420,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-30T09:31:53+00:00"
+            "time": "2023-07-31T07:16:29+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -2499,6 +2500,77 @@
                 }
             ],
             "time": "2023-07-29T13:12:44+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "7.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "dae2dae1b6fae99da4485874c6888a9eab024bdc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/dae2dae1b6fae99da4485874c6888a9eab024bdc",
+                "reference": "dae2dae1b6fae99da4485874c6888a9eab024bdc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "conflict": {
+                "symfony/console": "<6.4"
+            },
+            "require-dev": {
+                "symfony/console": "^6.4|^7.0"
+            },
+            "bin": [
+                "Resources/bin/yaml-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Loads and dumps YAML files",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/7.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-25T09:50:29+00:00"
         },
         {
             "name": "team-reflex/discord-php",
@@ -5506,7 +5578,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "team-reflex/discord-php": 20,
-        "wujunze/php-cli-color": 20
+        "wujunze/php-cli-color": 20,
+        "symfony/translation": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

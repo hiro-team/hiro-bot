@@ -52,6 +52,7 @@ class Slots extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $items = [
             "<:hiroslotsheart:1130403063203627080>",
             "<:hiroslotseggplant:1130403026318921848>",
@@ -59,41 +60,33 @@ class Slots extends Command
         ];
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
         if (!isset($args[0])) {
-            $msg->reply("You have to write a pay amount.");
+            $msg->reply($language->getTranslator()->trans('commands.slots.no_amount'));
             return;
         }
         $payamount = $args[0];
         if (!is_numeric($payamount)) {
-            $msg->reply("Pay amount should be numeric.");
+            $msg->reply($language->getTranslator()->trans('commands.slots.no_numeric_arg'));
             return;
         }
         if ($payamount < 1) {
-            $msg->reply("Invalid pay amount.");
-        }
-        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->id))) {
-            if (!$database->addUser([
-                'discord_id' => $msg->author->id
-            ])) {
-                $msg->reply("An error excepted when adding you to database.");
-                return;
-            }
+            $msg->reply($language->getTranslator()->trans('commands.slots.invalid_amount'));
         }
         if ($payamount > $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id))) {
-            $msg->reply("You can't pay this money, because u dont have it.");
+            $msg->reply($language->getTranslator()->trans('commands.slots.not_enough_money'));
             return;
         }
         if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id)) - $payamount)) {
-            $msg->reply("An error excepted when trying to pay.");
+            $msg->reply($language->getTranslator()->trans('commands.slots.fail_msg.pay'));
             return;
         }
         $chance = random_int(1, 3);
         if ($chance === 1) {
             if (!$database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id)) + ($payamount * 3))) {
-                $msg->reply("An error excepted when trying to give your money.");
+                $msg->reply($language->getTranslator()->trans('commands.slots.fail_msg.receive'));
                 return;
             }
             $rand_emote = $items[random_int(0, sizeof($items) - 1)];
@@ -121,15 +114,15 @@ class Slots extends Command
                 $items[$rand_emotes[2]]
             ];
         }
-        $msg->reply("Slot is spinning... \n<a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754>")->then(function ($msg) use ($chance, $choosed, $payamount) {
+        $msg->reply($language->getTranslator()->trans('commands.slots.spinning') . " \n<a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754> <a:hiroslotspinning:1130399548523679754>")->then(function ($msg) use ($chance, $choosed, $payamount, $language) {
             if (!($msg instanceof Message)) {
-                $msg->reply("An error excepted.");
+                $msg->reply($language->getTranslator()->trans('global.unknown_error'));
                 return;
             }
-            $this->discord->getLoop()->addTimer(3.0, function () use ($msg, $chance, $choosed, $payamount) {
-                if ($chance === 1) $text = "**YOU WON!!! <:hirocoin:1130392530677157898> " . $payamount * 3 . "**";
-                else $text = "You lose all of your pay :(";
-                $msg->edit(MessageBuilder::new()->setContent("Slot has been spinned. \n{$choosed[0]}{$choosed[1]}{$choosed[2]} \n$text"));
+            $this->discord->getLoop()->addTimer(3.0, function () use ($msg, $chance, $choosed, $payamount, $language) {
+                if ($chance === 1) $text = sprintf($language->getTranslator()->trans('commands.slots.win'), $payamount * 3, "<:hirocoin:1130392530677157898>");
+                else $text = $language->getTranslator()->trans('commands.slots.lose');
+                $msg->edit(MessageBuilder::new()->setContent(sprintf($language->getTranslator()->trans('commands.slots.spinned'), $choosed[0], $choosed[1], $choosed[2], $text)));
             });
         });
     }

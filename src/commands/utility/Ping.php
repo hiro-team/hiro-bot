@@ -49,7 +49,8 @@ class Ping extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
-        $msg->channel->sendMessage("Your ping took {$diff}ms to arrive.");
+        $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.ping.reply'), $diff));
     }
 }

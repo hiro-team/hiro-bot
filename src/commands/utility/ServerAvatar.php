@@ -49,13 +49,14 @@ class ServerAvatar extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if (!@$msg->channel->guild) {
-            $msg->reply("You can only use in a guild!");
+            $msg->reply($language->getTranslator()->trans('global.guild_only'));
             return;
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . "'s Avatar");
+        $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . " Avatar");
         $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

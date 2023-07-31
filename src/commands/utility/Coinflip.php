@@ -52,9 +52,10 @@ class Coinflip extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
         $usermoney = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
@@ -62,19 +63,19 @@ class Coinflip extends Command
             if (!$database->addUser([
                 "discord_id" => $msg->author->id
             ])) {
-                $msg->reply("You are couldn't added to database.");
+                $msg->reply($language->getTranslator()->trans('database.user.couldnt_added'));
                 return;
             } else {
                 $usermoney = 0;
             }
         }
         if (!$args[0] || !is_numeric($args[0])) {
-            $msg->reply("You should type payment amount.");
+            $msg->reply($language->getTranslator()->trans('commands.coinflip.no_amount'));
         } else {
             if ($args[0] <= 0) {
-                $msg->reply("You should give a value greater than zero.");
+                $msg->reply($language->getTranslator()->trans('commands.coinflip.too_less_amount'));
             } else if ($args[0] > $usermoney) {
-                $msg->reply("Your money isn't enough.");
+                $msg->reply($language->getTranslator()->trans('global.not_enough_money'));
             } else {
                 $payamount = $args[0];
                 $rand = random_int(0, 1);
@@ -83,14 +84,14 @@ class Coinflip extends Command
                 $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
                 $usermoney -= $payamount;
 
-                $msg->reply("Coin is flipping... <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount){
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount){
+                $msg->reply($language->getTranslator()->trans('commands.coinflip.coin_spinning') ." <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount, $language){
+                    $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount, $language){
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                            $botreply->edit(MessageBuilder::new()->setContent("You win :) <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . " <:hirocoin:1130392530677157898>"));
                         } else {
-                            $botreply->edit(MessageBuilder::new()->setContent("You lose :( <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . " <:hirocoin:1130392530677157898>"));
                         }
                     });
                 });

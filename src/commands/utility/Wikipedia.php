@@ -62,9 +62,10 @@ class Wikipedia extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         // Make sure the user provided a search query
         if (empty($args)) {
-            $msg->channel->sendMessage("Please provide a search query.");
+            $msg->channel->sendMessage($language->getTranslator->trans('commands.wikipedia.no_query'));
             return;
         }
 
@@ -72,12 +73,12 @@ class Wikipedia extends Command
         $query = implode(" ", $args);
 
         $this->browser->get("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srprop=snippet&srsearch=$query")->then(
-            function( ResponseInterface $response ) use ( $msg ) {
+            function( ResponseInterface $response ) use ( $msg, $language ) {
                 $body = (string)$response->getBody();
                 $json = json_decode($body);
 
                 if (empty($json->query->search)) {
-                    $msg->channel->sendMessage("No results found.");
+                    $msg->channel->sendMessage($language->getTranslator->trans('commands.wikipedia.no_results'));
                     return;
                 }
 
@@ -95,8 +96,8 @@ class Wikipedia extends Command
                 // Send the embed
                 $msg->channel->sendEmbed($embed);
             },
-            function (Exception $e) use ($msg) {
-                $msg->reply('Unable to acesss the Wikipedia API :(');
+            function (\Exception $e) use ($msg, $language) {
+                $msg->reply($language->getTranslator->trans('commands.wikipedia.api_error'));
             }
         );
     }

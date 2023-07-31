@@ -51,26 +51,27 @@ class Help extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if (isset($args[0])) {
             $command = $args[0];
             if ($cmd = $this->findCommand($command)) {
-                $description = $cmd->description ?? "No description";
-                $cooldown = $cmd->cooldown ? $cmd->cooldown / 1000 . "sec" : "No cooldown";
+                $description = $cmd->description ?? $language->getTranslator()->trans('commands.help.specific_command.no_description');
+                $cooldown = $cmd->cooldown ? $cmd->cooldown / 1000 . $language->getTranslator()->trans('commands.help.specific_command.seconds') : $language->getTranslator()->trans('commands.help.specific_command.no_cooldown');
 
                 $embed = new Embed($this->discord);
                 $embed->setTitle($command);
                 $embed->setColor("#ff0000");
                 $embed->setDescription(
                     <<<EOF
-Name: {$command}
-Description: {$description}
-Cooldown: {$cooldown}
+{$language->getTranslator()->trans('commands.help.specific_command.description.name')}: {$command}
+{$language->getTranslator()->trans('commands.help.specific_command.description.description')}: {$description}
+{$language->getTranslator()->trans('commands.help.specific_command.description.cooldown')}: {$cooldown}
 EOF
                 );
                 $embed->setAuthor($msg->author->username, $msg->author->avatar);
                 $msg->channel->sendEmbed($embed);
             } else {
-                $msg->channel->sendMessage("Command not found named '$command'");
+                $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.help.specific_command.not_found'), $command));
             }
             return;
         }
@@ -78,18 +79,18 @@ EOF
         $emotes = [
             "reactions" => ":wink:",
             "rpg" => ":crossed_swords:",
-	    "music" => ":notes:",
-	    "utility" => ":tools:",
+            "music" => ":notes:",
+            "utility" => ":tools:",
         ];
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
         $embed->setTitle("Bot Commands");
         $embed->setDescription(
-            <<<EOF
-Here is the list of commands!
-For more info on a specific command, use {$prefix}help {command}
-Need more help? Checkout [Github](https://github.com/hiro-team/hiro-bot)
-EOF
+            sprintf(
+                $language->getTranslator()->trans('commands.help.description'),
+                $prefix,
+                "[Github](https://github.com/hiro-team/hiro-bot)"
+            )
         );
 	$embed->setImage("https://raw.githubusercontent.com/hiro-team/hiro-bot/master/resources/zero-two-hiro.gif");
 	$embed->setThumbnail($this->discord->avatar);

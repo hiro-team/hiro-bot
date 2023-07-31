@@ -119,7 +119,7 @@ class Play extends MusicCommand
 
         $settings = @$voiceSettings[$msg->channel->guild_id];
 
-        $url = str_replace('\\', '', $url);
+        $url = str_replace('\\', '', trim($url));
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             $msg->reply("The URL is not valid.");
             return;
