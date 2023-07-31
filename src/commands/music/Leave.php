@@ -20,9 +20,9 @@
 
 namespace hiro\commands;
 
-use Discord\Voice\VoiceClient;
+use hiro\security\MusicCommand;
 
-class Leave extends Command
+class Leave extends MusicCommand
 {
     /**
      * configure
@@ -47,23 +47,13 @@ class Leave extends Command
     public function handle($msg, $args): void
     {
         global $voiceSettings;
-        $channel = $msg->member->getVoiceChannel();
 
         $voiceClient = $this->discord->getVoiceClient($msg->guild_id);
 
-        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
-            $msg->channel->sendMessage("You must be in same channel with me.");
-            return;
-        }
-
-        if ($voiceClient) {
-            $voiceClient->close();
-            if(isset($voiceSettings[$msg->guild_id]))
-            {
-                unset($voiceSettings[$msg->guild_id]);
-            }
-        } else {
-            $msg->channel->sendMessage("I'm not in a voice channel.");
+        $voiceClient->close();
+        if(isset($voiceSettings[$msg->guild_id]))
+        {
+            unset($voiceSettings[$msg->guild_id]);
         }
     }
 }

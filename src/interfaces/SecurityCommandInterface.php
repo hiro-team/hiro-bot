@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx.
- *
+ * Copyright 2023 bariscodefx
+ * 
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,38 +18,17 @@
  * limitations under the License.
  */
 
-namespace hiro\commands;
+namespace hiro\interfaces;
 
-use hiro\security\AuthorCommand;
-
-/**
- * Kill.
- */
-class Kill extends AuthorCommand
+interface SecurityCommandInterface
 {
-    /**
-     * configure.
-     */
-    public function configure(): void
-    {
-        $this->command = 'kill';
-        $this->description = 'Kills bot **ONLY FOR AUTHOR**';
-        $this->aliases = array('sb', 'stopbot');
-        $this->category = 'author';
-    }
 
     /**
-     * handle.
+     * securityChecks
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param array $args
+     * @return boolean
      */
-    public function handle($msg, $args): void
-    {
-        $msg->reply('hara-kiri')->then(
-            function () {
-                exit(0);
-            }
-        );
-    }
+    public function securityChecks(array $args): bool;
+
 }

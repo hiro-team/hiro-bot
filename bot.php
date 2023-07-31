@@ -36,7 +36,8 @@ if ( !isset( $_ENV['TOKEN'] ) ) {
 if ( Version::TYPE == 'development' )
 {
     error_reporting(E_ALL);
-    @ini_set('display_errors', 'On');
+} else {
+    error_reporting(0);
 }
 
 $ArgumentParser = new ArgumentParser($argv);
@@ -77,7 +78,7 @@ $bot->on('ready', function($discord) {
     ->startThread();
 
     /** fix discord guild count */
-    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord, $shard_id, $shard_count)
+    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord)
     {
         $presenceManager->setPresences(getPresenceState());
     });

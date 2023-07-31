@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx.
- *
+ * Copyright 2023 bariscodefx
+ * 
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,38 +18,37 @@
  * limitations under the License.
  */
 
-namespace hiro\commands;
+namespace hiro\security;
 
-use hiro\security\AuthorCommand;
+use hiro\interfaces\SecurityCommandInterface;
+use hiro\commands\Command;
 
 /**
- * Kill.
+ * AuthorCommand
  */
-class Kill extends AuthorCommand
+class AuthorCommand extends Command implements SecurityCommandInterface
 {
-    /**
-     * configure.
-     */
-    public function configure(): void
-    {
-        $this->command = 'kill';
-        $this->description = 'Kills bot **ONLY FOR AUTHOR**';
-        $this->aliases = array('sb', 'stopbot');
-        $this->category = 'author';
-    }
 
     /**
-     * handle.
+     * securityChecks
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param array $args
+     * @return boolean
      */
-    public function handle($msg, $args): void
+    public function securityChecks(array $args): bool
     {
-        $msg->reply('hara-kiri')->then(
-            function () {
-                exit(0);
-            }
-        );
+        if(!isset($args['msg']))
+        {
+            return false;
+        }
+
+        if(!($args['msg']->author->id == @$_ENV['AUTHOR']))
+        {
+            $args['msg']->reply('Only bot author can use this command.');
+            return false;
+        }
+
+        return true;
     }
+
 }

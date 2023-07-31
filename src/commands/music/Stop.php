@@ -20,9 +20,9 @@
 
 namespace hiro\commands;
 
-use Discord\Voice\VoiceClient;
+use hiro\security\MusicCommand;
 
-class Stop extends Command
+class Stop extends MusicCommand
 {
     /**
      * configure
@@ -47,27 +47,17 @@ class Stop extends Command
     public function handle($msg, $args): void
     {
         global $voiceSettings;
-        $channel = $msg->member->getVoiceChannel();
 
         $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
 
-        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
-            $msg->channel->sendMessage("You must be in same channel with me.");
-            return;
-        }
-
-        if ($voiceClient) {
-            try {
-            	$voiceClient->stop();
-                if(@$voiceSettings[$msg->guild_id])
-                {
-                    $voiceSettings[$msg->guild_id]->setQueue([]);
-                }
-            } catch (\Throwable $e) {
-                $msg->reply($e->getMessage());
+        try {
+            $voiceClient->stop();
+            if(@$voiceSettings[$msg->guild_id])
+            {
+                $voiceSettings[$msg->guild_id]->setQueue([]);
             }
-        } else {
-            $msg->channel->sendMessage("I'm not in a voice channel.");
+        } catch (\Throwable $e) {
+            $msg->reply($e->getMessage());
         }
     }
 }

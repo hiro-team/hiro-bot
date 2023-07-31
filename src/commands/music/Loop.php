@@ -20,11 +20,8 @@
 
 namespace hiro\commands;
 
-use Discord\Voice\VoiceClient;
-use React\ChildProcess\Process;
-use Discord\Builders\MessageBuilder;
-
-class Loop extends Command
+use hiro\security\MusicCommand;
+class Loop extends MusicCommand
 {
     public function configure(): void
     {
@@ -37,31 +34,8 @@ class Loop extends Command
     public function handle($msg, $args): void
     {
         global $voiceSettings;
-	    $channel = $msg->member->getVoiceChannel();
-	    $voiceClient = $this->discord->getVoiceClient($msg->guild_id);
-
-        if (!$channel) {
-            $msg->channel->sendMessage("You must be in a voice channel.");
-            return;
-        }
-
-        if (!$voiceClient) {
-            $msg->reply("Use the join command first.\n");
-            return;
-        }
-
-        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
-            $msg->reply("You must be in the same channel with me.");
-            return;
-	    }
 
         $settings = @$voiceSettings[$msg->channel->guild_id];
-        
-	    if (!$settings)
-	    {
-		    $msg->reply("Voice options couldn't found.");
-		    return;
-	    }
 
         if ($settings->getLoopEnabled())
         {

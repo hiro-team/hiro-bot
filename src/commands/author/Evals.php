@@ -20,10 +20,12 @@
 
 namespace hiro\commands;
 
+use hiro\security\AuthorCommand;
+
 /**
  * Evals
  */
-class Evals extends Command
+class Evals extends AuthorCommand
 {
     /**
      * configure
@@ -47,10 +49,6 @@ class Evals extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->id != $_ENV['AUTHOR']) {
-            $msg->channel->sendMessage("No");
-            return;
-        }
         $content = explode(' ', trim(str_replace("\n", "", $msg->content)), 2);
         if (!isset($content[1])) {
             $msg->reply("No args.");

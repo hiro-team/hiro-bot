@@ -20,10 +20,15 @@
 
 namespace hiro\commands;
 
+use Discord\Parts\Embed\Embed;
 use hiro\security\MusicCommand;
 
-class Skip extends MusicCommand
+/**
+ * Queue
+ */
+class Queue extends MusicCommand
 {
+
     /**
      * configure
      *
@@ -31,8 +36,8 @@ class Skip extends MusicCommand
      */
     public function configure(): void
     {
-        $this->command = "skip";
-        $this->description = "Skips the current song.";
+        $this->command = "queue";
+        $this->description = "Shows music queue!";
         $this->aliases = [];
         $this->category = "music";
     }
@@ -47,20 +52,18 @@ class Skip extends MusicCommand
     public function handle($msg, $args): void
     {
         global $voiceSettings;
-
-        $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
-        
-        $settings = @$voiceSettings[$msg->guild_id];
-        
-        try {
-            $voiceClient->stop();
-            if($cmd = $this->loader->getCmd("play"))
-            {
-                $settings->nextSong();
-                $cmd->playMusic($msg->channel, $settings);
-            }
-        } catch (\Throwable $e) {
-            $msg->reply($e->getMessage());
+        $queue = $voiceSettings[$msg->guild_id]->getQueue();
+        $embed = new Embed($this->discord);
+        $embed->setTitle('Queue');
+        $embed->setDescription("Current queue (" . sizeof($queue) . "):");
+        foreach($queue as $song)
+        {
+            $embed->addFieldValues($song->title, <<<EOF
+            Requested by: <@{$song->author_id}>
+            URL: {$song->url}
+            EOF);
         }
+        $embed->setTimestamp();
+        $msg->channel->sendEmbed($embed);
     }
 }
