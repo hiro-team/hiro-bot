@@ -47,7 +47,7 @@ class Play extends MusicCommand
     public function playMusic($text_channel, $settings)
     {
         $voice_client = $settings->getVoiceClient();
-        $current_voice_file = $settings->getQueue()[0];
+        $current_voice_file = $settings->getQueue()[0] ?? null;
         
         if (!$current_voice_file)
         {
