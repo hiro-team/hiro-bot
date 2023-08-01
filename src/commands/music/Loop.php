@@ -41,10 +41,10 @@ class Loop extends MusicCommand
         if ($settings->getLoopEnabled())
         {
             $settings->setLoopEnabled(false);
-            $msg->reply($language->getTranslator()->trans('commands.loop.on_enable'));
+            $msg->reply($language->getTranslator()->trans('commands.loop.on_disable'));
         } else {
              $settings->setLoopEnabled(true);
-            $msg->reply($language->getTranslator()->trans('commands.loop.on_disable'));
+            $msg->reply($language->getTranslator()->trans('commands.loop.on_enable'));
         }
     }
 }
