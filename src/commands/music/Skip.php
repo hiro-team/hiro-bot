@@ -46,6 +46,7 @@ class Skip extends MusicCommand
      */
     public function handle($msg, $args): void
     {
+        global $language;
         global $voiceSettings;
 
         $voiceClient = $this->discord->getVoiceClient($msg->channel->guild_id);
@@ -57,7 +58,7 @@ class Skip extends MusicCommand
             if($cmd = $this->loader->getCmd("play"))
             {
                 $settings->nextSong();
-                $cmd->playMusic($msg->channel, $settings);
+                $cmd->playMusic($msg->channel, $settings, $language);
             }
         } catch (\Throwable $e) {
             $msg->reply($e->getMessage());
