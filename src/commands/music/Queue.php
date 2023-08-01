@@ -51,17 +51,15 @@ class Queue extends MusicCommand
      */
     public function handle($msg, $args): void
     {
+        global $language;
         global $voiceSettings;
         $queue = $voiceSettings[$msg->guild_id]->getQueue();
         $embed = new Embed($this->discord);
-        $embed->setTitle('Queue');
-        $embed->setDescription("Current queue (" . sizeof($queue) . "):");
+        $embed->setTitle($language->getTranslator()->trans('commands.queue.title'));
+        $embed->setDescription(sprintf($language->getTranslator()->trans('commands.queue.description'), sizeof($queue)));
         foreach($queue as $song)
         {
-            $embed->addFieldValues($song->title, <<<EOF
-            Requested by: <@{$song->author_id}>
-            URL: {$song->url}
-            EOF);
+            $embed->addFieldValues($song->title, sprintf($language->getTranslator()->trans('commands.queue.field'), $song->author_id, $song->url));
         }
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

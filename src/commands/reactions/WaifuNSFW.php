@@ -59,8 +59,9 @@ class WaifuNSFW extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if (!$msg->channel->nsfw) {
-            $msg->reply('You have to use this command in nsfw channel!');
+            $msg->reply($language->getTranslator()->trans('commands.waifunsfw.no_nsfw_channel'));
             return;
         }
         $type_array = [
@@ -76,25 +77,25 @@ class WaifuNSFW extends Command
         }
 
         if (!in_array($args[0], $type_array)) {
-            $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.waifunsfw.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifunsfw.available_categories'), implode(", ", $type_array)));
             return;
         }
         $type = $args[0];
 
         $this->browser->get("https://api.waifu.pics/nsfw/$type")->then(
-            function (ResponseInterface $response) use ($msg) {
+            function (ResponseInterface $response) use ($msg, $language) {
                 $result = (string)$response->getBody();
                 $api = json_decode($result);
                 $embed = new Embed($this->discord);
                 $embed->setColor("#EB00EA");
-                $embed->setTitle('Horny Waifu Generator');
-                $embed->setDescription("{$msg->author->username} Your random horny waifu :)");
+                $embed->setTitle($language->getTranslator()->trans('commands.waifunsfw.title'));
+                $embed->setDescription(sprintf($language->getTranslator()->trans('commands.waifunsfw.success'), $msg->author->username));
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             },
-            function (Exception $e) use ($msg) {
-                $msg->reply('Unable to acesss the waifu.pics API :(');
+            function (\Exception $e) use ($msg, $language) {
+                $msg->reply($language->getTranslator()->trans('commands.waifunsfw.api_error'));
             }
         );
     }

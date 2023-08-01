@@ -50,6 +50,7 @@ class Marry extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $gifs = [
             "https://bariscodefxy.github.io/cdn/hiro/marry.gif",
             "https://bariscodefxy.github.io/cdn/hiro/marry_1.gif",
@@ -64,21 +65,21 @@ class Marry extends Command
         if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You must mention a user for get marry");
+            $embed->setDescription($language->getTranslator()->trans('commands.marry.no_user'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You cant marry with yourself stupid!");
+            $embed->setDescription($language->getTranslator()->trans('commands.marry.selfmarry'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setDescription("$self get married with you! $user");
+        $embed->setDescription($language->getTranslator()->trans('commands.marry.success'));
         $embed->setImage($random);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

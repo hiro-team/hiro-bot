@@ -47,10 +47,11 @@ class Join extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $channel = $msg->member->getVoiceChannel();
 
         if (!$channel) {
-            $msg->channel->sendMessage("You must be in a voice channel.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('commands.join.no_channel'));
         }
 
         $this->discord->joinVoiceChannel($channel, false, false, null, true)->done(function (VoiceClient $vc) use ($channel) {
@@ -63,8 +64,8 @@ class Join extends Command
             $vc->on('exit', function() use ($voiceSettings) {
                 unset($voiceSettings[$channel->guild_id]);
             });
-        }, function ($e) use ($msg) {
-            $msg->channel->sendMessage("There was an error joining the voice channel: {$e->getMessage()}"); 
+        }, function ($e) use ($msg, $language) {
+            $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.join.on_error'), $e->getMessage())); 
         });
     }
 }

@@ -33,6 +33,7 @@ class Loop extends MusicCommand
 
     public function handle($msg, $args): void
     {
+        global $language;
         global $voiceSettings;
 
         $settings = @$voiceSettings[$msg->channel->guild_id];
@@ -40,10 +41,10 @@ class Loop extends MusicCommand
         if ($settings->getLoopEnabled())
         {
             $settings->setLoopEnabled(false);
-            $msg->reply("Loop is **disabled** now.");
+            $msg->reply($language->getTranslator()->trans('commands.loop.on_enable'));
         } else {
              $settings->setLoopEnabled(true);
-            $msg->reply("Loop is **enabled** now.");
+            $msg->reply($language->getTranslator()->trans('commands.loop.on_disable'));
         }
     }
 }

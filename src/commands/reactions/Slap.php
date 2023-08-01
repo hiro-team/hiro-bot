@@ -49,6 +49,7 @@ class Slap extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $gifs = [
             "https://bariscodefxy.github.io/cdn/hiro/slap.gif",
             "https://bariscodefxy.github.io/cdn/hiro/slap_1.gif",
@@ -63,21 +64,21 @@ class Slap extends Command
         if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You must mention a user for slap");
+            $embed->setDescription($language->getTranslator()->trans('commands.slap.no_user'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You cant slap yourself stupid!");
+            $embed->setDescription($language->getTranslator()->trans('commands.slap.selfslap'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setDescription("$self slapped you! $user");
+        $embed->setDescription(sprintf($language->getTranslator()->trans('commands.slap.success'), $self, $user));
         $embed->setImage($random);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

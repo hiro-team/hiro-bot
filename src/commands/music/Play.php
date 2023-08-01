@@ -44,14 +44,14 @@ class Play extends MusicCommand
         $this->browser = new Browser(null, $this->discord->getLoop());
     }
 
-    public function playMusic($text_channel, $settings)
+    public function playMusic($text_channel, $settings, $language)
     {
         $voice_client = $settings->getVoiceClient();
         $current_voice_file = $settings->getQueue()[0] ?? null;
         
         if (!$current_voice_file)
         {
-            $text_channel->sendMessage("Current voice file not found.");
+            $text_channel->sendMessage($language->getTranslator()->trans('commands.play.no_queue'));
             return;
         }
         $author_id = $settings->getQueue()[0]->getAuthorId();
@@ -63,33 +63,33 @@ class Play extends MusicCommand
         $process = new Process($command);
         $process->start();
 
-        $editmsg = $text_channel->sendMessage("Downloading audio, please wait...");
+        $editmsg = $text_channel->sendMessage($language->getTranslator()->trans('commands.play.downloading'));
 
-        $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel) {
+        $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel, $language) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
             
-            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings) {
+            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings, $language) {
                 
                 if (!is_file($author_id . ".m4a")) {
-                    $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
+                    $m->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.play.couldnt_download')));
                     return;
                 }
                 
                 $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
 
-                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel){
-                    $play_file_promise->then(function() use ($m, $settings, $text_channel) {
+                $m->edit(MessageBuilder::new()->setContent(sprintf($language->getTranslator()->trans('commands.play.playing'), $jsondata->title) . " :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel, $language){
+                    $play_file_promise->then(function() use ($m, $settings, $text_channel, $language) {
                         if(@$settings->getQueue()[0])
                         {
                             if (!$settings->getLoopEnabled())
                             {
                                 $settings->nextSong();
                             }
-                            $this->playMusic($text_channel, $settings);
+                            $this->playMusic($text_channel, $settings, $language);
                         } else {
-                            $m->channel->sendMessage(MessageBuilder::new()->setContent("Music not found on queue."));
+                            $m->channel->sendMessage(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.play.no_queue')));
                         }
                         
                         $m->delete();
@@ -108,12 +108,13 @@ class Play extends MusicCommand
 
     public function handle($msg, $args): void
     {
+        global $language;
         global $voiceSettings;
 
         $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
 
         if (!$url) {
-            $msg->reply("You should write a URL!");
+            $msg->reply($language->getTranslator()->trans('commands.play.no_url'));
             return;
         }
 
@@ -121,7 +122,7 @@ class Play extends MusicCommand
 
         $url = str_replace('\\', '', trim($url));
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            $msg->reply("The URL is not valid.");
+            $msg->reply($language->getTranslator()->trans('commands.play.invalid_url'));
             return;
         }
 
@@ -130,14 +131,14 @@ class Play extends MusicCommand
     	preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
     	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
     	{
-    	    $msg->reply("YouTube video URL not found.\n");
+    	    $msg->reply($language->getTranslator()->trans('commands.play.no_youtube_url'));
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
 
         if(sizeof($settings->getQueue()) >= 10)
         {
-            $msg->reply("You cannot add more videos than 10 to queue.");
+            $msg->reply($language->getTranslator()->trans('commands.play.queue_overflow'));
             return;
         }
         
@@ -154,10 +155,10 @@ class Play extends MusicCommand
 
         if( @$settings->getQueue()[1] )
         {
-            $msg->reply("Song added to queue.\n");
+            $msg->reply($language->getTranslator()->trans('commands.play.added_to_queue'));
             return;
         }
         
-        $this->playMusic($msg->channel, $settings);
+        $this->playMusic($msg->channel, $settings, $language);
     }
 }

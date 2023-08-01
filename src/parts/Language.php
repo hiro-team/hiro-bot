@@ -42,6 +42,7 @@ class Language
 
         $translator->addResource('yaml', dirname(__DIR__, 2) . "/translations/en_EN.yaml", 'en_EN');
         $translator->addResource('yaml', dirname(__DIR__, 2) . "/translations/tr_TR.yaml", 'tr_TR');
+        $translator->addResource('yaml', dirname(__DIR__, 2) . "/translations/kr_KR.yaml", 'kr_KR');
 
         $translator->setFallbackLocales(['en_EN']);
 

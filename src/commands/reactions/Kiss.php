@@ -49,6 +49,7 @@ class Kiss extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $gifs = [
             "https://bariscodefxy.github.io/cdn/hiro/kiss.gif",
             "https://bariscodefxy.github.io/cdn/hiro/kiss_1.gif",
@@ -64,21 +65,21 @@ class Kiss extends Command
         if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You must mention a user for kiss");
+            $embed->setDescription($language->getTranslator()->trans('commands.kiss.no_user'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You cant kiss yourself stupid!");
+            $embed->setDescription($language->getTranslator()->trans('commands.kiss.selfkiss'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setDescription("$self kissed you! $user");
+        $embed->setDescription(sprintf($language->getTranslator()->trans('commands.kiss.success'), $self, $user));
         $embed->setImage($random);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

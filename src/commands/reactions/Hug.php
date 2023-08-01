@@ -49,6 +49,7 @@ class Hug extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $gifs = [
             "https://bariscodefxy.github.io/cdn/hiro/hug.gif",
             "https://bariscodefxy.github.io/cdn/hiro/hug_1.gif",
@@ -63,21 +64,21 @@ class Hug extends Command
         if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You must mention a user for hug");
+            $embed->setDescription($language->getTranslator()->trans('commands.hug.no_user'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
-            $embed->setDescription("You cant hug yourself stupid!");
+            $embed->setDescription($language->getTranslator()->trans('commands.hug.selfhug'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setDescription("$self was hug you! $user");
+        $embed->setDescription(sprintf($language->getTranslator()->trans('commands.hug.success'), $self, $user));
         $embed->setImage($random);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

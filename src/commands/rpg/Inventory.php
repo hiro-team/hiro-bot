@@ -54,9 +54,10 @@ class Inventory extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
 
@@ -70,16 +71,16 @@ class Inventory extends Command
         $character = $gender . "_" . $race . "_" . $type;
 
         $embed = new Embed($this->discord);
-        $embed->setTitle($user->username . " Inventory");
+        $embed->setTitle($user->username . " " . $language->getTranslator()->trans('commands.inventory.title'));
         $embed->setAuthor($user->username, $msg->author->avatar);
         $embed->setDescription(
             vsprintf(
                 <<<EOF
-%s `Level        : %d`
-%s `Experience   : %d`
-%s `Race         : %s`
-%s `Gender       : %s`
-%s `Type         : %s`
+%s `{$language->getTranslator()->trans('commands.inventory.level')}        : %d`
+%s `{$language->getTranslator()->trans('commands.inventory.experience')}   : %d`
+%s `{$language->getTranslator()->trans('commands.inventory.race')}         : %s`
+%s `{$language->getTranslator()->trans('commands.inventory.gender')}       : %s`
+%s `{$language->getTranslator()->trans('commands.inventory.type')}         : %s`
 EOF,
                 [
                     "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level
