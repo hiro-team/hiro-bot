@@ -72,7 +72,7 @@ class Money extends Command
             }
         }
 
-        $pronoun = $user == $msg->author ? "You" : $user->username;
+        $pronoun = $user->username;
 
         setlocale(LC_MONETARY, 'en_US');
         $user_money = number_format($user_money, 2, ',', '.');
