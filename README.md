@@ -18,8 +18,8 @@ A Discord bot written in PHP.
 - Has multi language support.
 ### Languages (Translations)
 - English %100
+- Turkish %90
 - Korean %10
-- Turkish %0
 ### Features
 - Can make your server more online with RPG commands
   - You can set RPG channel that RPG commands only usable in there
