@@ -98,11 +98,14 @@ class Waifu extends Command
             $type = "waifu";
         }
 
-        if (!in_array($args[0], $type_array)) {
-            $msg->reply(sprintf($language->getTranslator()->trans('commands.waifu.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifu.available_categories'), implode(", ", $type_array)));
-            return;
+        if(isset($args[0]))
+        {
+            if (!in_array($args[0], $type_array)) {
+                $msg->reply(sprintf($language->getTranslator()->trans('commands.waifu.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifu.available_categories'), implode(", ", $type_array)));
+                return;
+            }
+            $type = $args[0];
         }
-        $type = $args[0];
 
         $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
             function (ResponseInterface $response) use ($msg, $language) {

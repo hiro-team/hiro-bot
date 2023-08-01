@@ -76,11 +76,14 @@ class WaifuNSFW extends Command
             $type = "waifu";
         }
 
-        if (!in_array($args[0], $type_array)) {
-            $msg->reply(sprintf($language->getTranslator()->trans('commands.waifunsfw.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifunsfw.available_categories'), implode(", ", $type_array)));
-            return;
+        if(isset($args[0]))
+        {
+            if (!in_array($args[0], $type_array)) {
+                $msg->reply(sprintf($language->getTranslator()->trans('commands.waifunsfw.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifunsfw.available_categories'), implode(", ", $type_array)));
+                return;
+            }
+            $type = $args[0];
         }
-        $type = $args[0];
 
         $this->browser->get("https://api.waifu.pics/nsfw/$type")->then(
             function (ResponseInterface $response) use ($msg, $language) {
