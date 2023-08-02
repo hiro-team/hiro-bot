@@ -1,4 +1,4 @@
-# ja-JP.yaml - English Translations
+# ja_JP.yaml - English Translations
 database:
   notconnect: "データベースに接続できませんでした。"
   user:
