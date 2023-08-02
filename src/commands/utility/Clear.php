@@ -38,7 +38,6 @@ class Clear extends Command
         $this->description = "Clears messages";
         $this->aliases = ["purge"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**

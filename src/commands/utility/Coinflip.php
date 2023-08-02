@@ -40,7 +40,6 @@ class Coinflip extends Command
         $this->description = "An economy game";
         $this->aliases = ["cf"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**

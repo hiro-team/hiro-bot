@@ -39,7 +39,6 @@ class Money extends Command
         $this->description = "Displays your money.";
         $this->aliases = ["cash"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**

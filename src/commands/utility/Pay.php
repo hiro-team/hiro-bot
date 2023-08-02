@@ -36,7 +36,6 @@ class Pay extends Command
         $this->description = "Send your money to anybody.";
         $this->aliases = [];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**
