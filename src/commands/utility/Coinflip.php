@@ -84,14 +84,14 @@ class Coinflip extends Command
                 $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
                 $usermoney -= $payamount;
 
-                $msg->reply($language->getTranslator()->trans('commands.coinflip.coin_spinning') ." <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount, $language){
+                $msg->reply($language->getTranslator()->trans('commands.coinflip.coin_spinning') . " <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount, $language){
                     $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount, $language){
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . " <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . "+" . $payamount*2 . " <:hirocoin:1130392530677157898>"));
                         } else {
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . " <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . "-" . $payamount . " <:hirocoin:1130392530677157898>"));
                         }
                     });
                 });
