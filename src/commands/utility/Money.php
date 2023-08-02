@@ -81,7 +81,7 @@ class Money extends Command
                 $language->getTranslator()->trans('commands.money.reply'),
                 $pronoun,
                 $user_money,
-                "<a:hirocoinflip:1130395266105737256>"
+                "<:hirocoin:1130392530677157898>"
             )
         );
         $database = NULL;
