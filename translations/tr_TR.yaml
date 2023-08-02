@@ -48,7 +48,7 @@ commands:
     win: "Kazandın :)"
     lose: "Kaybettin :("
   daily:
-    cooldown_msg: "Bu komutu %s süre sonra kullanabilirsin."
+    cooldown_msg: "Bu komutu %s kullanabilirsin."
     reward_msg: "%s %s bakiye kazandın." # first is amount, second is emote
     fail_msg: "Günlük maaşın verilemedi"
   git:
