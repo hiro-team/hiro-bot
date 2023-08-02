@@ -80,7 +80,8 @@ class Money extends Command
             sprintf(
                 $language->getTranslator()->trans('commands.money.reply'),
                 $pronoun,
-                $user_money
+                $user_money,
+                "<a:hirocoinflip:1130395266105737256>"
             )
         );
         $database = NULL;
