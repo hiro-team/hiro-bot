@@ -89,9 +89,9 @@ class Coinflip extends Command
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
                             $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . "+" . $payamount*2 . " <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . " +" . $payamount*2 . " <:hirocoin:1130392530677157898>"));
                         } else {
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . "-" . $payamount . " <:hirocoin:1130392530677157898>"));
+                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . " -" . $payamount . " <:hirocoin:1130392530677157898>"));
                         }
                     });
                 });
