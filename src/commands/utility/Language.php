@@ -57,7 +57,8 @@ class Language extends Command
         $lang_array = [
             "en_EN" => "English",
             "tr_TR" => "Turkish",
-            "kr_KR" => "Korean"
+            "kr_KR" => "Korean",
+            "ja_JP" => "Japanese",
         ];
         $selected = $args[0] ?? null;
         if(!$selected)
