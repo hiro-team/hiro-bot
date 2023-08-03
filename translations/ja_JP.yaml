@@ -49,7 +49,7 @@ commands:
     lose: "残念ですが、あなたの負けです :("
   daily:
     cooldown_msg: "このコマンドは%sで使用できます。"
-    reward_msg: "You gained %s %s coins." # first is amount, second is emote
+    reward_msg: "%s枚の%sコインを獲得しました。" # first is amount, second is emote
     fail_msg: "デイリーボーナスを提供できませんでした。"
   git:
     description: "私はオープンソースです！\nリンクに移動するにはクリックしてください。"
@@ -92,94 +92,94 @@ commands:
   ping:
     reply: "ping の到着に %s ms かかりました。"
   slots:
-    no_amount: "You have to write a pay amount."
-    no_numeric_arg: "Pay amount should be numeric."
-    invalid_amount: "Invalid pay amount."
-    not_enough_money: "You can't pay this money, because u dont have it."
+    no_amount: "支払金額を書かなければなりません。"
+    no_numeric_arg: "支払金額は数字でなければなりません。"
+    invalid_amount: "無効な支払金額です。"
+    not_enough_money: "そのお金を払うことはできません、なぜならそれを持っていないからです。"
     fail_msg:
-      pay: "An error excepted when trying to pay."
-      receive: "An error excepted when trying to give your money."
-    spinning: "Slot is spinning..."
-    spinned: "Slot has been spinned. \n%s%s%s \n%s"
-    win: "**YOU WON!!! %s %s**" # first is amount, second is emote
-    lose: "You lose all of your pay :("
+      pay: "支払いを試みる際にエラーが発生しました。"
+      receive: "お金を渡そうとした際にエラーが発生しました。"
+    spinning: "スロットが回転しています"
+    spinned: "スロットが回転しました。\n%s%s%s \n%s"
+    win: "**勝ちました！！！ %s %s**" # first is amount, second is emote
+    lose: "あなたはすべてのお金を失った :("
   wikipedia:
-    no_query: "Please provide a search query."
-    no_results: "No results found."
-    api_error: "Unable to acesss the Wikipedia API :("
+    no_query: "検索クエリを入力してください。"
+    no_results: "結果が見つかりませんでした。"
+    api_error: "WikipediaのAPIにアクセスできませんでした :("
   createchar:
-    already_created: "You have already created your character!"
-    description: "Usage:
-            %screatechar [type] [race] [gender]
-            \n\nAvailable:
-            \n\n\tTypes: warrior, ranger, mage, healer
-            \n\n\tRaces: %s
-            \n\n\tGenders: male or female
-            \n\nExample:
+    already_created: "キャラクターはすでに作成されています！"
+    description: "使用方法：
+            %screatechar [タイプ] [種族] [性別]
+            \n\n利用可能：
+            \n\n\tタイプ： warrior, ranger, mage, healer
+            \n\n\t種族： %s
+            \n\n\t性別： male or female
+            \n\n例：
             \n%screatechar healer elf female"
-    unknown_type: "Unknown type."
-    unknown_race: "Unknown race."
-    unknown_gender: "Unknown gender."
-    set_type: "Your class has been changed to **%s** successfully."
-    set_race: "Your race has been changed to **%s** successfully."
-    set_gender: "Your gender has been changed to **%s** successfully."
-    on_success: "Character created successfully. :white_check_mark:"
-    on_failure: "Character create failure. :x:"
+    unknown_type: "未知のタイプ"
+    unknown_race: "未知の種族"
+    unknown_gender: "未知の性別"
+    set_type: "クラスは**%s**に変更されました。変更が成功しました。"
+    set_race: "種族は**%s**に変更されました。変更が成功しました。"
+    set_gender: "性別は**%s**に変更されました。変更が成功しました。"
+    on_success: "キャラクターが作成されました。 :white_check_mark:"
+    on_failure: "キャラクター作成失敗。 :x:"
   hunt:
     start_msg:
-      title: "Hunting"
-      description: "Click to the button for starting hunting"
-    monster_hp: "Monster HP"
-    level_up: "Level up !"
-    gain_exp: "Monster died! Gained %d experiences."
-    attack_button: "Attack"
-    start_button: "Start Hunting"
+      title: "狩り"
+      description: "狩りを始めるためにボタンをクリックしてください"
+    monster_hp: "モンスターのHP"
+    level_up: "レベルアップ！"
+    gain_exp: "モンスターが倒れました！%dの経験値を獲得しました。"
+    attack_button: "攻撃"
+    start_button: "狩りを始める"
   inventory:
-    title: "Inventory"
-    level: "Level"
-    experience: "Experience"
-    race: "Race"
-    gender: "Gender"
-    type: "Type"
+    title: "インベントリー"
+    level: "レベル"
+    experience: "経験値"
+    race: "種族"
+    gender: "性別"
+    type: "タイプ"
   setrpgchannel:
-    no_perm: "You have to own `manage channels` permission for this."
-    no_channel: "Channel not found."
-    success: "<#%s> is now the RPG channel!"
+    no_perm: "これを行うには「manage_channels」権限が必要です。"
+    no_channel: "チャンネルが見つかりません。"
+    success: "<#%s>が今RPGチャンネルです！"
   setrpgenabled:
-    no_perm: "You have to own `manage channels` permission for this."
-    invalid_parameter: "Invalid value, you should use like this: setrpgenabled 1 or setrpgenabled 0"
-    on_enable: "RPG is enabled for this server!"
-    on_disable: "RPG is disabled for this server!"
+    no_perm: "これを行うには「manage_channels」権限が必要です。"
+    invalid_parameter: "無効な値です。次のように入力してください：「setrpgenabled 1」 または 「setrpgenabled 0」"
+    on_enable: "このサーバーでRPGが有効になっています！"
+    on_disable: "このサーバーでRPGは無効になっています！"
   avatar:
-    title: "Avatar"
+    title: "アバター"
   howgay:
-    description: "%s you are %s gay." # first is user, second is degree (like: 15%)
+    description: "%s、あなたは%sの割合でゲイです。" # first is user, second is degree (like: 15%)
   hug:
-    no_user: "You must mention a user for hug"
-    selfhug: "You can't hug yourself."
-    success: "%s did hug with you! %s"
+    no_user: "ハグするユーザーをメンションしてください"
+    selfhug: "自分自身を抱きしめることはできません。"
+    success: "%sがあなたとハグしました！ %s"
   kiss:
-    no_user: "You must mention a user for kiss"
-    selfkiss: "You can't kiss yourself."
-    success: "%s kissed you! %s"
+    no_user: "キスのためにユーザーを挙げるべき"
+    selfkiss: "自分自身にキスすることはできません。"
+    success: "%sがあなたにキスしました！ %s"
   marry:
-    no_user: "You must mention a user for get marry"
-    selfmarry: "You can't marry with yourself."
-    success: "%s get married with you! %s"
+    no_user: "結婚する相手のユーザーをメンションしてください"
+    selfmarry: "自分自身と結婚することはできません。"
+    success: "%sがあなたと結婚しました！ %s"
   nekos:
-    not_available_category: "%s is not available."
-    available_categories: "Available categories: `%s`"
-    api_error: "Unable to access to the nekos API :("
+    not_available_category: "%sは利用できません。"
+    available_categories: "利用可能なカテゴリー: 「%s」"
+    api_error: "nekos APIにアクセスできません :("
   slap:
-    no_user: "You must mention a user for slap"
-    selfslap: "You can't slap yourself."
+    no_user: "スラップするユーザーをメンションしてください"
+    selfslap: "自分自身を叩くことはできません。"
     success: "%sはあなたを平手打ちした！%s"
   waifu:
     not_available_category: "%sは使用できません。."
     available_categories: "利用可能なカテゴリ「%s」."
     api_error: "waifu.pics APIにアクセスできない :("
-    title: "Waifu Generator"
-    success: "%s, your random waifu."
+    title: "ワイフ・ジェネレーター"
+    success: "%s、あなたのランダム・ワイフ。"
   waifunsfw:
     no_nsfw_channel: "このコマンドはnsfwチャンネルで使わなければならない！"
     not_available_category: "%sは使用できません。"
@@ -198,7 +198,7 @@ commands:
     invalid_url: "URLは無効です。"
     no_youtube_url: "YouTubeビデオのURLが見つかりません。"
     queue_overflow: "10本以上のビデオをキューに追加することはできません。"
-    added_to_queue: "Song added to queue."
+    added_to_queue: "曲がキューに追加されました。"
     no_queue: "キューに音楽が見つからない。"
     playing: "プレーは**%s**だ。"
     couldnt_download: "音声をダウンロードできませんでした。"
