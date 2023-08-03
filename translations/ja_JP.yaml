@@ -1,0 +1,210 @@
+# ja_JP.yaml - Japanese Translations
+database:
+  notconnect: "データベースに接続できませんでした。"
+  user:
+    couldnt_added: "申し訳ありませんが、データベースに追加できませんでした。"
+
+global:
+  unknown_error: "未知のエラーが発生しました。"
+  not_enough_money: "お金が足りません。"
+  user_not_found: "ユーザーが見つかりませんでした。"
+  guild_only: "ギルド内でのみ使用できます！"
+
+commands:
+  apod:
+    date: "日付"
+    media_type: "メディアタイプ"
+    service_version: "サービスバージョン"
+    no_api_key: "NASAのAPIキーは利用できません。開発者と連絡してください。"
+    api_error: "NASAのAPIにアクセスできません :("
+  ban:
+    selfban: "自分自身を禁止することはできません。"
+    role_pos_low: "あなたの役職のポジションはあまりにも低すぎます！"
+    banned: "%sが%sによって禁止されました。"
+    no_bot_perm: "私はユーザーを禁止する権限を持っていません。役職の位置や権限を確認してください"
+    no_user: "ユーザーを禁止する場合は、対象のユーザーを指定する必要があります。"
+    no_perm: "ユーザーを禁止するには、「ban_members」権限が必要です。"
+  botinfo:
+    title: "ボット情報"
+    shard_id: "シャードID"
+    shard_count: "シャード数"
+    guilds: "ギルド"
+    members: "メンバー"
+    commands: "コマンド"
+    version: "バージョン"
+    latency: "遅延"
+  clear:
+    error: "エラー！"
+    no_perm: "この操作を使用するには、「メッセージの管理」権限が必要です。"
+    no_amount: "金額を指定する必要があります。"
+    no_numeric_arg: "数値のパラメーターを指定する必要があります。"
+    limit: "金額は1から100の範囲内である必要があります。"
+    deleted: "%d件のメッセージが削除されました。"
+    no_bot_perm: "メッセージを削除する権限がありません。"
+  coinflip:
+    no_amount: "支払い金額を入力する必要があります。"
+    too_less_amount: "ゼロより大きな値を指定する必要があります。"
+    coin_spinning: "コインが回転しています..."
+    win: "おめでとうございます！あなたの勝ちです :)"
+    lose: "残念ですが、あなたの負けです :("
+  daily:
+    cooldown_msg: "このコマンドは%sで使用できます。"
+    reward_msg: "%s枚の%sコインを獲得しました。" # first is amount, second is emote
+    fail_msg: "デイリーボーナスを提供できませんでした。"
+  git:
+    description: "私はオープンソースです！\nリンクに移動するにはクリックしてください。"
+  help:
+    description: "こちらがコマンドのリストです！\n特定のコマンドの詳細情報を知りたい場合は、%shelp {コマンド}を使用してください。\nさらなるヘルプが必要ですか？%sをご覧ください。"
+    specific_command:
+      no_description: "説明なし"
+      no_cooldown: "クールダウンなし "
+      seconds: "秒"
+      description:
+        name: "名前"
+        description: "説明"
+        cooldown: "クールダウン"
+      not_found: "コマンド '%s' は見つかりませんでした。"
+  kick:
+    selfkick: "自分自身をキックすることはできません。"
+    role_pos_low: "あなたの役職の位置が低すぎます！"
+    kicked: "%sが%sによってキックされました。"
+    no_bot_perm: "私はユーザーをキックする権限を持っていません。役職の位置や権限を確認してください。"
+    no_user: "ユーザーをキックする場合は、対象のユーザーをメンションする必要があります。"
+    no_perm: "ユーザーをキックするには、「kick_members」権限が必要です。"
+  language:
+    changed: "あなたの言語は現在**%s**です。"
+    notavailable: "申し訳ありませんが、その言語は利用できません。"
+  money:
+    reply: "%sは%s%sコインを持っています。" # first is pronoun (like: You or someone), second is amount, third is emote
+  nick:
+    changed: "ニックネームが変更されました。"
+    no_bot_perm: "ニックネームを管理する許可は持っていない。"
+    no_user: "ユーザー名を変更したい場合は、そのユーザーについて言及しなければならない。"
+    no_perm: "ユーザー名を変更するには、「manage_nicknames」パーミッションが必要です。"
+  pay:
+    no_user: "送金するユーザーを選択する必要があります。"
+    selfsend: "自分に送金することはできない。"
+    no_numeric_arg: "数字でお金を渡すべきだ。"
+    fail_msg: "送金時にエラーが発生 :("
+    # 1: sender 2: amount 3: emote
+    # 4: reciever 5: amount 6: emote
+    pay_msg: "送金！\n\n%s - %s %s  -->  %s + %s %s"
+  ping:
+    reply: "ping の到着に %s ms かかりました。"
+  slots:
+    no_amount: "支払金額を書かなければなりません。"
+    no_numeric_arg: "支払金額は数字でなければなりません。"
+    invalid_amount: "無効な支払金額です。"
+    not_enough_money: "そのお金を払うことはできません、なぜならそれを持っていないからです。"
+    fail_msg:
+      pay: "支払いを試みる際にエラーが発生しました。"
+      receive: "お金を渡そうとした際にエラーが発生しました。"
+    spinning: "スロットが回転しています"
+    spinned: "スロットが回転しました。\n%s%s%s \n%s"
+    win: "**勝ちました！！！ %s %s**" # first is amount, second is emote
+    lose: "あなたはすべてのお金を失った :("
+  wikipedia:
+    no_query: "検索クエリを入力してください。"
+    no_results: "結果が見つかりませんでした。"
+    api_error: "WikipediaのAPIにアクセスできませんでした :("
+  createchar:
+    already_created: "キャラクターはすでに作成されています！"
+    description: "使用方法：
+            %screatechar [タイプ] [種族] [性別]
+            \n\n利用可能：
+            \n\n\tタイプ： warrior, ranger, mage, healer
+            \n\n\t種族： %s
+            \n\n\t性別： male or female
+            \n\n例：
+            \n%screatechar healer elf female"
+    unknown_type: "未知のタイプ"
+    unknown_race: "未知の種族"
+    unknown_gender: "未知の性別"
+    set_type: "クラスは**%s**に変更されました。変更が成功しました。"
+    set_race: "種族は**%s**に変更されました。変更が成功しました。"
+    set_gender: "性別は**%s**に変更されました。変更が成功しました。"
+    on_success: "キャラクターが作成されました。 :white_check_mark:"
+    on_failure: "キャラクター作成失敗。 :x:"
+  hunt:
+    start_msg:
+      title: "狩り"
+      description: "狩りを始めるためにボタンをクリックしてください"
+    monster_hp: "モンスターのHP"
+    level_up: "レベルアップ！"
+    gain_exp: "モンスターが倒れました！%dの経験値を獲得しました。"
+    attack_button: "攻撃"
+    start_button: "狩りを始める"
+  inventory:
+    title: "インベントリー"
+    level: "レベル"
+    experience: "経験値"
+    race: "種族"
+    gender: "性別"
+    type: "タイプ"
+  setrpgchannel:
+    no_perm: "これを行うには「manage_channels」権限が必要です。"
+    no_channel: "チャンネルが見つかりません。"
+    success: "<#%s>が今RPGチャンネルです！"
+  setrpgenabled:
+    no_perm: "これを行うには「manage_channels」権限が必要です。"
+    invalid_parameter: "無効な値です。次のように入力してください：「setrpgenabled 1」 または 「setrpgenabled 0」"
+    on_enable: "このサーバーでRPGが有効になっています！"
+    on_disable: "このサーバーでRPGは無効になっています！"
+  avatar:
+    title: "アバター"
+  howgay:
+    description: "%s、あなたは%sの割合でゲイです。" # first is user, second is degree (like: 15%)
+  hug:
+    no_user: "ハグするユーザーをメンションしてください"
+    selfhug: "自分自身を抱きしめることはできません。"
+    success: "%sがあなたとハグしました！ %s"
+  kiss:
+    no_user: "キスのためにユーザーを挙げるべき"
+    selfkiss: "自分自身にキスすることはできません。"
+    success: "%sがあなたにキスしました！ %s"
+  marry:
+    no_user: "結婚する相手のユーザーをメンションしてください"
+    selfmarry: "自分自身と結婚することはできません。"
+    success: "%sがあなたと結婚しました！ %s"
+  nekos:
+    not_available_category: "%sは利用できません。"
+    available_categories: "利用可能なカテゴリー: 「%s」"
+    api_error: "nekos APIにアクセスできません :("
+  slap:
+    no_user: "スラップするユーザーをメンションしてください"
+    selfslap: "自分自身を叩くことはできません。"
+    success: "%sはあなたを平手打ちした！%s"
+  waifu:
+    not_available_category: "%sは使用できません。."
+    available_categories: "利用可能なカテゴリ「%s」."
+    api_error: "waifu.pics APIにアクセスできない :("
+    title: "ワイフ・ジェネレーター"
+    success: "%s、あなたのランダム・ワイフ。"
+  waifunsfw:
+    no_nsfw_channel: "このコマンドはnsfwチャンネルで使わなければならない！"
+    not_available_category: "%sは使用できません。"
+    available_categories: "利用可能なカテゴリ 「%s」。"
+    api_error: "waifu.pics APIにアクセスできない :("
+    title: "ムラムラウェイフジェネレーター"
+    success: "%s、あなたのランダムなムラムラしたワイフ :)"
+  join:
+    no_channel: "音声チャンネルでなければならない。"
+    on_error: "音声チャネルへの参加にエラーが発生しました: %s"
+  loop:
+    on_enable: "ループが**有効になった**。"
+    on_disable: "ループは現在**無効**です。"
+  play:
+    no_url: "URLを書くべきだ！"
+    invalid_url: "URLは無効です。"
+    no_youtube_url: "YouTubeビデオのURLが見つかりません。"
+    queue_overflow: "10本以上のビデオをキューに追加することはできません。"
+    added_to_queue: "曲がキューに追加されました。"
+    no_queue: "キューに音楽が見つからない。"
+    playing: "プレーは**%s**だ。"
+    couldnt_download: "音声をダウンロードできませんでした。"
+    downloading: "オーディオをダウンロードしています。"
+  queue:
+    title: "キュー"
+    description: "現在のキュー (%d)："
+    field: "依頼者: <@%s>
+            URL: %s"
