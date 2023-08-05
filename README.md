@@ -19,6 +19,7 @@ A Discord bot written in PHP.
 ### Languages (Translations)
 - English %100
 - Turkish %90
+- Japanese %90
 - Korean %10
 ### Features
 - Can make your server more online with RPG commands
