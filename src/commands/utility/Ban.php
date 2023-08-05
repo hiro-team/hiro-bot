@@ -116,8 +116,8 @@ class Ban extends Command
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
-            $embed->setDescription();
-            $embed->setTimestamp($language->getTranslator()->trans('commands.ban.no_perm'));
+            $embed->setDescription($language->getTranslator()->trans('commands.ban.no_perm'));
+            $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
         }
     }
