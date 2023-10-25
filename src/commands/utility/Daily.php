@@ -56,8 +56,8 @@ class Daily extends Command
             $msg->reply($language->getTranslator()->trans('database.notconnect'));
             return;
         }
-        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
-        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
 
         if (time() - $last_daily < 86400) {
             $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.cooldown_msg'), '<t:' . ($last_daily + 86400) . ':R>'));
@@ -75,7 +75,7 @@ class Daily extends Command
             }
         }
         setlocale(LC_MONETARY, 'en_US');
-        $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
         if ($daily) {
             $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.reward_msg'), number_format($daily, 2, ',', '.'), "<:hirocoin:1130392530677157898>"));
         } else {
