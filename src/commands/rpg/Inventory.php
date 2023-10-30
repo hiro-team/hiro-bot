@@ -76,11 +76,11 @@ class Inventory extends Command
         $embed->setDescription(
             vsprintf(
                 <<<EOF
-%s `{$language->getTranslator()->trans('commands.inventory.level')}        : %d`
-%s `{$language->getTranslator()->trans('commands.inventory.experience')}   : %d`
-%s `{$language->getTranslator()->trans('commands.inventory.race')}         : %s`
-%s `{$language->getTranslator()->trans('commands.inventory.gender')}       : %s`
-%s `{$language->getTranslator()->trans('commands.inventory.type')}         : %s`
+%s `{str_pad($language->getTranslator()->trans('commands.inventory.level'), 20)}: %d`
+%s `{str_pad($language->getTranslator()->trans('commands.inventory.experience'), 20)}: %d`
+%s `{str_pad($language->getTranslator()->trans('commands.inventory.race'), 20)}: %s`
+%s `{str_pad($language->getTranslator()->trans('commands.inventory.gender'), 20)}: %s`
+%s `{str_pad($language->getTranslator()->trans('commands.inventory.type'), 20)}: %s`
 EOF,
                 [
                     "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level
