@@ -73,14 +73,19 @@ class Inventory extends Command
         $embed = new Embed($this->discord);
         $embed->setTitle($user->username . " " . $language->getTranslator()->trans('commands.inventory.title'));
         $embed->setAuthor($user->username, $msg->author->avatar);
+        $level = str_pad($language->getTranslator()->trans('commands.inventory.level'), 20);
+        $exp = str_pad($language->getTranslator()->trans('commands.inventory.experience'), 20);
+        $race = str_pad($language->getTranslator()->trans('commands.inventory.race'), 20);
+        $gender = str_pad($language->getTranslator()->trans('commands.inventory.gender'), 20);
+        $type = str_pad($language->getTranslator()->trans('commands.inventory.type'), 20);
         $embed->setDescription(
             vsprintf(
                 <<<EOF
-%s `{str_pad($language->getTranslator()->trans('commands.inventory.level'), 20)}: %d`
-%s `{str_pad($language->getTranslator()->trans('commands.inventory.experience'), 20)}: %d`
-%s `{str_pad($language->getTranslator()->trans('commands.inventory.race'), 20)}: %s`
-%s `{str_pad($language->getTranslator()->trans('commands.inventory.gender'), 20)}: %s`
-%s `{str_pad($language->getTranslator()->trans('commands.inventory.type'), 20)}: %s`
+%s `{$level}: %d`
+%s `{$exp}: %d`
+%s `{$race}: %s`
+%s `{$gender}: %s`
+%s `{$type}: %s`
 EOF,
                 [
                     "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level
