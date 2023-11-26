@@ -18,6 +18,8 @@
  * limitations under the License.
  */
 
+namespace hiro\parts;
+
 final class Padding {
 
 public static function mb_str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT, $encoding = 'UTF-8')
