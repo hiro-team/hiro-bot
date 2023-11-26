@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use hiro\helpers\RPGUI;
 use hiro\database\Database;
+use hiro\parts\Padding;
 use Discord\Parts\Embed\Embed;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Channel\Attachment;
@@ -73,11 +74,11 @@ class Inventory extends Command
         $embed = new Embed($this->discord);
         $embed->setTitle($user->username . " " . $language->getTranslator()->trans('commands.inventory.title'));
         $embed->setAuthor($user->username, $msg->author->avatar);
-        $level = str_pad($language->getTranslator()->trans('commands.inventory.level'), 10);
-        $exp = str_pad($language->getTranslator()->trans('commands.inventory.experience'), 10);
-        $race = str_pad($language->getTranslator()->trans('commands.inventory.race'), 10);
-        $gender = str_pad($language->getTranslator()->trans('commands.inventory.gender'), 10);
-        $type = str_pad($language->getTranslator()->trans('commands.inventory.type'), 10);
+        $level = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.level'), 10);
+        $exp = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.experience'), 10);
+        $race = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.race'), 10);
+        $gender = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.gender'), 10);
+        $type = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.type'), 10);
         $embed->setDescription(
             vsprintf(
                 <<<EOF
