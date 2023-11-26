@@ -73,11 +73,11 @@ class Inventory extends Command
         $embed = new Embed($this->discord);
         $embed->setTitle($user->username . " " . $language->getTranslator()->trans('commands.inventory.title'));
         $embed->setAuthor($user->username, $msg->author->avatar);
-        $level = str_pad($language->getTranslator()->trans('commands.inventory.level'), 5);
-        $exp = str_pad($language->getTranslator()->trans('commands.inventory.experience'), 5);
-        $race = str_pad($language->getTranslator()->trans('commands.inventory.race'), 5);
-        $gender = str_pad($language->getTranslator()->trans('commands.inventory.gender'), 5);
-        $type = str_pad($language->getTranslator()->trans('commands.inventory.type'), 20);
+        $level = str_pad($language->getTranslator()->trans('commands.inventory.level'), 10);
+        $exp = str_pad($language->getTranslator()->trans('commands.inventory.experience'), 10);
+        $race = str_pad($language->getTranslator()->trans('commands.inventory.race'), 10);
+        $gender = str_pad($language->getTranslator()->trans('commands.inventory.gender'), 10);
+        $type = str_pad($language->getTranslator()->trans('commands.inventory.type'), 10);
         $embed->setDescription(
             vsprintf(
                 <<<EOF
