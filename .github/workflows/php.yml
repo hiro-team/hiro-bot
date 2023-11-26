@@ -34,6 +34,11 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: PHP Syntax Checker (Lint)
+      uses: StephaneBour/actions-php-lint@8.2
+      with:
+        dir: './src'
+
     - name: Run test suite
       run: composer run-script test
 
