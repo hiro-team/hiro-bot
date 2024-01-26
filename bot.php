@@ -49,7 +49,7 @@ $bot = new Hiro([
     'shardId' => $shard_id,
     'shardCount' => $shard_count,
     'caseInsensitiveCommands' => true,
-    'loadAllMembers' => false,
+    'loadAllMembers' => @$_ENV['LOAD_ALL_MEMBERS'] ? true : false,
     'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS | Intents::MESSAGE_CONTENT
 ]);
 $voiceSettings = [];
