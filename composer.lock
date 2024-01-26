@@ -2575,16 +2575,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.0.0",
+            "version": "7.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0055b230c408428b9b5cde7c55659555be5c0278"
+                "reference": "5d2b2a584d83a82f82445cfddb943f2fbfeec3ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/0055b230c408428b9b5cde7c55659555be5c0278",
-                "reference": "0055b230c408428b9b5cde7c55659555be5c0278",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/5d2b2a584d83a82f82445cfddb943f2fbfeec3ba",
+                "reference": "5d2b2a584d83a82f82445cfddb943f2fbfeec3ba",
                 "shasum": ""
             },
             "require": {
@@ -2626,7 +2626,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.0.0"
+                "source": "https://github.com/symfony/yaml/tree/7.1"
             },
             "funding": [
                 {
@@ -2642,7 +2642,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-07T10:26:03+00:00"
+            "time": "2023-12-26T14:02:43+00:00"
         },
         {
             "name": "team-reflex/discord-php",
@@ -5641,5 +5641,5 @@
         "php": "^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
