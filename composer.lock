@@ -4,8 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4446446000018b161e75edfe93959326",
+    "content-hash": "e3e748ee94bf1dbde8eeaf3b28fb7dfe",
     "packages": [
+        {
+            "name": "bariscodefx/php-hashmap",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bariscodefxy/php-hashmap.git",
+                "reference": "d6644de13002b0f19fe5f6e0a6a2e94f088c7053"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bariscodefxy/php-hashmap/zipball/d6644de13002b0f19fe5f6e0a6a2e94f088c7053",
+                "reference": "d6644de13002b0f19fe5f6e0a6a2e94f088c7053",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "bariscodefx\\PHPHashMap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "bariscodefx",
+                    "email": "bariscodefx@protonmail.com"
+                }
+            ],
+            "description": "HashMapping for PHP.",
+            "support": {
+                "issues": "https://github.com/bariscodefxy/php-hashmap/issues",
+                "source": "https://github.com/bariscodefxy/php-hashmap/tree/master"
+            },
+            "time": "2024-04-20T22:22:20+00:00"
+        },
         {
             "name": "carbonphp/carbon-doctrine-types",
             "version": "dev-main",

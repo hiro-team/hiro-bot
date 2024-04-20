@@ -23,6 +23,7 @@ namespace hiro\database;
 use hiro\consts\RPG;
 use PDO;
 use PDOException;
+use bariscodefx\PHPHashMap\HashMap;
 
 /**
  * Database
@@ -35,6 +36,13 @@ class Database extends PDO
      * @var boolean
      */
     public $isConnected = false;
+
+    /**
+     * Hashmap of banned users
+     *
+     * @var HashMap
+     */
+    private HashMap $bannedUsers;
 
     /**
      * __construct
@@ -52,6 +60,7 @@ class Database extends PDO
         }
         $this->isConnected = true;
         $this->createTables();
+        $this->bannedUsers = new HashMap();
     }
 
     /**
@@ -737,9 +746,10 @@ class Database extends PDO
      */
     public function banUserFromBot(int $discord_id): ?\PDOStatement
     {
-	return $this->query(
-		sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
-	);
+        $this->bannedUsers->set((string)$discord_id, true);
+        return $this->query(
+            sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
+        );
     }
 
     /**
@@ -750,9 +760,10 @@ class Database extends PDO
      */
     public function unbanUserFromBot(int $discord_id): ?\PDOStatement
     {
+        $this->bannedUsers->set((string)$discord_id, false);
     	return $this->query(
-		sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
-	);
+            sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
+        );
     }
 
     /**
@@ -763,11 +774,15 @@ class Database extends PDO
      */
     public function isUserBannedFromBot(int $discord_id): bool
     {
+        if ($this->bannedUsers->get((string)$discord_id))
+        {
+            return true;
+        }
     	return $this->query(
-		sprintf(
-			"SELECT * FROM bans WHERE discord_id = %d", $discord_id
-		)
-	)->fetch() ? true : false;
+            sprintf(
+                "SELECT * FROM bans WHERE discord_id = %d", $discord_id
+            )
+        )->fetch() ? true : false;
     }
 
     /**
