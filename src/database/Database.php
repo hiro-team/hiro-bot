@@ -38,11 +38,11 @@ class Database extends PDO
     public $isConnected = false;
 
     /**
-     * Hashmap of banned users
+     * Hashmap of cached users for checking bot ban
      *
      * @var HashMap
      */
-    private HashMap $bannedUsers;
+    private HashMap $cachedUsers;
 
     /**
      * __construct
@@ -60,7 +60,7 @@ class Database extends PDO
         }
         $this->isConnected = true;
         $this->createTables();
-        $this->bannedUsers = new HashMap();
+        $this->cachedUsers = new HashMap();
     }
 
     /**
@@ -746,7 +746,7 @@ class Database extends PDO
      */
     public function banUserFromBot(int $discord_id): ?\PDOStatement
     {
-        $this->bannedUsers->set((string)$discord_id, true);
+        $this->cachedUsers->set((string)$discord_id, true);
         return $this->query(
             sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
         );
@@ -760,8 +760,8 @@ class Database extends PDO
      */
     public function unbanUserFromBot(int $discord_id): ?\PDOStatement
     {
-        $this->bannedUsers->set((string)$discord_id, false);
-    	return $this->query(
+        $this->cachedUsers->set((string)$discord_id, false);
+    	   return $this->query(
             sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
         );
     }
@@ -774,15 +774,17 @@ class Database extends PDO
      */
     public function isUserBannedFromBot(int $discord_id): bool
     {
-        if ($this->bannedUsers->get((string)$discord_id))
+        if ($this->cachedUsers->get((string)$discord_id))
         {
             return true;
         }
-    	return $this->query(
+        $banned = $this->query(
             sprintf(
                 "SELECT * FROM bans WHERE discord_id = %d", $discord_id
             )
         )->fetch() ? true : false;
+        $this->cachedUsers->set((string)$discord_id, $banned);
+        return $banned;
     }
 
     /**
