@@ -46,7 +46,7 @@ class Kill extends AuthorCommand
      */
     public function handle($msg, $args): void
     {
-        $msg->reply('hara-kiri')->then(
+        $msg->reply('ハラキリ')->then(
             function () {
                 exit(0);
             }
