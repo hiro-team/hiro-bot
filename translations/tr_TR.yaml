@@ -202,7 +202,7 @@ commands:
     no_queue: "Kuyrukta müzik bulunamadı."
     playing: "**%s** oynatılıyor."
     couldnt_download: "Ses dosyası indirilemedi."
-    downloading: "Ses dosyası indirliyor, lütfen bekleyin..."
+    downloading: "Ses dosyası indiriliyor, lütfen bekleyin..."
   queue:
     title: "Kuyruk"
     description: "Şuanki kuyruk (%d):"
