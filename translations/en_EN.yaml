@@ -90,7 +90,7 @@ commands:
     # 4: reciever 5: amount 6: emote
     pay_msg: "Money Sent!\n\n%s - %s %s  -->  %s + %s %s"
   ping:
-    reply: "Your ping took %s ms to arrive."
+    reply: "My ping is %s ms."
   slots:
     no_amount: "You have to write a pay amount."
     no_numeric_arg: "Pay amount should be numeric."
