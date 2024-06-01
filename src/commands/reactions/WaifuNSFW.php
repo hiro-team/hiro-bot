@@ -60,7 +60,7 @@ class WaifuNSFW extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        if (!$msg->channel->nsfw && $msg->guild) {
+        if (!@$msg->channel->nsfw && $msg->guild) {
             $msg->reply($language->getTranslator()->trans('commands.waifunsfw.no_nsfw_channel'));
             return;
         }
