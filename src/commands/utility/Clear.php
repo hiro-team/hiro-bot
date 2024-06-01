@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -38,7 +38,6 @@ class Clear extends Command
         $this->description = "Clears messages";
         $this->aliases = ["purge"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**
@@ -50,10 +49,11 @@ class Clear extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if (!$msg->member->getPermissions()["manage_messages"]) {
             $embed = new Embed($this->discord);
-            $embed->setTitle("Error!");
-            $embed->setDescription("You must have manage messages permission for use this");
+            $embed->setTitle($language->getTranslator()->trans('commands.clear.error'));
+            $embed->setDescription($language->getTranslator()->trans('commands.clear.no_perm'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
@@ -62,33 +62,33 @@ class Clear extends Command
         $limit = $args[0];
         if (!isset($limit)) {
             $embed = new Embed($this->discord);
-            $embed->setTitle("Error!");
-            $embed->setDescription("You must give an amount");
+            $embed->setTitle($language->getTranslator()->trans('commands.clear.error'));
+            $embed->setDescription($language->getTranslator()->trans('commands.clear.no_amount'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if (!is_numeric($limit)) {
             $embed = new Embed($this->discord);
-            $embed->setTitle("Error!");
-            $embed->setDescription("You must give an numeric parameter");
+            $embed->setTitle($language->getTranslator()->trans('commands.clear.error'));
+            $embed->setDescription($language->getTranslator()->trans('commands.clear.no_numeric_arg'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         } else if ($limit < 1 || $limit > 100) {
             $embed = new Embed($this->discord);
-            $embed->setTitle("Error!");
-            $embed->setDescription("Amount must be around of 1-100");
+            $embed->setTitle($language->getTranslator()->trans('commands.clear.error'));
+            $embed->setDescription($language->getTranslator()->trans('commands.clear.limit'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
             return;
         }
-        $msg->channel->limitDelete($limit)->then(function() use ($msg, $limit) {
+        $msg->channel->limitDelete($limit)->then(function() use ($msg, $limit, $language) {
             $embed = new Embed($this->discord);
             $embed->setTitle("Clear Command");
-            $embed->setDescription($limit . " messages was deleted.");
+            $embed->setDescription(sprintf($language->getTranslator()->trans('commands.clear.deleted'), $limit));
             $embed->setColor("#5558E0");
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed)->then(function ($msg) {
@@ -96,8 +96,8 @@ class Clear extends Command
                     $msg->delete();
                 });
             });
-        }, function (\Throwable $reason) use ($msg) {
-            $msg->reply($reason->getCode() === 50013 ? "I don't have permission to delete messages." : "Unknown error excepted.");
+        }, function (\Throwable $reason) use ($msg, $language) {
+            $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.clear.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
         });
     }
 }

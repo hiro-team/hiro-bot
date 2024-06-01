@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -20,16 +20,16 @@
 
 namespace hiro\commands;
 
-use hiro\consts\RPG;
 use hiro\database\Database;
 use hiro\parts\generators\{GithubImageGenerator, MonsterGenerator};
 use hiro\parts\rpg\{AttackSystem, LevelSystem};
 use hiro\interfaces\GeneratorReturn;
-use Discord\Parts\Channel\Message;
+use hiro\parts\Language;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\User\User;
 use Discord\Builders\MessageBuilder;
 use Discord\Builders\Components\{Button, ActionRow};
+use Discord\Parts\Channel\Message;
 use Discord\Parts\Interactions\Interaction;
 
 class Hunt extends Command
@@ -56,13 +56,14 @@ class Hunt extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
 
-        $startMessage = $this->getStartMessage($msg->author);
+        $startMessage = $this->getStartMessage($msg->author, $language);
         $custom_id = $startMessage[1];
         $btn = $startMessage[2];
 
@@ -85,17 +86,18 @@ class Hunt extends Command
     /**
      * attackHandle
      * 
-     * @var Interaction $interaction
+     * @var ?Interaction $interaction
      * @var GeneratorReturn $monster
      * @var bool $attack
+     * @var Language $language
      */
-    public function attackHandle(Interaction $interaction = null, User $user, GeneratorReturn $monster, bool $attack = true)
+    public function attackHandle(Interaction $interaction = null, User $user, GeneratorReturn $monster, bool $attack, Language $language): ?MessageBuilder
     {
         $embed = new Embed($this->discord);
         $embed
             ->setTitle($monster->getName())
             ->setDescription(<<<EOF
-Monster HP {$monster->getHealth()}
+{$language->getTranslator()->trans('commands.hunt.monster_hp')}: {$monster->getHealth()}
 EOF)
             ->setImage(GithubImageGenerator::generate($monster->getName()))
             ->setTimestamp();
@@ -131,18 +133,18 @@ EOF)
                     $database->setUserExperience($uId, abs($uExp - LevelSystem::getRequiredExperiences($uLvl)));
                     $database->setUserLevel($uId, $uLvl + 1);
 
-                    $interaction->channel->sendMessage("Level up !");
+                    $interaction->channel->sendMessage($language->getTranslator()->trans('commands.hunt.level_up'));
                 }
 
                 $interaction->updateMessage(
                     MessageBuilder::new()
-                        ->setContent(sprintf("Monster died! Gained %d experiences.", $exp))
+                        ->setContent(sprintf($language->getTranslator()->trans('commands.hunt.gain_exp'), $exp))
                         ->setEmbeds([])
                         ->setComponents([])
                 );
 
-                $this->discord->getLoop()->addTimer(2.0, function () use ($interaction) {
-                    $startMessage = $this->getStartMessage($interaction->user);
+                $this->discord->getLoop()->addTimer(2.0, function () use ($interaction, $language) {
+                    $startMessage = $this->getStartMessage($interaction->user, $language);
                     $custom_id = $startMessage[1];
                     $btn = $startMessage[2];
 
@@ -162,24 +164,21 @@ EOF)
                     });
                 });
 
-                return;
+                return null;
             }
         }
 
         $buildedMsg = MessageBuilder::new()
             ->addComponent(
                 ActionRow::new()->addComponent(
-                    Button::new(Button::STYLE_DANGER)->setLabel("Attack")
+                    Button::new(Button::STYLE_DANGER)->setLabel($language->getTranslator()->trans('commands.hunt.attack_button'))
                         ->setCustomId(sprintf("for-%s", $user->id))
                         ->setListener(
-                            function (Interaction $i) use ($user, $monster) {
+                            function (Interaction $i) use ($user, $monster, $language) {
                                 if (!str_starts_with($i->data->custom_id, "for-{$i->user->id}")) {
                                     return;
                                 }
-                                $buildedMsg = $this->attackHandle($i, $user, $monster, true);
-                                if ($buildedMsg) {
-                                    $i->updateMessage();
-                                }
+                                $this->attackHandle($i, $user, $monster, true, $language);
                             },
                             $this->discord,
                             true
@@ -198,13 +197,15 @@ EOF)
     /**
      * getStartMessage
      * 
+     * @var User $user
+     * @var Language $language
      * @return MessageBuilder
      */
-    public function getStartMessage(User $user): array
+    public function getStartMessage(User $user, Language $language): array
     {
         $embed = new Embed($this->discord);
-        $embed->setTitle("Hunting");
-        $embed->setDescription("Click to the button for starting hunting");
+        $embed->setTitle($language->getTranslator()->trans('commands.hunt.start_msg.title'));
+        $embed->setDescription($language->getTranslator()->trans('commands.hunt.start_msg.description'));
         $embed->setTimestamp();
         $random_hex = bin2hex(random_bytes(6));
         $custom_id = "hunting-{$random_hex}-{$user->id}";
@@ -214,16 +215,16 @@ EOF)
             ->addComponent(
                 ActionRow::new()->addComponent(
                     $btn = Button::new(Button::STYLE_DANGER)
-                        ->setLabel("Start Hunting")
+                        ->setLabel($language->getTranslator()->trans('commands.hunt.start_button'))
                         ->setCustomId($custom_id)
                         ->setListener(
-                            function (Interaction $interaction) use ($custom_id, $user) {
+                            function (Interaction $interaction) use ($custom_id, $user, $language) {
                                 if (!str_starts_with($interaction->data->custom_id, $custom_id)) {
                                     return;
                                 }
                                 $generator = new MonsterGenerator();
                                 $monster = $generator->generateRandom();
-                                $interaction->message->edit($this->attackHandle(null, $user, $monster, true));
+                                $interaction->message->edit($this->attackHandle(null, $user, $monster, true, $language));
                             },
                             $this->discord,
                             true

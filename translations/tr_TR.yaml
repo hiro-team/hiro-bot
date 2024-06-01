@@ -1,0 +1,210 @@
+# tr_TR.yaml - Turkish Translations
+database:
+  notconnect: "Veritabanına bağlanılamadı."
+  user:
+    couldnt_added: "Sizi veritabanına kaydederken bir sorun oluştu."
+
+global:
+  unknown_error: "Bilinmeyen bir hata meydana geldi."
+  not_enough_money: "Yetersiz bakiye."
+  user_not_found: "Kullanıcı bulunamadı."
+  guild_only: "Sadece sunucuda kullanabilirsin!"
+
+commands:
+  apod:
+    date: "Tarih"
+    media_type: "Medya Türü"
+    service_version: "Servis Sürümü"
+    no_api_key: "Nasa API anahtarı uygun değil, lütfen geliştiriciyle görüşün..."
+    api_error: "Nasa API'a bağlanılamadı :("
+  ban:
+    selfban: "Kendini yasaklayamazsın."
+    role_pos_low: "Rol pozisyonun düşük."
+    banned: "%s, %s tarafından yasaklandı."
+    no_bot_perm: "Kullanıcıları yasaklamak için yetkim yok. Rol pozisyonumu veya yetkimi kontrol edin."
+    no_user: "Birisini yasaklamak için o kişiyi etiketleyin."
+    no_perm: "Birilerini yasaklamak için `üyeleri yasakla` yetkisine sahip olmalısın."
+  botinfo:
+    title: "Bot Bilgisi"
+    shard_id: "Shard Numarası"
+    shard_count: "Shard Sayısı"
+    guilds: "Sunucular"
+    members: "Üyeler"
+    commands: "Komutlar"
+    version: "Sürüm"
+    latency: "Gecikme (ms)"
+  clear:
+    error: "Hata!"
+    no_perm: "Bunu kullanabilmek için mesajları yönet yetkisine sahip olmalısın."
+    no_amount: "Bir sayı belirtmelisin."
+    no_numeric_arg: "Belirtiğin sayı numara olmalı."
+    limit: "Değer 1 ile 100 arasında olmalı."
+    deleted: "%d kadar mesaj silindi."
+    no_bot_perm: "Mesajları silmek için yetkim yok."
+  coinflip:
+    no_amount: "Bahis miktarını girmelisin."
+    too_less_amount: "0'dan küçük bahis miktarı giremezsin."
+    coin_spinning: "Para çeviriliyor..."
+    win: "Kazandın :)"
+    lose: "Kaybettin :("
+  daily:
+    cooldown_msg: "Bu komutu %s kullanabilirsin."
+    reward_msg: "%s %s bakiye kazandın." # first is amount, second is emote
+    fail_msg: "Günlük maaşın verilemedi"
+  git:
+    description: "Ben açık kaynağım!\nLinke gitmek için tıkla."
+  help:
+    description: "İşte komutların listesi!\nBir komut için bilgi almak istersen, %shelp {komut} kullan.\nDaha fazla mı yardıma ihtiyacın var? %s burayı kontrol et."
+    specific_command:
+      no_description: "Açıklama yok"
+      no_cooldown: "Bekleme süresi yok"
+      seconds: "saniye"
+      description:
+        name: "İsim"
+        description: "Açıklama"
+        cooldown: "Bekleme Süresi"
+      not_found: "'%s' isminde komut bulunamadı."
+  kick:
+    selfkick: "Kendini atamazsın."
+    role_pos_low: "Rol pozisyonun çok düşük."
+    kicked: "%s, %s tarafından sunucudan atıldı."
+    no_bot_perm: "Kullanıcıları atmak için yetkim yok. Rol pozisyonumu veya yetkimi kontrol et."
+    no_user: "Eğer birisini atmak istiyorsan o kişiyi etiketle."
+    no_perm: "Birisini atmak için, `üyeleri at` yetkisine sahip olmalısın."
+  language:
+    changed: "Dilin **%s** olarak değiştirildi."
+    notavailable: "Bilinmeyen dil."
+  money:
+    reply: "%s, %s %s kadar bakiyeye sahip." # first is pronoun (like: You or someone), second is amount, third is emote
+  nick:
+    changed: "Takma isim değiştirildi."
+    no_bot_perm: "Takma isimleri düzenlemek için yeterli yetkim yok."
+    no_user: "Bir kullanıcının ismini değiştirmek için, o kişiyi etiketlemelisin."
+    no_perm: "Bir kullanıcının ismini değiştirmek için, `takma isimleri yönet` yetkisine sahip olmalısın."
+  pay:
+    no_user: "Para göndermek istediğiniz kişiyi etiketleyin."
+    selfsend: "Kendi paranı kendine gönderemezsin."
+    no_numeric_arg: "Sayısal bir değer girmelisin."
+    fail_msg: "Para gönderilirken bir sorun oluştu :("
+    # 1: sender 2: amount 3: emote
+    # 4: reciever 5: amount 6: emote
+    pay_msg: "Para gönderildi!\n\n%s - %s %s  -->  %s + %s %s"
+  "ping":
+    reply: "Botun pingi %s ms."
+  slots:
+    no_amount: "Bahis miktarını girmelisin."
+    no_numeric_arg: "Bahis miktarı sayısal olmalıdır."
+    invalid_amount: "Geçersiz bahis miktarı."
+    not_enough_money: "Bu bahis miktarını belirtemezsin, çünkü o kadar paran yok."
+    fail_msg:
+      pay: "Ödeme yapılırken bir sorun oluştu."
+      receive: "Paranız verilirken bir sorun oluştu."
+    spinning: "Slot dönüyor..."
+    spinned: "Slot döndü. \n%s%s%s \n%s"
+    win: "**KAZANDIN!!! %s %s**" # first is amount, second is emote
+    lose: "Bütün parayı kaybettin :("
+  wikipedia:
+    no_query: "Aramak için bir şey yazın."
+    no_results: "Sonuç bulunamadı."
+    api_error: "Wikipedia API'a bağlanılamadı :("
+  createchar:
+    already_created: "Zaten karakterini oluşturdun!"
+    description: "Kullanım:
+            %screatechar [tür] [ırk] [cinsiyet]
+            \n\nKullanılabilir:
+            \n\n\tTürler: warrior (savaşcı), ranger (okçu), mage (büyücü), healer (şifacı)
+            \n\n\tIrklar: %s
+            \n\n\tCinsiyetler: male (erkek) ya da female (kadın)
+            \n\nÖrnek:
+            \n%screatechar healer elf female"
+    unknown_type: "Bilinmeyen tür."
+    unknown_race: "Bilinmeyen ırk."
+    unknown_gender: "Bilinmeyen cinsiyet."
+    set_type: "Mesleğin **%s** olarak değiştirildi."
+    set_race: "Irkın **%s** olarak değiştirildi."
+    set_gender: "Cinsiyetin **%s** olarak değiştirilid."
+    on_success: "Karakter başarıyla oluşturuldu. :white_check_mark:"
+    on_failure: "Karakter oluşturma başarısız. :x:"
+  hunt:
+    start_msg:
+      title: "Avlanma"
+      description: "Avlanmak için butona basın"
+    monster_hp: "Canavar Sağlığı"
+    level_up: "Seviye atladın !"
+    gain_exp: "Canavar öldü! %d kadar tecrübe kazandın."
+    attack_button: "Saldır"
+    start_button: "Avlanmaya Başla"
+  inventory:
+    title: "Envanter"
+    level: "Seviye"
+    experience: "Tecrübe"
+    race: "Irk"
+    gender: "Cinsiyet"
+    type: "Tür"
+  setrpgchannel:
+    no_perm: "Bunun için `kanalları yönet` yetkisine sahip olmalısın."
+    no_channel: "Kanal bulunamadı."
+    success: "<#%s> artık rol yapma kanalı!"
+  setrpgenabled:
+    no_perm: "Bunun için `kanalları yönet` yetkisine sahip olmalısın."
+    invalid_parameter: "Geçersiz değer, şu şekilde kullanmalısın: setrpgenabled 1 ya da setrpgenabled 0"
+    on_enable: "RRG bu sunucu için aktifleştirildi!"
+    on_disable: "RRG bu sunucu için kapatıldı!"
+  avatar:
+    title: "Avatar"
+  howgay:
+    description: "%s, %s kadar ibne." # first is user, second is degree (like: 15%)
+  hug:
+    no_user: "Sarılmak için birisini etiketleyin"
+    selfhug: "Kendinle sarılamazsın."
+    success: "%s seninle sarıldı! %s"
+  kiss:
+    no_user: "Öpmek için birisini etiketleyin"
+    selfkiss: "Kendini öpemezsin."
+    success: "%s seni öptü! %s"
+  marry:
+    no_user: "Evlenmek için birisini etiketleyin"
+    selfmarry: "Kendinle evlenemezsin."
+    success: "%s seninle evlendi! %s"
+  nekos:
+    not_available_category: "%s geçersiz kategori."
+    available_categories: "Mevcut kategoriler: `%s`"
+    api_error: "Nekos API'a bağlanılamadı :("
+  slap:
+    no_user: "Tokatlamak için birisini etiketleyin"
+    selfslap: "Kendini tokatlayamazsın."
+    success: "%s seni tokatladı! %s"
+  waifu:
+    not_available_category: "%s geçersiz kategori."
+    available_categories: "Mevcut kategoriler: `%s`"
+    api_error: "waifu.pics API'a bağlanılamadı :("
+    title: "Waifu Oluşturucu"
+    success: "%s, rastgele waifu'n."
+  waifunsfw:
+    no_nsfw_channel: "Bu komutu NSFW bir kanalda kullanmalısın!"
+    not_available_category: "%s geçersiz kategori."
+    available_categories: "Mevcut Kategoriler: `%s`"
+    api_error: "waifu.pics API'a bağlanılamadı :("
+    title: "Ateşli Waifu Oluşturucusu"
+    success: "%s, rastegele ateşli waifu'n :)"
+  join:
+    no_channel: "Bir sesli kanalda olmalısın."
+    on_error: "Sesli kanala bağlanırken bir sorun oluştu: %s"
+  loop:
+    on_enable: "Şarkı döngüsü **aktif edildi**."
+    on_disable: "Şarkı döngüsü **kapatıldı**."
+  play:
+    no_url: "Bir link yazmalısın!"
+    invalid_url: "Geçersiz link."
+    no_youtube_url: "YouTube vidyo linki bulunamadı."
+    queue_overflow: "Kuyuruğa 10'dan fazla şarkı ekleyemezsin."
+    added_to_queue: "Şarkı kuyruğa eklendi."
+    no_queue: "Kuyrukta müzik bulunamadı."
+    playing: "**%s** oynatılıyor."
+    couldnt_download: "Ses dosyası indirilemedi."
+    downloading: "Ses dosyası indiriliyor, lütfen bekleyin..."
+  queue:
+    title: "Kuyruk"
+    description: "Şuanki kuyruk (%d):"
+    field: "Ekleyen kişi: <@%s>
+            Link: %s"

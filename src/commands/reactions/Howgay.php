@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -49,12 +49,13 @@ class Howgay extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $user = $msg->mentions->first();
         if (!$user) $user = $msg->author;
         $random = rand(0, 100);
         $embed = new Embed($this->discord);
         $embed->setColor("#EB00EA");
-        $embed->setDescription("$user you are $random% gay. :gay_pride_flag:");
+        $embed->setDescription(sprintf("%s :gay_pride_flag:", sprintf($language->getTranslator()->trans('commands.howgay.description'), $user, $random . "%")));
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

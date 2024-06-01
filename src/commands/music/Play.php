@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file is part of project Hiro 016 Discord Bot.
  *
@@ -20,29 +20,38 @@
 
 namespace hiro\commands;
 
-use Discord\Voice\VoiceClient;
+use hiro\security\MusicCommand;
 use React\ChildProcess\Process;
 use Discord\Builders\MessageBuilder;
 use hiro\parts\voice\VoiceFile;
+use React\Http\Browser;
 
-class Play extends Command
+class Play extends MusicCommand
 {
+    /**
+     * Browser
+     *
+     * @var Browser
+     */
+    public Browser $browser;
+    
     public function configure(): void
     {
         $this->command = "play";
         $this->description = "Plays music from youtube.";
         $this->aliases = [];
         $this->category = "music";
+        $this->browser = new Browser(null, $this->discord->getLoop());
     }
 
-    public function playMusic($text_channel, $settings)
+    public function playMusic($text_channel, $settings, $language)
     {
         $voice_client = $settings->getVoiceClient();
-        $current_voice_file = $settings->getQueue()[0];
+        $current_voice_file = $settings->getQueue()[0] ?? null;
         
         if (!$current_voice_file)
         {
-            $text_channel->sendMessage("Current voice file not found.");
+            $text_channel->sendMessage($language->getTranslator()->trans('commands.play.no_queue'));
             return;
         }
         $author_id = $settings->getQueue()[0]->getAuthorId();
@@ -54,33 +63,33 @@ class Play extends Command
         $process = new Process($command);
         $process->start();
 
-        $editmsg = $text_channel->sendMessage("Downloading audio, please wait...");
+        $editmsg = $text_channel->sendMessage($language->getTranslator()->trans('commands.play.downloading'));
 
-        $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel) {
+        $process->on('exit', function($code, $term) use ($voice_client, $author_id, $editmsg, $settings, $text_channel, $language) {
             if (is_file($author_id . ".m4a")) {
                 $play_file_promise = $voice_client->playFile($author_id . ".m4a");
             }
             
-            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings) {
+            $editmsg->then(function($m) use ($text_channel, $author_id, $play_file_promise, $settings, $language) {
                 
                 if (!is_file($author_id . ".m4a")) {
-                    $m->edit(MessageBuilder::new()->setContent("Couldn't download the audio."));
+                    $m->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.play.couldnt_download')));
                     return;
                 }
                 
                 $jsondata = json_decode(file_get_contents($author_id . ".info.json"));
 
-                $m->edit(MessageBuilder::new()->setContent("Playing **{$jsondata->title}**. :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel){
-                    $play_file_promise->then(function() use ($m, $settings, $text_channel) {
+                $m->edit(MessageBuilder::new()->setContent(sprintf($language->getTranslator()->trans('commands.play.playing'), $jsondata->title) . " :musical_note: :tada:"))->then(function() use ($m, $play_file_promise, $settings, $text_channel, $language){
+                    $play_file_promise->then(function() use ($m, $settings, $text_channel, $language) {
                         if(@$settings->getQueue()[0])
                         {
                             if (!$settings->getLoopEnabled())
                             {
                                 $settings->nextSong();
                             }
-                            $this->playMusic($text_channel, $settings);
+                            $this->playMusic($text_channel, $settings, $language);
                         } else {
-                            $m->channel->sendMessage(MessageBuilder::new()->setContent("Music not found on queue."));
+                            $m->channel->sendMessage(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.play.no_queue')));
                         }
                         
                         $m->delete();
@@ -99,43 +108,21 @@ class Play extends Command
 
     public function handle($msg, $args): void
     {
+        global $language;
         global $voiceSettings;
-	    $channel = $msg->member->getVoiceChannel();
-	    $voiceClient = $this->discord->getVoiceClient($msg->guild_id);
-
-        if (!$channel) {
-            $msg->channel->sendMessage("You must be in a voice channel.");
-            return;
-        }
 
         $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
 
         if (!$url) {
-            $msg->reply("You should write a URL!");
+            $msg->reply($language->getTranslator()->trans('commands.play.no_url'));
             return;
         }
-
-        if (!$voiceClient) {
-            $msg->reply("Use the join command first.\n");
-            return;
-        }
-
-        if ($voiceClient && $channel->id !== $voiceClient->getChannel()->id) {
-            $msg->reply("You must be in the same channel with me.");
-            return;
-	    }
 
         $settings = @$voiceSettings[$msg->channel->guild_id];
-        
-	    if (!$settings)
-	    {
-		    $msg->reply("Voice options couldn't found.");
-		    return;
-	    }
 
-        $url = str_replace('\\', '', $url);
+        $url = str_replace('\\', '', trim($url));
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            $msg->reply("The URL is not valid.");
+            $msg->reply($language->getTranslator()->trans('commands.play.invalid_url'));
             return;
         }
 
@@ -144,18 +131,34 @@ class Play extends Command
     	preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
     	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
     	{
-    	    $msg->reply("YouTube video URL not found.\n");
+    	    $msg->reply($language->getTranslator()->trans('commands.play.no_youtube_url'));
     	    return;
     	}
     	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
 
-        $settings->addToQueue(new VoiceFile($url, $msg->author->id));
+        if(sizeof($settings->getQueue()) >= 10)
+        {
+            $msg->reply($language->getTranslator()->trans('commands.play.queue_overflow'));
+            return;
+        }
+        
+        $settings->addToQueue($voice_file = new VoiceFile(null, $url, $msg->author->id));
+        
+        $this->browser->get('https://noembed.com/embed?url=' . $url)->then(function (\Psr\Http\Message\ResponseInterface $response) use ($voice_file) {
+            $data = json_decode((string) $response->getBody());
+            if(isset($data->title))
+            {
+                $voice_file->setTitle($data->title);
+            }
+        }, function (\Exception $e) {
+        });
 
         if( @$settings->getQueue()[1] )
         {
-            $msg->reply("Song added to queue.\n");
-        } else {
-            $this->playMusic($msg->channel, $settings);
+            $msg->reply($language->getTranslator()->trans('commands.play.added_to_queue'));
+            return;
         }
+        
+        $this->playMusic($msg->channel, $settings, $language);
     }
 }

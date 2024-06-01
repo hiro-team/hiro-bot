@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -50,19 +50,20 @@ class Botinfo extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $guilds             = $this->discord->formatNumber(sizeof($this->discord->guilds));
         $members            = $this->discord->formatNumber(sizeof($this->discord->users));
         $embed = new Embed($this->discord);
-        $embed->setTitle("Bot Info");
-        $embed->addField($this->discord->makeField("Shard ID", $this->discord->options['shardId']));
-        $embed->addField($this->discord->makeField("Shard Count", $this->discord->options['shardCount']));
-        $embed->addField($this->discord->makeField("Guilds", $guilds));
-        $embed->addField($this->discord->makeField("Members", $members));
-        $embed->addField($this->discord->makeField("Commands", $this->loader->getCommandsCount()));
-        $embed->addField($this->discord->makeField("Version", sprintf("%s %s", Version::VERSION, Version::TYPE)));
-        $embed->addField($this->discord->makeField("Latency", intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
+        $embed->setTitle($language->getTranslator()->trans('commands.botinfo.title'));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.shard_id'), $this->discord->options['shardId']));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.shard_count'), $this->discord->options['shardCount']));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.guilds'), $guilds));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.members'), $members));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.commands'), $this->loader->getCommandsCount()));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.version'), sprintf("%s %s", Version::VERSION, Version::TYPE)));
+        $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.botinfo.latency'), intval($msg->timestamp->floatDiffInRealSeconds() * 1000) . "ms"));
         $embed->setThumbnail($this->discord->avatar);
-        $embed->setAuthor($msg->member->username, $msg->author->avatar);
+        $embed->setAuthor($msg->author->username, $msg->author->avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

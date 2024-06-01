@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -46,6 +46,7 @@ class Avatar extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $user = $msg->mentions->first();
         if($user)
         {
@@ -58,7 +59,7 @@ class Avatar extends Command
         }
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
-        $embed->setTitle("Avatar");
+        $embed->setTitle($language->getTranslator()->trans('commands.avatar.title'));
         $embed->setImage($avatar);
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);

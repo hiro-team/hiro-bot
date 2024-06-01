@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -28,6 +28,13 @@ use Discord\Parts\Embed\Embed;
 class Ping extends Command
 {
     /**
+     * Latest ping from Discord gateway
+     *
+     * @var integer
+     */
+    protected ?int $lastPing = null;
+
+    /**
      * configure
      *
      * @return void
@@ -38,6 +45,10 @@ class Ping extends Command
         $this->description = "Displays bot's latency.";
         $this->aliases = ["latency", "ms"];
         $this->category = "utility";
+        
+        $this->discord->on('heartbeat-ack', function($time) {
+            $this->lastPing = intval($time);
+        });
     }
 
     /**
@@ -49,7 +60,7 @@ class Ping extends Command
      */
     public function handle($msg, $args): void
     {
-        $diff = intval($msg->timestamp->floatDiffInRealSeconds() * 1000);
-        $msg->channel->sendMessage("Your ping took {$diff}ms to arrive.");
+        global $language;
+        $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.ping.reply'), $this->lastPing ?? "..."));
     }
 }

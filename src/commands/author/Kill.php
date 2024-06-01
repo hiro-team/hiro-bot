@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx.
+ * Copyright 2021-2024 bariscodefx.
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -20,10 +20,12 @@
 
 namespace hiro\commands;
 
+use hiro\security\AuthorCommand;
+
 /**
  * Kill.
  */
-class Kill extends Command
+class Kill extends AuthorCommand
 {
     /**
      * configure.
@@ -44,11 +46,7 @@ class Kill extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->id != $_ENV['AUTHOR']) {
-            return;
-        }
-
-        $msg->reply('hara-kiri')->then(
+        $msg->reply('ハラキリ')->then(
             function () {
                 exit(0);
             }

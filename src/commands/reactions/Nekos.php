@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -59,10 +59,11 @@ class Nekos extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $type_array = [];
         $type = $args[0] ?? "waifu";
 
-        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($msg, $args, $type, $type_array) {
+        $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($msg, $args, $type, $type_array, $language) {
             $result = json_decode((string)$response->getBody(), true);
             foreach ($result as $key => $useless) {
                 $type_array[] = $key;
@@ -70,7 +71,7 @@ class Nekos extends Command
 
             if (isset($args[0])) {
                 if (!in_array($args[0], $type_array)) {
-                    $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
+                    $msg->reply(sprintf($language->getTranslator()->trans('commands.nekos.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.nekos.available_categories'), implode(", ", $type_array)));
                     return;
                 }
                 $type = $args[0];
@@ -88,8 +89,8 @@ class Nekos extends Command
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                 },
-                function (\Exception $e) use ($msg) {
-                    $msg->reply('Unable to acesss the nekos API :(');
+                function (\Exception $e) use ($msg, $language) {
+                    $msg->reply($language->getTranslator()->trans('commands.nekos.api_error'));
                 }
             );
         });

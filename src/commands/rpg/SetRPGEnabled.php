@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -46,30 +46,31 @@ class SetRPGEnabled extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
 
         if (!$msg->member->getPermissions()['manage_channels']) {
-            $msg->reply('You have to own `manage channels` permission for this.');
+            $msg->reply($language->getTranslator()->trans('commands.setrpgenabled.no_perm'));
             return;
         }
 
         $enabled = $args[0] ?? null;
 
         if ($enabled === null || ($enabled != 0 && $enabled != 1)) {
-            $msg->reply('Invalid value, you should use like this: setrpgenabled 1 or setrpgenabled 0');
+            $msg->reply($language->getTranslator()->trans('commands.setrpgenabled.invalid_parameter'));
             return;
         }
 
         if (!$database->setServerRPGEnabled($database->getServerIdByDiscordId($msg->guild->id), $enabled)) {
-            $msg->reply('An error excepted.');
+            $msg->reply($language->getTranslator()->trans('global.unknown_error'));
             return;
         }
 
-        $enabled = $enabled ? "enabled" : "disabled";
-        $msg->reply('RPG is ' . $enabled . ' for this server!');
+        $msg_str = $enabled ? $language->getTranslator()->trans('commands.setrpgenabled.on_enable') : $language->getTranslator()->trans('commands.setrpgenabled.on_disable');
+        $msg->reply($msg_str);
     }
 }

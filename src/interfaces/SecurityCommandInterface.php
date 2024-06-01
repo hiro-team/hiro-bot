@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2021-2024 bariscodefx
- *
+ * 
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,22 +18,17 @@
  * limitations under the License.
  */
 
-namespace hiro\parts\rpg;
+namespace hiro\interfaces;
 
-/**
- * AttackSystem
- */
-class AttackSystem {
+interface SecurityCommandInterface
+{
 
     /**
-     * getAttackDamage
-     * 
-     * @var int $level
-     * @return ?int
+     * securityChecks
+     *
+     * @param array $args
+     * @return boolean
      */
-    public static function getAttackDamage(int $level): ?int
-    {
-        return $level * random_int(1, 3) + 5;
-    }
+    public function securityChecks(array $args): bool;
 
 }

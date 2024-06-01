@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -28,7 +28,7 @@ class Version {
     /**
      * VERSION
      */
-    const VERSION = "v1.0.2";
+    const VERSION = "v1.0.6";
 
     /**
      * TYPE

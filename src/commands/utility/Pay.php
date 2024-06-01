@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -36,7 +36,6 @@ class Pay extends Command
         $this->description = "Send your money to anybody.";
         $this->aliases = [];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**
@@ -48,43 +47,38 @@ class Pay extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->reply("Couldn't connect to database.");
+            $msg->reply($language->getTranslator()->trans('database.notconnect'));
             return;
         }
         $embed = new Embed($this->discord);
         $user = $msg->mentions->first();
         if (!$user) {
-            $msg->reply("You should select a user for send money.");
+            $msg->reply($language->getTranslator()->trans('commands.pay.no_user'));
             return;
         }
         if ($user->id === $msg->author->id) {
-            $msg->reply("You can't send your money to yourself.");
+            $msg->reply($language->getTranslator()->trans('commands.pay.selfsend'));
             return;
         }
         if (!isset($args[1]) && !is_numeric($args[1])) {
-            $msg->reply("You should give a numeric money.");
+            $msg->reply($language->getTranslator()->trans('commands.pay.no_numeric_arg'));
             return;
         }
-        if (!$database->getUser($database->getUserIdByDiscordId($msg->author->id))) {
-            if (!$database->addUser(["discord_id" => $user->id])) {
-                $msg->reply("An error excepted while registering you to database :(");
-                return;
-            }
-        }
-        if (!$database->getUser($database->getUserIdByDiscordId($user->id))) {
-            if (!$database->addUser(["discord_id" => $user->id])) {
-                $msg->reply("An error excepted while registering you to database :(");
-                return;
-            }
-        }
         if (!$database->pay($database->getUserIdByDiscordId($msg->author->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
-            $msg->reply("An error excepted when sending money :(");
+            $msg->reply($language->getTranslator()->trans('commands.pay.fail_msg'));
             return;
         }
         setlocale(LC_MONETARY, 'en_US');
-        $msg->reply("Money Sent!\n\n" . $msg->user->username . " - <:hirocoin:1130392530677157898> " . number_format($args[1], 2, ',', '.') . "  -->  " . $user->username . " + <:hirocoin:1130392530677157898> " . number_format($args[1], 2, ',', '.'));
+        $msg->reply(
+            sprintf(
+                $language->getTranslator()->trans('commands.pay.pay_msg'),
+                $msg->user->username, number_format($args[1], 2, ',', '.'), "<:hirocoin:1130392530677157898>",
+                $user->username, number_format($args[1], 2, ',', '.'), "<:hirocoin:1130392530677157898>" 
+            )
+        );
         return;
     }
 }

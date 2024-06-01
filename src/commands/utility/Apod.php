@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -60,7 +60,15 @@ class Apod extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
+        if( !isset($_ENV['NASA_KEY']) )
+        {
+            $msg->reply($language->getTranslator()->trans('commands.apod.no_api_key'));
+            return;
+        }
+
         $this->browser->get("https://api.nasa.gov/planetary/apod?thumbs=true&api_key=" . $_ENV['NASA_KEY'])->then(function (ResponseInterface $response) use ($msg) {
+            global $language;
             $embed = new Embed($this->discord);
 
             $result = json_decode((string)$response->getBody());
@@ -69,14 +77,15 @@ class Apod extends Command
             $embed->setTitle($result->title);
             $embed->setImage($result->hdurl);
             $embed->setDescription($result->explanation);
-            $embed->addField($this->discord->makeField("Date", $result->date));
-            $embed->addField($this->discord->makeField("Media Type", $result->media_type));
-            $embed->addField($this->discord->makeField("Service Version", $result->service_version));
+            $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.apod.date'), $result->date));
+            $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.apod.media_type'), $result->media_type));
+            $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.apod.service_version'), $result->service_version));
             $embed->setTimestamp();
 
             $msg->channel->sendEmbed($embed);
-        }, function (Exception $e) use ($msg) {
-            $msg->reply('Unable to acesss the Nasa API :(');
+        }, function (\Exception $e) use ($msg) {
+            global $language;
+            $msg->reply($language->getTranslator()->trans('commands.apod.api_error'));
         });
     }
 }

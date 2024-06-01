@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -59,6 +59,7 @@ class Waifu extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $type_array = [
             "waifu",
             "neko",
@@ -97,26 +98,29 @@ class Waifu extends Command
             $type = "waifu";
         }
 
-        if (!in_array($args[0], $type_array)) {
-            $msg->reply("{$args[0]} is not available. \nAvailable categories: `" . implode(", ", $type_array) . "`");
-            return;
+        if(isset($args[0]))
+        {
+            if (!in_array($args[0], $type_array)) {
+                $msg->reply(sprintf($language->getTranslator()->trans('commands.waifu.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifu.available_categories'), implode(", ", $type_array)));
+                return;
+            }
+            $type = $args[0];
         }
-        $type = $args[0];
 
         $this->browser->get("https://api.waifu.pics/sfw/$type")->then(
-            function (ResponseInterface $response) use ($msg) {
+            function (ResponseInterface $response) use ($msg, $language) {
                 $result = (string)$response->getBody();
                 $api = json_decode($result);
                 $embed = new Embed($this->discord);
                 $embed->setColor("#EB00EA");
-                $embed->setTitle('Waifu Generator');
-                $embed->setDescription("{$msg->author->username} Your random waifu!");
+                $embed->setTitle($language->getTranslator()->trans('commands.waifu.title'));
+                $embed->setDescription(sprintf($language->getTranslator()->trans('commands.waifu.success'), $msg->author->username));
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             },
-            function (Exception $e) use ($msg) {
-                $msg->reply('Unable to acesss the waifu.pics API :(');
+            function (\Exception $e) use ($msg, $language) {
+                $msg->reply($language->getTranslator()->trans('commands.waifu.api_error'));
             }
         );
     }

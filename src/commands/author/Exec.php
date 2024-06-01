@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -20,13 +20,13 @@
 
 namespace hiro\commands;
 
-use hiro\interfaces\HiroInterface;
+use hiro\security\AuthorCommand;
 use React\ChildProcess\Process;
 
 /**
  * Exec
  */
-class Exec extends Command
+class Exec extends AuthorCommand
 {
     /**
      * configure
@@ -50,11 +50,6 @@ class Exec extends Command
      */
     public function handle($msg, $args): void
     {
-        if ($msg->author->id != $_ENV['AUTHOR']) {
-            $msg->channel->sendMessage("No");
-            return;
-        }
-        
         $ex = implode(' ', $args);
         
         if (!$ex) $ex = " ";

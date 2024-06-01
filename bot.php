@@ -1,7 +1,7 @@
  <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -36,7 +36,8 @@ if ( !isset( $_ENV['TOKEN'] ) ) {
 if ( Version::TYPE == 'development' )
 {
     error_reporting(E_ALL);
-    @ini_set('display_errors', 'On');
+} else {
+    error_reporting(0);
 }
 
 $ArgumentParser = new ArgumentParser($argv);
@@ -48,7 +49,7 @@ $bot = new Hiro([
     'shardId' => $shard_id,
     'shardCount' => $shard_count,
     'caseInsensitiveCommands' => true,
-    'loadAllMembers' => true,
+    'loadAllMembers' => @$_ENV['LOAD_ALL_MEMBERS'] ? true : false,
     'intents' => Intents::getDefaultIntents() | Intents::GUILD_MEMBERS | Intents::MESSAGE_CONTENT
 ]);
 $voiceSettings = [];
@@ -77,7 +78,7 @@ $bot->on('ready', function($discord) {
     ->startThread();
 
     /** fix discord guild count */
-    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord, $shard_id, $shard_count)
+    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord)
     {
         $presenceManager->setPresences(getPresenceState());
     });

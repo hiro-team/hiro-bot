@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use hiro\helpers\RPGUI;
 use hiro\database\Database;
+use hiro\parts\Padding;
 use Discord\Parts\Embed\Embed;
 use Discord\Builders\MessageBuilder;
 use Discord\Parts\Channel\Attachment;
@@ -54,9 +55,10 @@ class Inventory extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
 
@@ -70,16 +72,21 @@ class Inventory extends Command
         $character = $gender . "_" . $race . "_" . $type;
 
         $embed = new Embed($this->discord);
-        $embed->setTitle($user->username . " Inventory");
+        $embed->setTitle($user->username . " " . $language->getTranslator()->trans('commands.inventory.title'));
         $embed->setAuthor($user->username, $msg->author->avatar);
+        $level = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.level'), 10);
+        $exp = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.experience'), 10);
+        $race = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.race'), 10);
+        $gender = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.gender'), 10);
+        $type = Padding::mb_str_pad($language->getTranslator()->trans('commands.inventory.type'), 10);
         $embed->setDescription(
             vsprintf(
                 <<<EOF
-%s `Level        : %d`
-%s `Experience   : %d`
-%s `Race         : %s`
-%s `Gender       : %s`
-%s `Type         : %s`
+%s `{$level}: %d`
+%s `{$exp}: %d`
+%s `{$race}: %s`
+%s `{$gender}: %s`
+%s `{$type}: %s`
 EOF,
                 [
                     "<:g_level:1107035586994389062>", $database->getUserLevel($user_id),            // level

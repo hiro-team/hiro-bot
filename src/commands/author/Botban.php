@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -20,68 +20,59 @@
 
 namespace hiro\commands;
 
-use hiro\interfaces\HiroInterface;
+use hiro\security\AuthorCommand;
 use hiro\database\Database;
 
 /**
  * Botban
  */
-class Botban extends Command
+class Botban extends AuthorCommand
 {
-    /**
-     * configure
-     *
-     * @return void
-     */
-    public function configure(): void
-    {
-        $this->command = "botban";
-        $this->description = "Ban/unban a player from bot. **ONLY FOR AUTHOR**";
-        $this->aliases = [];
-        $this->category = "author";
-    }
-
-    /**
-     * handle
-     *
-     * @param [type] $msg
-     * @param [type] $args
-     * @return void
-     */
-    public function handle($msg, $args): void
-    {
-        if ($msg->author->id != $_ENV['AUTHOR']) {
-            $msg->channel->sendMessage("No");
-            return;
-	}
-
-	$user = $msg->mentions->first();
-	if(!$user)
+	/**
+	 * configure
+	 *
+	 * @return void
+	 */
+	public function configure(): void
 	{
-		$msg->channel->sendMessage("You should mention a user to ban.");
-		return;
+		$this->command = "botban";
+		$this->description = "Ban/unban a player from bot. **ONLY FOR AUTHOR**";
+		$this->aliases = [];
+		$this->category = "author";
 	}
 
-	if($user->id == $msg->author->id)
+	/**
+	 * handle
+	 *
+	 * @param [type] $msg
+	 * @param [type] $args
+	 * @return void
+	 */
+	public function handle($msg, $args): void
 	{
-		$msg->channel->sendMessage("You can't ban yourself.");
-		return;
-	}
+		$user = $msg->mentions->first();
+		if (!$user) {
+			$msg->channel->sendMessage("You should mention a user to ban.");
+			return;
+		}
 
-	$db = new Database();
-	if(!$db->isConnected)
-	{
-		$msg->channel->sendMessage("Couldn't connect to database.");
-		return;
-	}
+		if ($user->id == $msg->author->id) {
+			$msg->channel->sendMessage("You can't ban yourself.");
+			return;
+		}
 
-	if(!$db->isUserBannedFromBot($user->id))
-	{
-		$db->banUserFromBot($user->id);
-		$msg->channel->sendMessage("User has been banned.");
-	} else {
-		$db->unbanUserFromBot($user->id);
-		$msg->channel->sendMessage("User's ban has been removed.");
+		$db = new Database();
+		if (!$db->isConnected) {
+			$msg->channel->sendMessage("Couldn't connect to database.");
+			return;
+		}
+
+		if (!$db->isUserBannedFromBot($user->id)) {
+			$db->banUserFromBot($user->id);
+			$msg->channel->sendMessage("User has been banned.");
+		} else {
+			$db->unbanUserFromBot($user->id);
+			$msg->channel->sendMessage("User's ban has been removed.");
+		}
 	}
-    }
 }

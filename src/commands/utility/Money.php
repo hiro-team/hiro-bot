@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -39,7 +39,6 @@ class Money extends Command
         $this->description = "Displays your money.";
         $this->aliases = ["cash"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**
@@ -51,9 +50,11 @@ class Money extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
+        global $database;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->reply("Couldn't connect to database.");
+            $msg->reply($language->getTranslator()->trans('database.notconnect'));
             return;
         }
         $user = $msg->mentions->first();
@@ -63,18 +64,25 @@ class Money extends Command
             if (!$database->addUser([
                 "discord_id" => $user->id
             ])) {
-                $msg->reply("You're couldnt added to database.");
+                $msg->reply($language->getTranslator()->trans('database.user.couldnt_added'));
                 return;
             } else {
                 $user_money = 0;
             }
         }
 
-        $pronoun = $user == $msg->author ? "You" : $user->username;
+        $pronoun = $user->username;
 
         setlocale(LC_MONETARY, 'en_US');
         $user_money = number_format($user_money, 2, ',', '.');
-        $msg->reply($pronoun . " have {$user_money} <:hirocoin:1130392530677157898> coins.");
+        $msg->reply(
+            sprintf(
+                $language->getTranslator()->trans('commands.money.reply'),
+                $pronoun,
+                $user_money,
+                "<:hirocoin:1130392530677157898>"
+            )
+        );
         $database = NULL;
     }
 }

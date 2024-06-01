@@ -4,7 +4,7 @@
     "authors": [
         {
             "name": "bariscodefx",
-            "email": "barisoa029@yandex.com"
+            "email": "bariscodefx@protonmail.com"
         },
         {
             "name": "CYB3R73",
@@ -29,10 +29,13 @@
         "php": "^8.0",
         "team-reflex/discord-php": "dev-master",
         "vlucas/phpdotenv": "^5.3",
-        "wujunze/php-cli-color": "dev-master"
+        "wujunze/php-cli-color": "dev-master",
+        "symfony/translation": "^6.3.3",
+        "symfony/yaml": "^7.0.0",
+        "bariscodefx/php-hashmap": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^11.0",
         "clue/phar-composer": "^1.4"
     }
 }

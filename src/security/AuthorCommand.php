@@ -2,7 +2,7 @@
 
 /**
  * Copyright 2021-2024 bariscodefx
- *
+ * 
  * This file part of project Hiro 016 Discord Bot.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,22 +18,37 @@
  * limitations under the License.
  */
 
-namespace hiro\parts\rpg;
+namespace hiro\security;
+
+use hiro\interfaces\SecurityCommandInterface;
+use hiro\commands\Command;
 
 /**
- * AttackSystem
+ * AuthorCommand
  */
-class AttackSystem {
+class AuthorCommand extends Command implements SecurityCommandInterface
+{
 
     /**
-     * getAttackDamage
-     * 
-     * @var int $level
-     * @return ?int
+     * securityChecks
+     *
+     * @param array $args
+     * @return boolean
      */
-    public static function getAttackDamage(int $level): ?int
+    public function securityChecks(array $args): bool
     {
-        return $level * random_int(1, 3) + 5;
+        if(!isset($args['msg']))
+        {
+            return false;
+        }
+
+        if(!($args['msg']->author->id == @$_ENV['AUTHOR']))
+        {
+            $args['msg']->reply('Only bot author can use this command.');
+            return false;
+        }
+
+        return true;
     }
 
 }

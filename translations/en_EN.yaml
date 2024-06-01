@@ -1,0 +1,210 @@
+# en_EN.yaml - English Translations
+database:
+  notconnect: "Couldn't connect to database."
+  user:
+    couldnt_added: "You are couldn't added to database."
+
+global:
+  unknown_error: "Unknown error excepted."
+  not_enough_money: "Not enough money."
+  user_not_found: "User couldn't found."
+  guild_only: "You can only use in a guild!"
+
+commands:
+  apod:
+    date: "Date"
+    media_type: "Media Type"
+    service_version: "Service Version"
+    no_api_key: "Nasa API key not available, please interact with developer..."
+    api_error: "Unable to acesss the Nasa API :("
+  ban:
+    selfban: "You can't ban yourself"
+    role_pos_low: "Your role position too low!"
+    banned: "%s banned by %s"
+    no_bot_perm: "I don't have permission to ban users. Check my role position or permission."
+    no_user: "If you want ban a user you must mention a user."
+    no_perm: "If you want ban a user u must have `ban_members` permission."
+  botinfo:
+    title: "Bot Info"
+    shard_id: "Shard ID"
+    shard_count: "Shard Count"
+    guilds: "Guilds"
+    members: "Members"
+    commands: "Commands"
+    version: "Version"
+    latency: "Latency"
+  clear:
+    error: "Error!"
+    no_perm: "You must have manage messages permission for use this"
+    no_amount: "You must give an amount"
+    no_numeric_arg: "You must give an numeric parameter"
+    limit: "Amount must be around of 1-100"
+    deleted: "%d messages was deleted."
+    no_bot_perm: "I don't have permission to delete messages."
+  coinflip:
+    no_amount: "You should type payment amount."
+    too_less_amount: "You should give a value greater than zero."
+    coin_spinning: "Coin is spinning..."
+    win: "You win :)"
+    lose: "You lose :("
+  daily:
+    cooldown_msg: "You can use this command in %s."
+    reward_msg: "You gained %s %s coins." # first is amount, second is emote
+    fail_msg: "Couldn't give daily"
+  git:
+    description: "I'm open source!\nClick to go to the link."
+  help:
+    description: "Here is the list of commands!\nFor more info on a specific command, use %shelp {command}\nNeed more help? Checkout %s"
+    specific_command:
+      no_description: "No description"
+      no_cooldown: "No cooldown"
+      seconds: "secs"
+      description:
+        name: "Name"
+        description: "Description"
+        cooldown: "Cooldown"
+      not_found: "Command not found named '%s'"
+  kick:
+    selfkick: "You can't kick yourself"
+    role_pos_low: "Your role position too low!"
+    kicked: "%s kicked by %s."
+    no_bot_perm: "I don't have permission to kick users. Check my role position or permission."
+    no_user: "If you want kick a user you must mention a user."
+    no_perm: "If you want kick a user, you must have `kick_members` permission."
+  language:
+    changed: "Your language is now **%s**."
+    notavailable: "Not available language."
+  money:
+    reply: "%s have %s %s coins." # first is pronoun (like: You or someone), second is amount, third is emote
+  nick:
+    changed: "Nickname changed."
+    no_bot_perm: "I don't have permission to manage nicknames."
+    no_user: "If you wanna change name for a user, you must mention a user."
+    no_perm: "If you wanna change name for a user, you must have `manage_nicknames` permission."
+  pay:
+    no_user: "You should select a user for send money."
+    selfsend: "You can't send your money to yourself."
+    no_numeric_arg: "You should give a numeric money."
+    fail_msg: "An error excepted when sending money :("
+    # 1: sender 2: amount 3: emote
+    # 4: reciever 5: amount 6: emote
+    pay_msg: "Money Sent!\n\n%s - %s %s  -->  %s + %s %s"
+  ping:
+    reply: "My ping is %s ms."
+  slots:
+    no_amount: "You have to write a pay amount."
+    no_numeric_arg: "Pay amount should be numeric."
+    invalid_amount: "Invalid pay amount."
+    not_enough_money: "You can't pay this money, because u dont have it."
+    fail_msg:
+      pay: "An error excepted when trying to pay."
+      receive: "An error excepted when trying to give your money."
+    spinning: "Slot is spinning..."
+    spinned: "Slot has been spinned. \n%s%s%s \n%s"
+    win: "**YOU WON!!! %s %s**" # first is amount, second is emote
+    lose: "You lose all of your pay :("
+  wikipedia:
+    no_query: "Please provide a search query."
+    no_results: "No results found."
+    api_error: "Unable to acesss the Wikipedia API :("
+  createchar:
+    already_created: "You have already created your character!"
+    description: "Usage:
+            %screatechar [type] [race] [gender]
+            \n\nAvailable:
+            \n\n\tTypes: warrior, ranger, mage, healer
+            \n\n\tRaces: %s
+            \n\n\tGenders: male or female
+            \n\nExample:
+            \n%screatechar healer elf female"
+    unknown_type: "Unknown type."
+    unknown_race: "Unknown race."
+    unknown_gender: "Unknown gender."
+    set_type: "Your class has been changed to **%s** successfully."
+    set_race: "Your race has been changed to **%s** successfully."
+    set_gender: "Your gender has been changed to **%s** successfully."
+    on_success: "Character created successfully. :white_check_mark:"
+    on_failure: "Character create failure. :x:"
+  hunt:
+    start_msg:
+      title: "Hunting"
+      description: "Click to the button for starting hunting"
+    monster_hp: "Monster HP"
+    level_up: "Level up !"
+    gain_exp: "Monster died! Gained %d experiences."
+    attack_button: "Attack"
+    start_button: "Start Hunting"
+  inventory:
+    title: "Inventory"
+    level: "Level"
+    experience: "Experience"
+    race: "Race"
+    gender: "Gender"
+    type: "Type"
+  setrpgchannel:
+    no_perm: "You have to own `manage channels` permission for this."
+    no_channel: "Channel not found."
+    success: "<#%s> is now the RPG channel!"
+  setrpgenabled:
+    no_perm: "You have to own `manage channels` permission for this."
+    invalid_parameter: "Invalid value, you should use like this: setrpgenabled 1 or setrpgenabled 0"
+    on_enable: "RPG is enabled for this server!"
+    on_disable: "RPG is disabled for this server!"
+  avatar:
+    title: "Avatar"
+  howgay:
+    description: "%s you are %s gay." # first is user, second is degree (like: 15%)
+  hug:
+    no_user: "You must mention a user for hug"
+    selfhug: "You can't hug yourself."
+    success: "%s did hug with you! %s"
+  kiss:
+    no_user: "You must mention a user for kiss"
+    selfkiss: "You can't kiss yourself."
+    success: "%s kissed you! %s"
+  marry:
+    no_user: "You must mention a user for get marry"
+    selfmarry: "You can't marry with yourself."
+    success: "%s get married with you! %s"
+  nekos:
+    not_available_category: "%s is not available."
+    available_categories: "Available categories: `%s`"
+    api_error: "Unable to access to the nekos API :("
+  slap:
+    no_user: "You must mention a user for slap"
+    selfslap: "You can't slap yourself."
+    success: "%s slapped you! %s"
+  waifu:
+    not_available_category: "%s is not available."
+    available_categories: "Available categories: `%s`"
+    api_error: "Unable to access to the waifu.pics API :("
+    title: "Waifu Generator"
+    success: "%s, your random waifu."
+  waifunsfw:
+    no_nsfw_channel: "You have to use this command in nsfw channel!"
+    not_available_category: "%s is not available."
+    available_categories: "Available categories: `%s`"
+    api_error: "Unable to access to the waifu.pics API :("
+    title: "Horny Waifu Generator"
+    success: "%s, your random horny waifu :)"
+  join:
+    no_channel: "You must be in a voice channel."
+    on_error: "There was an error joining the voice channel: %s"
+  loop:
+    on_enable: "Loop is **enabled** now."
+    on_disable: "Loop is **disabled** now."
+  play:
+    no_url: "You should write a URL!"
+    invalid_url: "The URL is not valid."
+    no_youtube_url: "YouTube video URL not found."
+    queue_overflow: "You cannot add more videos than 10 to queue."
+    added_to_queue: "Song added to queue."
+    no_queue: "Music not found on queue."
+    playing: "Playing **%s**."
+    couldnt_download: "Couldn't download the audio."
+    downloading: "Downloading audio, please wait..."
+  queue:
+    title: "Queue"
+    description: "Current queue (%d):"
+    field: "Requested by: <@%s>
+            URL: %s"

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -46,14 +46,15 @@ class SetRPGChannel extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->channel->sendMessage("Couldn't connect to database.");
+            $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
 
         if (!$msg->member->getPermissions()['manage_channels']) {
-            $msg->reply('You have to own `manage channels` permission for this.');
+            $msg->reply($language->getTranslator()->trans('commands.setrpgchannel.no_perm'));
             return;
         }
 
@@ -63,15 +64,15 @@ class SetRPGChannel extends Command
         $channel = $result[1] ?? $msg->channel->id;
 
         if (!isset($msg->guild->channels[$channel])) {
-            $msg->reply('Channel not found.');
+            $msg->reply($language->getTranslator()->trans('commands.setrpgchannel.no_channel'));
             return;
         }
 
         if (!$database->setServerRPGChannel($database->getServerIdByDiscordId($msg->guild->id), $channel)) {
-            $msg->reply('An error excepted.');
+            $msg->reply($language->getTranslator()->trans('global.unknown_error'));
             return;
         }
 
-        $msg->reply("<#" . $channel . "> is now the RPG channel!");
+        $msg->reply(sprintf($language->getTranslator()->trans('commands.setrpgchannel.success'), $channel));
     }
 }

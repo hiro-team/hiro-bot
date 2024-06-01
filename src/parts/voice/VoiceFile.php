@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file is part of project Hiro 016 Discord Bot.
  *
@@ -22,32 +22,44 @@ namespace hiro\parts\voice;
 
 class VoiceFile
 {
-    public string $url;
+
+    public ?string $title;
+    public ?string $url;
+    public ?string $author_id;
     
-    public string $author_id;
-    
-    public function __construct(string $url, string $author_id)
+    public function __construct(?string $title = null, ?string $url = null, ?string $author_id = null)
     {
+        $this->setTitle($title);
         $this->setUrl($url);
         $this->setAuthorId($author_id);
+    }
+    
+    public function getTitle(): ?string
+    {
+        return $this->title;
     }
     
     public function getUrl(): ?string
     {
         return $this->url;
     }
-    
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
-    }
-    
+
     public function getAuthorId(): ?string
     {
         return $this->author_id;
     }
     
-    public function setAuthorId(string $author_id): void
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+    
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
+    }
+    
+    public function setAuthorId(?string $author_id): void
     {
         $this->author_id = $author_id;
     }

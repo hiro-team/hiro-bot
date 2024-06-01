@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -23,6 +23,7 @@ namespace hiro\database;
 use hiro\consts\RPG;
 use PDO;
 use PDOException;
+use bariscodefx\PHPHashMap\HashMap;
 
 /**
  * Database
@@ -35,6 +36,13 @@ class Database extends PDO
      * @var boolean
      */
     public $isConnected = false;
+
+    /**
+     * Hashmap of cached users for checking bot ban
+     *
+     * @var HashMap
+     */
+    private HashMap $cachedUsers;
 
     /**
      * __construct
@@ -52,6 +60,7 @@ class Database extends PDO
         }
         $this->isConnected = true;
         $this->createTables();
+        $this->cachedUsers = new HashMap();
     }
 
     /**
@@ -737,9 +746,10 @@ class Database extends PDO
      */
     public function banUserFromBot(int $discord_id): ?\PDOStatement
     {
-	return $this->query(
-		sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
-	);
+        $this->cachedUsers->set((string)$discord_id, true);
+        return $this->query(
+            sprintf("INSERT INTO bans SET discord_id = %d", $discord_id)
+        );
     }
 
     /**
@@ -750,9 +760,10 @@ class Database extends PDO
      */
     public function unbanUserFromBot(int $discord_id): ?\PDOStatement
     {
-    	return $this->query(
-		sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
-	);
+        $this->cachedUsers->set((string)$discord_id, false);
+    	   return $this->query(
+            sprintf("DELETE FROM bans WHERE discord_id = %d", $discord_id)
+        );
     }
 
     /**
@@ -763,11 +774,43 @@ class Database extends PDO
      */
     public function isUserBannedFromBot(int $discord_id): bool
     {
-    	return $this->query(
-		sprintf(
-			"SELECT * FROM bans WHERE discord_id = %d", $discord_id
-		)
-	)->fetch() ? true : false;
+        if ($this->cachedUsers->get((string)$discord_id))
+        {
+            return true;
+        }
+        $banned = $this->query(
+            sprintf(
+                "SELECT * FROM bans WHERE discord_id = %d", $discord_id
+            )
+        )->fetch() ? true : false;
+        $this->cachedUsers->set((string)$discord_id, $banned);
+        return $banned;
+    }
+
+    /**
+     * getUserLocale
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function getUserLocale(int $user_id): ?string
+    {
+        return $this->getUser($user_id)['locale'] ?? null;
+    }
+    
+    /**
+     * setUserLocale
+     *
+     * @param integer $user_id
+     * @return string|null
+     */
+    public function setUserLocale(int $user_id, ?string $locale = null): ?bool
+    {
+        return $this->query(
+            sprintf(
+                "UPDATE users SET locale = '%s' WHERE id = '%d'", $locale, $user_id
+            )
+        ) ? true : false;
     }
 
     /**
@@ -805,6 +848,7 @@ class Database extends PDO
                 "rpg_chargender" => "int(11) DEFAULT NULL",
                 "experience" => "int(11) DEFAULT '0'",
                 "level" => "int(11) DEFAULT '1'",
+                "locale" => "varchar(100) DEFAULT NULL"
             ],
             "servers" => [
                 "discord_id" => "bigint(21) NOT NULL",

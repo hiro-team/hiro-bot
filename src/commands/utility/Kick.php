@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -47,6 +47,7 @@ class Kick extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if(@$msg->member->getPermissions()['kick_members'])
         {
             $user = @$msg->mentions->first();
@@ -57,7 +58,7 @@ class Kick extends Command
                 {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("User couldn't found.");
+                    $embed->setDescription($language->getTranslator()->trans('global.user_not_found'));
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                     return;
@@ -80,7 +81,7 @@ class Kick extends Command
                 {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
-                    $embed->setDescription("You can't kick yourself");
+                    $embed->setDescription($language->getTranslator()->trans('commands.kick.selfkick'));
                     $embed->setTimestamp();
                     $msg->channel->sendEmbed($embed);
                     return;
@@ -89,33 +90,39 @@ class Kick extends Command
                     {
                         $embed = new Embed($this->discord);
                         $embed->setColor('#ff0000');
-                        $embed->setDescription("Your role position too low!");
+                        $embed->setDescription($language->getTranslator()->trans('commands.kick.role_pos_low'));
                         $embed->setTimestamp();
                         $msg->channel->sendEmbed($embed);
                     } else {
                         $msg->channel->guild->members->delete($msg->channel->guild->members[$user->id])
-                            ->then(function() use ( $msg, $user, $kicker ) {
+                            ->then(function() use ( $msg, $user, $kicker, $language ) {
                                 $embed = new Embed($this->discord);
                                 $embed->setColor('#ff0000');
-                                $embed->setDescription("$user kicked by $kicker.");
+                                $embed->setDescription(
+                                    sprintf(
+                                        $language->getTranslator()->trans('commands.kick.kicked'),
+                                        $user,
+                                        $kicker
+                                    )
+                                );
                                 $embed->setTimestamp();
                                 $msg->channel->sendEmbed($embed);
-                            }, function (\Throwable $reason) use ( $msg ) {
-                                $msg->reply($reason->getCode() === 50013 ? "I don't have permission to kick users. Check my role position or permission." : "Unknown error excepted.");
+                            }, function (\Throwable $reason) use ( $msg, $language ) {
+                                $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.kick.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
                             });
                     }
                 }
             }else {
                 $embed = new Embed($this->discord);
                 $embed->setColor('#ff0000');
-                $embed->setDescription("If you want kick a user you must mention a user.");
+                $embed->setDescription($language->getTranslator()->trans('commands.kick.no_user'));
                 $embed->setTimestamp();
                 $msg->channel->sendEmbed($embed);
             }
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
-            $embed->setDescription("If you want kick a user, you must have `kick_members` permission.");
+            $embed->setDescription($language->getTranslator()->trans('commands.kick.no_perm'));
             $embed->setTimestamp();
             $msg->channel->sendEmbed($embed);
         }

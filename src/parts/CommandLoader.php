@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  *
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -22,6 +22,7 @@ namespace hiro\parts;
 
 use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
+use hiro\interfaces\SecurityCommandInterface;
 use Wujunze\Colors;
 
 /**
@@ -128,6 +129,7 @@ class CommandLoader
                 $classnamespace = 'hiro\\commands\\' . $class;
                 $cmd = new $classnamespace($this->client, $this);
 
+                $this->print_color("Loading {$class}...", "yellow");
                 $this->loadCommand($cmd);
 
                 if (!isset($this->categories[$cmd->category])) {
@@ -204,6 +206,17 @@ class CommandLoader
                 $database = new Database();
 
                 if (!$database->isUserBannedFromBot($msg->author->id)) {
+                    if( $cmd instanceof SecurityCommandInterface )
+                    {
+                        if( !$cmd->securityChecks(['msg' => $msg, 'client' => $this->client]) )
+                        {
+                            return;
+                        }
+                    }
+
+                    global $language;
+                    $language = new Language($database->getUserLocale($database->getUserIdByDiscordId($msg->author->id)) ?? "en_EN");
+
                     $cmd->handle($msg, $args);
                 }
             } catch (\Throwable $e) {

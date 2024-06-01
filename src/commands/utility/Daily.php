@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -50,16 +50,17 @@ class Daily extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $database = new Database();
         if (!$database->isConnected) {
-            $msg->reply("Couldn't connect to database.");
+            $msg->reply($language->getTranslator()->trans('database.notconnect'));
             return;
         }
-        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->member->id));
-        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->member->id));
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
 
         if (time() - $last_daily < 86400) {
-            $msg->reply('You can use this command in <t:' . ($last_daily + 86400) . ':R>.');
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.cooldown_msg'), '<t:' . ($last_daily + 86400) . ':R>'));
             return;
         }
         
@@ -67,18 +68,18 @@ class Daily extends Command
             if (!$database->addUser([
                 "discord_id" => $msg->member->id
             ])) {
-                $msg->reply("You are couldn't added to database.");
+                $msg->reply($language->getTranslator()->trans('database.user.couldnt_added'));
                 return;
             } else {
                 $user_money = 0;
             }
         }
         setlocale(LC_MONETARY, 'en_US');
-        $daily = $database->daily($database->getUserIdByDiscordId($msg->member->id));
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
         if ($daily) {
-            $msg->reply("You gained " . number_format($daily, 2, ',', '.') . " <:hirocoin:1130392530677157898> coins.");
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.reward_msg'), number_format($daily, 2, ',', '.'), "<:hirocoin:1130392530677157898>"));
         } else {
-            $msg->reply("Couldn't give daily");
+            $msg->reply($language->getTranslator()->trans('commands.daily.fail_msg'));
         }
         $database = NULL;
     }

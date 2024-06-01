@@ -15,6 +15,12 @@ A Discord bot written in PHP.
   - PHP is fast learnable programming language that most using in the Web, so you can learn in average 1 week and you can fork this project and you can make your own bot
 - We're fast merging your good pull requests
 - Most features in one bot
+- Has multi language support.
+### Languages (Translations)
+- English %100
+- Japanese %100
+- Turkish %100
+- Korean %10
 ### Features
 - Can make your server more online with RPG commands
   - You can set RPG channel that RPG commands only usable in there
@@ -69,7 +75,7 @@ Done!
 
 ### License
 ```
-Copyright 2021-2023 bariscodefx
+Copyright 2021-2024 bariscodefx
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

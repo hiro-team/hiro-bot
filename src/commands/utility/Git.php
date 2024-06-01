@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -49,11 +49,12 @@ class Git extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         $embed = new Embed($this->discord);
         $embed->setColor("#ff0000");
         $embed->setTitle("Git (Github)");
         $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
-        $embed->setDescription("I'm open source!\nClick to go to the link.");
+        $embed->setDescription($language->getTranslator()->trans('commands.git.description'));
         $embed->setTimestamp();
         $msg->channel->sendEmbed($embed);
     }

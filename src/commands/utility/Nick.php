@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2023 bariscodefx
+ * Copyright 2021-2024 bariscodefx
  * 
  * This file part of project Hiro 016 Discord Bot.
  *
@@ -38,7 +38,6 @@ class Nick extends Command
         $this->description = "Change users nick.";
         $this->aliases = ["nickname"];
         $this->category = "utility";
-        $this->cooldown = 10 * 1000;
     }
 
     /**
@@ -50,20 +49,21 @@ class Nick extends Command
      */
     public function handle($msg, $args): void
     {
+        global $language;
         if ($msg->member->getPermissions()['manage_nicknames']) {
             $user = $msg->mentions->first();
             if ($user) {
                 $newname = explode("$user ", implode(' ', $args))[1] ?? ""; // else set to default
-                $msg->channel->guild->members[$user->id]->setNickname($newname)->then(function() use ($msg) {
-                    $msg->reply("Nickname changed.");
-                }, function( \Throwable $reason ) use ($msg) {
-                    $msg->reply($reason->getCode() === 50013 ? "I don't have permission to manage nicknames." : "Unknown error excepted.");
+                $msg->channel->guild->members[$user->id]->setNickname($newname)->then(function() use ($msg, $language) {
+                    $msg->reply($language->getTranslator()->trans('commands.nick.changed'));
+                }, function( \Throwable $reason ) use ($msg, $language) {
+                    $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('global.unknown_error') : $language->getTranslator()->trans('global.unknown_error'));
                 });
             } else {
-                $msg->reply("If you wanna change name for a user, you must mention a user.");
+                $msg->reply($language->getTranslator()->trans('commands.nick.no_user'));
             }
         } else {
-            $msg->reply("If you wanna change name for a user, you must have `manage_nicknames` permission.");
+            $msg->reply($language->getTranslator()->trans('commands.nick.no_perm'));
         }
     }
 }
