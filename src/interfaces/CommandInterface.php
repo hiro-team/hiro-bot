@@ -20,8 +20,7 @@
 
 namespace hiro\interfaces;
 
-use Discord\Parts\Channel\Message;
-use Discord\Parts\Interactions\Interaction;
+use hiro\parts\Respondable;
 
 /**
  * CommandInterface
@@ -38,11 +37,11 @@ interface CommandInterface
 	/**
 	 * handle
 	 *
-	 * @param Message|Interaction $msg
+	 * @param Respondable $msg
 	 * @param array $args
 	 * @return void
 	 */
-	public function handle(Message|Interaction $msg, array $args): void;
+	public function handle(Respondable $msg, array $args): void;
 
 	/**
 	 * __get
