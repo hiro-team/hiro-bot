@@ -20,12 +20,18 @@
 
 namespace hiro\parts;
 
+use Discord\Builders\MessageBuilder;
 use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
 use hiro\interfaces\SecurityCommandInterface;
+use hiro\parts\Respondable;
 use Wujunze\Colors;
 use Discord\Discord;
+use Discord\Helpers\Collection;
+use Discord\Parts\Channel\Message;
 use Discord\Parts\Interactions\Interaction;
+use Discord\Builders\CommandBuilder;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * CommandLoader
@@ -169,35 +175,40 @@ class CommandLoader
     {
         $command = $cmd->command;
 
-        $closure = function ($msg, $args) use ($cmd) {
+        $closure = function (Respondable|Message $respondable, array|Collection $args) use ($cmd) {
+            if($respondable instanceof Message)
+            {
+                $respondable = new Respondable($respondable);
+            }
+
             try {
                 if ($cmd->category == "rpg") {
                     $database = new Database();
 
                     if ($database->isConnected) {
-                        $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($msg->guild->id));
-                        $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($msg->guild->id));
+                        $rpgenabled = $database->getRPGEnabledForServer($database->getServerIdByDiscordId($respondable->guild->id));
+                        $rpgchannel = $database->getRPGChannelForServer($database->getServerIdByDiscordId($respondable->guild->id));
 
                         if ($cmd->command != "setrpgchannel" && $cmd->command != "setrpgenabled") {
                             if (!$rpgenabled) {
-                                $msg->reply('RPG commands is not enabled in this server.');
+                                $respondable->reply('RPG commands is not enabled in this server.');
                                 return;
-                            } elseif (!$rpgchannel) {
-                                $msg->reply('RPG commands channel is not available for this server.');
+                            } else if (!$rpgchannel) {
+                                $respondable->reply('RPG commands channel is not available for this server.');
                                 return;
-                            } elseif ($rpgchannel != $msg->channel->id) {
-                                $msg->reply('You should use this command in <#' . $rpgchannel . '>'); // may be problems if channel was deleted.
+                            } else if ($rpgchannel != $respondable->channel->id) {
+                                $respondable->reply('You should use this command in <#' . $rpgchannel . '>');
                                 return;
                             }
 
 
                             if ($cmd->command != "createchar") {
-                                $charType = $database->getRPGCharType($database->getUserIdByDiscordId($msg->author->id));
-                                $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($msg->author->id));
-                                $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($msg->author->id));
+                                $charType = $database->getRPGCharType($database->getUserIdByDiscordId($respondable->user->id));
+                                $charNation = $database->getRPGCharRace($database->getUserIdByDiscordId($respondable->user->id));
+                                $charGender = $database->getRPGCharGender($database->getUserIdByDiscordId($respondable->user->id));
 
                                 if (!$charType || !$charNation || !$charGender) {
-                                    $msg->reply('You must create your character first!');
+                                    $respondable->reply('You must create your character first!');
                                     return;
                                 }
                             }
@@ -207,25 +218,25 @@ class CommandLoader
 
                 $database = new Database();
 
-                if (!$database->isUserBannedFromBot($msg->author->id)) {
+                if (!$database->isUserBannedFromBot($respondable->user->id)) {
                     if( $cmd instanceof SecurityCommandInterface )
                     {
-                        if( !$cmd->securityChecks(['msg' => $msg, 'client' => $this->client]) )
+                        if( !$cmd->securityChecks(['respondable' => $respondable, 'client' => $this->client]) )
                         {
                             return;
                         }
                     }
 
                     global $language;
-                    $language = new Language($database->getUserLocale($database->getUserIdByDiscordId($msg->author->id)) ?? "en_EN");
+                    $language = new Language($database->getUserLocale($database->getUserIdByDiscordId($respondable->user->id)) ?? "en_EN");
 
-                    $cmd->handle($msg, $args);
+                    $cmd->handle($respondable, $args);
                 }
             } catch (\Throwable $e) {
                 if (\hiro\Version::TYPE == 'development') {
                     echo $e;
                 }
-                $msg->reply("ERROR: `" . $e->getMessage() . "`");
+                $respondable->reply("ERROR: `" . $e->getMessage() . "`");
             }
         };
 
@@ -240,18 +251,28 @@ class CommandLoader
             $closure,
             $options
         );
-        
-        // $this->client->application->commands->save(
-        //     $this->client->application->commands->create(
-        //         CommandBuilder::new()
-        //             ->setName($command)
-        //             ->setDescription($cmd->description)
-        //             ->toArray()
-        //     )
-        // );
+    
+        $this->client->application->commands->freshen()->then(function (\Discord\Repository\Interaction\GlobalCommandRepository $commands) use ($cmd, $command): void
+        {
+            if(!$commands->get('name', $command)) {
+                $builder = CommandBuilder::new();
+
+                $builder->setName($command)
+                    ->setDescription($cmd->description);
+                
+                $builder->options = $cmd->options;
+                
+                $this->client->application->commands->save(
+                    $this->client->application->commands->create(
+                        $builder->toArray()
+                    )
+                );
+            }
+        });
         
         $this->client->listenCommand($command, function(Interaction $interaction) use ($closure, $command) {
-            $closure($interaction, $interaction->data);
+            $respondable = new Respondable($interaction);
+            $closure($respondable, $interaction->data->options);
         });
     }
 
