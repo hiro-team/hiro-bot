@@ -20,8 +20,11 @@
 
 namespace hiro\security;
 
+use Discord\Builders\MessageBuilder;
 use hiro\interfaces\SecurityCommandInterface;
 use hiro\commands\Command;
+use Discord\Parts\Interactions\Interaction;
+use Discord\Parts\Channel\Message;
 
 /**
  * AuthorCommand
@@ -37,14 +40,14 @@ class AuthorCommand extends Command implements SecurityCommandInterface
      */
     public function securityChecks(array $args): bool
     {
-        if(!isset($args['msg']))
+        if(!isset($args['respondable']))
         {
             return false;
         }
 
-        if(!($args['msg']->author->id == @$_ENV['AUTHOR']))
+        if(!($args['respondable']->user->id == @$_ENV['AUTHOR']))
         {
-            $args['msg']->reply('Only bot author can use this command.');
+            $args['respondable']->reply('Only bot author can use this command.');
             return false;
         }
 

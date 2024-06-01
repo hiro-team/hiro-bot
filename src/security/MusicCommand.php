@@ -22,6 +22,9 @@ namespace hiro\security;
 
 use hiro\interfaces\SecurityCommandInterface;
 use hiro\commands\Command;
+use Discord\Parts\Interactions\Interaction;
+use Discord\Parts\Channel\Message;
+use Discord\Builders\MessageBuilder;
 
 /**
  * MusicCommand
@@ -38,29 +41,29 @@ class MusicCommand extends Command implements SecurityCommandInterface
     public function securityChecks(array $args): bool
     {
         global $voiceSettings;
-        if(!isset($args['msg']))
+        if(!isset($args['respondable']))
         {
             return false;
         }
 
-        if (!$args['msg']->member->getVoiceChannel()) {
-            $args['msg']->channel->sendMessage("You must be in a voice channel.");
+        if (!$args['respondable']->member->getVoiceChannel()) {
+            $args['respondable']->channel->sendMessage("You're must be in a voice channel.");
             return false;
         }
 
-        if (!$args['client']->getVoiceClient($args['msg']->guild_id)) {
-            $args['msg']->channel->sendMessage("You should use join command first.");
+        if (!$args['client']->getVoiceClient($args['respondable']->guild_id)) {
+            $args['respondable']->reply("You should use join command first.");
             return false;
         }
 
-        if ($args['client']->getVoiceClient($args['msg']->guild_id) && $args['msg']->member->getVoiceChannel()->id !== $args['client']->getVoiceClient($args['msg']->guild_id)->getChannel()->id) {
-            $args['msg']->channel->sendMessage("You must be in same channel with me.");
+        if ($args['client']->getVoiceClient($args['respondable']->guild_id) && $args['respondable']->member->getVoiceChannel()->id !== $args['client']->getVoiceClient($args['respondable']->guild_id)->getChannel()->id) {
+            $args['respondable']->reply("You must be in same channel with me.");
             return false;
         }
 
-        if (!isset($voiceSettings[$args['msg']->guild_id]))
+        if (!isset($voiceSettings[$args['respondable']->guild_id]))
 	    {
-		    $args['msg']->reply("Voice options couldn't found.");
+            $args['respondable']->reply("Voice options couldn't found.");
 		    return false;
 	    }
 
