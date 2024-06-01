@@ -24,6 +24,8 @@ use hiro\database\Database;
 use hiro\interfaces\HiroInterface;
 use hiro\interfaces\SecurityCommandInterface;
 use Wujunze\Colors;
+use Discord\Discord;
+use Discord\Parts\Interactions\Interaction;
 
 /**
  * CommandLoader
@@ -33,9 +35,9 @@ class CommandLoader
     /**
      * client
      *
-     * @var HiroInterface
+     * @var Discord
      */
-    protected HiroInterface $client;
+    protected Discord $client;
 
     /**
      * CLI Colors
@@ -238,8 +240,7 @@ class CommandLoader
             $closure,
             $options
         );
-
-        // $command_for_slash = Discord\Parts\Interactions\Command\Command($this->client, $options);
+        
         // $this->client->application->commands->save(
         //     $this->client->application->commands->create(
         //         CommandBuilder::new()
@@ -248,9 +249,10 @@ class CommandLoader
         //             ->toArray()
         //     )
         // );
-        // $this->client->listenCommand($command, function(Interaction $interaction) use ($closure, $command) {
-        //     {$closure}($interaction->message, substr($interaction->message->content, strlen($this->client->prefix . $command . " ")));
-        // });
+        
+        $this->client->listenCommand($command, function(Interaction $interaction) use ($closure, $command) {
+            $closure($interaction, $interaction->data);
+        });
     }
 
     /**
