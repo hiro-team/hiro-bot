@@ -79,7 +79,7 @@ $bot->on('ready', function($discord) {
     ->startThread();
 
     /** fix discord guild count */
-    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord)
+    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager)
     {
         $presenceManager->setPresences(getPresenceState());
     });
