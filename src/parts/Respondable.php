@@ -11,6 +11,7 @@ use Discord\Parts\Embed\Embed;
 use Discord\Parts\Guild\Guild;
 use Discord\Parts\User\Member;
 use Discord\Parts\User\User;
+use React\Promise\ExtendedPromiseInterface;
 
 class Respondable
 {
@@ -105,22 +106,22 @@ class Respondable
     /**
      * Reply method to reply to the message or interaction.
      *
-     * @param string $message
-     * @return void
+     * @param string|Embed $message
+     * @return ExtendedPromiseInterface<Message>|null
      */
-    public function reply(string|Embed $message): void
+    public function reply(string|Embed $message): ?ExtendedPromiseInterface
     {
         if ($this->respondable instanceof Interaction) {
             if ($message instanceof Embed) {
-                $this->respondable->respondWithMessage(MessageBuilder::new()->addEmbed($message));
+                return $this->respondable->respondWithMessage(MessageBuilder::new()->addEmbed($message));
             } else {
-                $this->respondable->respondWithMessage(MessageBuilder::new()->setContent($message));
+                return $this->respondable->respondWithMessage(MessageBuilder::new()->setContent($message));
             }
         } elseif ($this->respondable instanceof Message) {
             if($message instanceof Embed) {
-                $this->respondable->channel->sendMessage(MessageBuilder::new()->addEmbed($message));
+                return $this->respondable->channel->sendMessage(MessageBuilder::new()->addEmbed($message));
             } else {
-                $this->respondable->channel->sendMessage($message);
+                return $this->respondable->channel->sendMessage($message);
             }
         } else {
             throw new \InvalidArgumentException('Invalid respondable object.');
