@@ -65,6 +65,6 @@ class Botinfo extends Command
         $embed->setThumbnail($this->discord->avatar);
         $embed->setAuthor($msg->author->username, $msg->author->avatar);
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

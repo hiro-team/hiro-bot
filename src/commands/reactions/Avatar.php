@@ -21,6 +21,7 @@
 namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 class Avatar extends Command
 {
@@ -35,6 +36,13 @@ class Avatar extends Command
         $this->description = "Shows your avatar.";
         $this->aliases = [];
         $this->category = "reactions";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to show avatar')
+                ->setRequired(false)
+        ];
     }
 
     /**
@@ -62,6 +70,6 @@ class Avatar extends Command
         $embed->setTitle($language->getTranslator()->trans('commands.avatar.title'));
         $embed->setImage($avatar);
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

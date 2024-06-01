@@ -69,7 +69,7 @@ class Help extends Command
 EOF
                 );
                 $embed->setAuthor($msg->author->username, $msg->author->avatar);
-                $msg->channel->sendEmbed($embed);
+                $msg->reply($embed);
             } else {
                 $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.help.specific_command.not_found'), $command));
             }
@@ -118,7 +118,7 @@ EOF
         }
         $embed->setAuthor($msg->author->username, $msg->author->avatar);
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 
     /**

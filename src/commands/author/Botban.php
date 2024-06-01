@@ -22,6 +22,7 @@ namespace hiro\commands;
 
 use hiro\security\AuthorCommand;
 use hiro\database\Database;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Botban
@@ -39,6 +40,13 @@ class Botban extends AuthorCommand
 		$this->description = "Ban/unban a player from bot. **ONLY FOR AUTHOR**";
 		$this->aliases = [];
 		$this->category = "author";
+		$this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+				->setDescription('User to ban/unban')
+                ->setRequired(true)
+        ];
 	}
 
 	/**

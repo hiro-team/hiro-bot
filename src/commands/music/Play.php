@@ -25,6 +25,7 @@ use React\ChildProcess\Process;
 use Discord\Builders\MessageBuilder;
 use hiro\parts\voice\VoiceFile;
 use React\Http\Browser;
+use Discord\Parts\Interactions\Command\Option;
 
 class Play extends MusicCommand
 {
@@ -42,6 +43,13 @@ class Play extends MusicCommand
         $this->aliases = [];
         $this->category = "music";
         $this->browser = new Browser(null, $this->discord->getLoop());
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('url')
+                ->setDescription('Youtube video url.')
+                ->setRequired(true)
+        ];
     }
 
     public function playMusic($text_channel, $settings, $language)

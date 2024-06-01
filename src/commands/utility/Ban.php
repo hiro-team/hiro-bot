@@ -60,7 +60,7 @@ class Ban extends Command
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('global.user_not_found'));
                     $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    $msg->reply($embed);
                     return;
                 }
                 $roles_men = $this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles);
@@ -83,7 +83,7 @@ class Ban extends Command
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('commands.ban.selfban'));
                     $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    $msg->reply($embed);
                     return;
                 }else {
                     if( ($roles_self < $roles_men) && !($msg->channel->guild->owner_id == $msg->member->id) )
@@ -92,7 +92,7 @@ class Ban extends Command
                         $embed->setColor('#ff0000');
                         $embed->setDescription($language->getTranslator()->trans('commands.ban.role_pos_low'));
                         $embed->setTimestamp();
-                        $msg->channel->sendEmbed($embed);
+                        $msg->reply($embed);
                     }else {
                         $msg->channel->guild->members[$user->id]->ban(null, null)
                             ->then(function() use ( $msg, $user, $banner, $language ) {
@@ -100,7 +100,7 @@ class Ban extends Command
                                 $embed->setColor('#ff0000');
                                 $embed->setDescription(sprintf($language->getTranslator()->trans('commands.ban.banned'), $user, $banner));
                                 $embed->setTimestamp();
-                                $msg->channel->sendEmbed($embed);
+                                $msg->reply($embed);
                             }, function (\Throwable $reason) use ( $msg, $language ) {
                                 $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.ban.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
                             }); 
@@ -111,14 +111,14 @@ class Ban extends Command
                 $embed->setColor('#ff0000');
                 $embed->setDescription($language->getTranslator()->trans('commands.ban.no_user'));
                 $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
+                $msg->reply($embed);
             }
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
             $embed->setDescription($language->getTranslator()->trans('commands.ban.no_perm'));
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
         }
     }
 

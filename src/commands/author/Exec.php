@@ -20,6 +20,7 @@
 
 namespace hiro\commands;
 
+use Discord\Parts\Interactions\Command\Option;
 use hiro\security\AuthorCommand;
 use React\ChildProcess\Process;
 
@@ -39,6 +40,13 @@ class Exec extends AuthorCommand
         $this->description = "Executes an command **ONLY FOR AUTHOR**";
         $this->aliases = ["execute", "shell-exec"];
         $this->category = "author";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('command')
+                ->setDescription('Command to execute')
+                ->setRequired(true)
+        ];
     }
 
     /**

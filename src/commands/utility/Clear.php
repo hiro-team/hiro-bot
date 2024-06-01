@@ -56,7 +56,7 @@ class Clear extends Command
             $embed->setDescription($language->getTranslator()->trans('commands.clear.no_perm'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         }
         $limit = $args[0];
@@ -66,7 +66,7 @@ class Clear extends Command
             $embed->setDescription($language->getTranslator()->trans('commands.clear.no_amount'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         } else if (!is_numeric($limit)) {
             $embed = new Embed($this->discord);
@@ -74,7 +74,7 @@ class Clear extends Command
             $embed->setDescription($language->getTranslator()->trans('commands.clear.no_numeric_arg'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         } else if ($limit < 1 || $limit > 100) {
             $embed = new Embed($this->discord);
@@ -82,7 +82,7 @@ class Clear extends Command
             $embed->setDescription($language->getTranslator()->trans('commands.clear.limit'));
             $embed->setColor("#ff000");
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         }
         $msg->channel->limitDelete($limit)->then(function() use ($msg, $limit, $language) {
@@ -91,7 +91,7 @@ class Clear extends Command
             $embed->setDescription(sprintf($language->getTranslator()->trans('commands.clear.deleted'), $limit));
             $embed->setColor("#5558E0");
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed)->then(function ($msg) {
+            $msg->reply($embed)->then(function ($msg) {
                 $this->discord->getLoop()->addTimer(3.0, function () use ($msg) {
                     $msg->delete();
                 });

@@ -59,6 +59,6 @@ class ServerAvatar extends Command
         $embed->setDescription($msg->channel->guild->getUpdatableAttributes()['name'] . " Avatar");
         $embed->setImage($msg->channel->guild->getIconAttribute("png", 1024));
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

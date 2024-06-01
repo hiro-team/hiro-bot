@@ -94,7 +94,7 @@ class Wikipedia extends Command
                 $embed->setTimestamp();
         
                 // Send the embed
-                $msg->channel->sendEmbed($embed);
+                $msg->reply($embed);
             },
             function (\Exception $e) use ($msg, $language) {
                 $msg->reply($language->getTranslator->trans('commands.wikipedia.api_error'));

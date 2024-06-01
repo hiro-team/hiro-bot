@@ -23,6 +23,7 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Waifu
@@ -48,6 +49,13 @@ class Waifu extends Command
         $this->aliases = ["wfu"];
         $this->category = "reactions";
         $this->browser = new Browser(null, $this->discord->getLoop());
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('category')
+                ->setDescription('Category of waifu')
+                ->setRequired(false)
+        ];
     }
 
     /**
@@ -117,7 +125,7 @@ class Waifu extends Command
                 $embed->setDescription(sprintf($language->getTranslator()->trans('commands.waifu.success'), $msg->author->username));
                 $embed->setImage($api->url);
                 $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
+                $msg->reply($embed);
             },
             function (\Exception $e) use ($msg, $language) {
                 $msg->reply($language->getTranslator()->trans('commands.waifu.api_error'));

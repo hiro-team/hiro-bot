@@ -21,6 +21,7 @@
 namespace hiro\commands;
 
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Kiss
@@ -38,6 +39,13 @@ class Kiss extends Command
         $this->description = "You can kiss everybody.";
         $this->aliases = ["öp"];
         $this->category = "reactions";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to kiss')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -67,14 +75,14 @@ class Kiss extends Command
             $embed->setColor("#ff0000");
             $embed->setDescription($language->getTranslator()->trans('commands.kiss.no_user'));
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         } else if ($user->id == $self->id) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");
             $embed->setDescription($language->getTranslator()->trans('commands.kiss.selfkiss'));
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
             return;
         }
         $embed = new Embed($this->discord);
@@ -82,6 +90,6 @@ class Kiss extends Command
         $embed->setDescription(sprintf($language->getTranslator()->trans('commands.kiss.success'), $self, $user));
         $embed->setImage($random);
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

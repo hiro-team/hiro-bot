@@ -23,6 +23,7 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Nekos
@@ -48,6 +49,13 @@ class Nekos extends Command
         $this->aliases = ["neko"];
         $this->category = "reactions";
         $this->browser = new Browser(null, $this->discord->getLoop());
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('category')
+                ->setDescription('Category to get image or gif')
+                ->setRequired(false)
+        ];
     }
 
     /**
@@ -87,7 +95,7 @@ class Nekos extends Command
                     $embed->setImage($api[0]->url);
                     $embed->setAuthor($msg->author->username, $msg->author->avatar);
                     $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    $msg->reply($embed);
                 },
                 function (\Exception $e) use ($msg, $language) {
                     $msg->reply($language->getTranslator()->trans('commands.nekos.api_error'));
