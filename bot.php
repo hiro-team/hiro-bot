@@ -40,6 +40,7 @@ if ( Version::TYPE == 'development' )
     error_reporting(0);
 }
 
+global $shard_id, $shard_count;
 $ArgumentParser = new ArgumentParser($argv);
 $shard_id = $ArgumentParser->getShardId();
 $shard_count = $ArgumentParser->getShardCount();
