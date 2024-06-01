@@ -20,6 +20,7 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Interactions\Command\Option;
 use hiro\security\AuthorCommand;
 use React\ChildProcess\Process;
@@ -58,7 +59,11 @@ class Exec extends AuthorCommand
      */
     public function handle($msg, $args): void
     {
-        $ex = implode(' ', $args);
+        if($args instanceof Collection) {
+            $ex = $args->get('name', 'command')->value;
+        } else if(is_array($args)) {
+            $ex = implode(' ', $args);
+        }
         
         if (!$ex) $ex = " ";
         
