@@ -43,7 +43,7 @@ class Language extends Command
                 ->setType(Option::STRING)
                 ->setName('language')
                 ->setDescription('Language to select.')
-                ->setRequired(true)
+                ->setRequired(false)
         ];
     }
     
