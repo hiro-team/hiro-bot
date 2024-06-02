@@ -117,7 +117,7 @@ class PresenceManager implements PresenceManagerInterface
             "name" => $this->presences[$this->currentPresence],
             "type" => $this->presenceType
         ]);
-        $this->discord->updatePresence($act, false, 'idle');
+        $this->discord->updatePresence($act, false, 'online');
         $this->currentPresence += 1;
     }
     
