@@ -85,6 +85,13 @@ class Respondable
      */
     public ?int $channel_id = null;
 
+    /**
+     * Content of the respondable object. (Only for Message object)
+     *
+     * @var string|null
+     */
+    public ?string $content = null;
+
     public function __construct($respondable)
     {
         $this->respondable = $respondable;
@@ -94,6 +101,7 @@ class Respondable
         $this->author = $respondable->author ?? $respondable->user;
         $this->guild ??= $respondable->guild;
         $this->mentions = $respondable->mentions ?? new Collection();
+        $this->content ??= $respondable->content;
 
         if (isset($this->author) && !isset($this->user)) $this->user = $this->author;
         if (isset($this->user) && !isset($this->author)) $this->author = $this->user;
