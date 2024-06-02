@@ -114,6 +114,7 @@ class Play extends MusicCommand
     {
         global $language;
         global $voiceSettings;
+<<<<<<< HEAD
 
         $url = null;
         if ($args instanceof Collection && $args->get('name', 'url') !== null) {
@@ -121,6 +122,8 @@ class Play extends MusicCommand
         } else if (is_array($args)) {
             $url = substr($msg->content, strlen($_ENV['PREFIX'] . "play "));
         }
+=======
+>>>>>>> master
 
         if (!$url) {
             $msg->reply($language->getTranslator()->trans('commands.play.no_url'));
@@ -135,6 +138,7 @@ class Play extends MusicCommand
             return;
         }
 
+<<<<<<< HEAD
         preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
         preg_match('/https?:\/\/(www\.)?youtu\.be\/([A-Za-z0-9-_]+)/', $url, $matches2);
         preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
@@ -164,6 +168,41 @@ class Play extends MusicCommand
             return;
         }
 
+=======
+    	preg_match('/https?:\/\/(www\.)?youtube\.com\/watch\?v\=([A-Za-z0-9-_]+)/', $url, $matches);
+    	preg_match('/https?:\/\/(www\.)?youtu\.be\/([A-Za-z0-9-_]+)/', $url, $matches2);
+    	preg_match('/https?:\/\/(www\.)?youtube\.com\/shorts\/([A-Za-z0-9-_]+)/', $url, $matches3);
+    	if(!@$matches[0] && !@$matches2[0] && !@$matches3[0])
+    	{
+    	    $msg->reply($language->getTranslator()->trans('commands.play.no_youtube_url'));
+    	    return;
+    	}
+    	$url = $matches[0] ?? $matches2[0] ?? $matches3[0];
+
+        if(sizeof($settings->getQueue()) >= 10)
+        {
+            $msg->reply($language->getTranslator()->trans('commands.play.queue_overflow'));
+            return;
+        }
+        
+        $settings->addToQueue($voice_file = new VoiceFile(null, $url, $msg->author->id));
+        
+        $this->browser->get('https://noembed.com/embed?url=' . $url)->then(function (\Psr\Http\Message\ResponseInterface $response) use ($voice_file) {
+            $data = json_decode((string) $response->getBody());
+            if(isset($data->title))
+            {
+                $voice_file->setTitle($data->title);
+            }
+        }, function (\Exception $e) {
+        });
+
+        if( @$settings->getQueue()[1] )
+        {
+            $msg->reply($language->getTranslator()->trans('commands.play.added_to_queue'));
+            return;
+        }
+        
+>>>>>>> master
         $this->playMusic($msg->channel, $settings, $language);
     }
 }

@@ -66,7 +66,7 @@ class Join extends Command
                 unset($voiceSettings[$channel->guild_id]);
             });
         }, function ($e) use ($msg, $language) {
-            $msg->reply(sprintf($language->getTranslator()->trans('commands.join.on_error'), $e->getMessage())); 
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.join.on_error'), $e->getMessage()));
         });
     }
 }
