@@ -23,7 +23,9 @@ namespace hiro\commands;
 use hiro\interfaces\CommandInterface;
 use hiro\interfaces\HiroInterface;
 use Discord\Discord;
+use Discord\Helpers\Collection;
 use hiro\parts\CommandLoader;
+use hiro\parts\Respondable;
 
 /**
  * Command
@@ -57,6 +59,13 @@ class Command implements CommandInterface {
      * @var array
      */
     public $aliases = [];
+
+    /**
+     * Options
+     *
+     * @var array<Option[]>
+     */
+    public array $options = [];
 
     /**
      * CommandLoader
@@ -106,11 +115,11 @@ class Command implements CommandInterface {
     /**
      * handle
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param Respondable $msg
+     * @param array|Collection $args
      * @return void
      */
-    public function handle($msg, $args): void
+    public function handle(Respondable $msg, array|Collection $args): void
     {
         
     }

@@ -20,9 +20,10 @@
 
 namespace hiro\commands;
 
-use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 use Discord\Builders\MessageBuilder;
+use Discord\Helpers\Collection;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Coinflip
@@ -39,7 +40,14 @@ class Coinflip extends Command
         $this->command = "coinflip";
         $this->description = "An economy game";
         $this->aliases = ["cf"];
-        $this->category = "utility";
+        $this->category = "economy";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::INTEGER)
+                ->setName('amount')
+                ->setDescription('Amount of money to bet')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -68,29 +76,36 @@ class Coinflip extends Command
                 $usermoney = 0;
             }
         }
-        if (!$args[0] || !is_numeric($args[0])) {
+
+        if ($args instanceof Collection && $args->get('name', 'amount') !== null) {
+            $amount = $args->get('name', 'amount')->value;
+        } else if (is_array($args)) {
+            $amount = $args[0] ?? null;
+        }
+        $amount ??= null;
+
+        if (!$amount || !is_numeric($amount)) {
             $msg->reply($language->getTranslator()->trans('commands.coinflip.no_amount'));
         } else {
-            if ($args[0] <= 0) {
+            if ($amount <= 0) {
                 $msg->reply($language->getTranslator()->trans('commands.coinflip.too_less_amount'));
-            } else if ($args[0] > $usermoney) {
+            } else if ($amount > $usermoney) {
                 $msg->reply($language->getTranslator()->trans('global.not_enough_money'));
             } else {
-                $payamount = $args[0];
                 $rand = random_int(0, 1);
 
-                // delete user money from payamount
-                $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $payamount);
-                $usermoney -= $payamount;
+                // delete user money from ammount
+                $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney - $amount);
+                $usermoney -= $amount;
 
-                $msg->reply($language->getTranslator()->trans('commands.coinflip.coin_spinning') . " <a:hirocoinflip:1130395266105737256>")->then(function($botreply) use ($msg, $rand, $database, $usermoney, $payamount, $language){
-                    $this->discord->getLoop()->addTimer(2.0, function() use ($botreply, $msg, $rand, $database, $usermoney, $payamount, $language){
+                $msg->reply($language->getTranslator()->trans('commands.coinflip.coin_spinning') . " <a:hirocoinflip:1130395266105737256>")->then(function ($botreply) use ($msg, $rand, $database, $usermoney, $amount, $language) {
+                    $this->discord->getLoop()->addTimer(2.0, function () use ($botreply, $msg, $rand, $database, $usermoney, $amount, $language) {
                         setlocale(LC_MONETARY, 'en_US');
                         if ($rand) {
-                            $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $payamount * 2);
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . " +" . $payamount*2 . " <:hirocoin:1130392530677157898>"));
+                            $database->setUserMoney($database->getUserIdByDiscordId($msg->author->id), $usermoney + $amount * 2);
+                            if ($botreply) $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.win') . " +" . $amount * 2 . " <:hirocoin:1130392530677157898>"));
                         } else {
-                            $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . " -" . $payamount . " <:hirocoin:1130392530677157898>"));
+                            if ($botreply) $botreply->edit(MessageBuilder::new()->setContent($language->getTranslator()->trans('commands.coinflip.lose') . " -" . $amount . " <:hirocoin:1130392530677157898>"));
                         }
                     });
                 });

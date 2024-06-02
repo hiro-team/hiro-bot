@@ -20,7 +20,8 @@
 
 namespace hiro\commands;
 
-use Discord\Parts\Embed\Embed;
+use Discord\Helpers\Collection;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Nick
@@ -35,9 +36,21 @@ class Nick extends Command
     public function configure(): void
     {
         $this->command = "nick";
-        $this->description = "Change users nick.";
+        $this->description = "You can change nickname of everybody.";
         $this->aliases = ["nickname"];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to change nickname')
+                ->setRequired(true),
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('nickname')
+                ->setDescription('New nickname')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -51,9 +64,19 @@ class Nick extends Command
     {
         global $language;
         if ($msg->member->getPermissions()['manage_nicknames']) {
-            $user = $msg->mentions->first();
+            if($args instanceof Collection && $args->get('name', 'user') !== null) {
+                $user = $args->get('name', 'user')->value;
+            } else {
+                $user = $msg->mentions->first() ?? null;
+            }
+            $user ??= null;
             if ($user) {
-                $newname = explode("$user ", implode(' ', $args))[1] ?? ""; // else set to default
+                if($args instanceof Collection && $args->get('name', 'nickname') !== null ) {
+                    $newname = $args->get('name', 'nickname')->value;
+                } else if (is_array($args)) {
+                    $newname = explode("$user ", implode(' ', $args))[1] ?? null;
+                }
+                $newname ??= ""; // else set to default
                 $msg->channel->guild->members[$user->id]->setNickname($newname)->then(function() use ($msg, $language) {
                     $msg->reply($language->getTranslator()->trans('commands.nick.changed'));
                 }, function( \Throwable $reason ) use ($msg, $language) {

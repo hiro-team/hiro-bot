@@ -82,7 +82,7 @@ class Apod extends Command
             $embed->addField($this->discord->makeField($language->getTranslator()->trans('commands.apod.service_version'), $result->service_version));
             $embed->setTimestamp();
 
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
         }, function (\Exception $e) use ($msg) {
             global $language;
             $msg->reply($language->getTranslator()->trans('commands.apod.api_error'));

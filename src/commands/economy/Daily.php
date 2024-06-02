@@ -23,7 +23,10 @@ namespace hiro\commands;
 use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 
-class Pay extends Command
+/**
+ * Daily
+ */
+class Daily extends Command
 {
     /**
      * configure
@@ -32,10 +35,10 @@ class Pay extends Command
      */
     public function configure(): void
     {
-        $this->command = "pay";
-        $this->description = "Send your money to anybody.";
+        $this->command = "daily";
+        $this->description = "Daily moneys.";
         $this->aliases = [];
-        $this->category = "utility";
+        $this->category = "economy";
     }
 
     /**
@@ -53,32 +56,31 @@ class Pay extends Command
             $msg->reply($language->getTranslator()->trans('database.notconnect'));
             return;
         }
-        $embed = new Embed($this->discord);
-        $user = $msg->mentions->first();
-        if (!$user) {
-            $msg->reply($language->getTranslator()->trans('commands.pay.no_user'));
+        $user_money = $database->getUserMoney($database->getUserIdByDiscordId($msg->author->id));
+        $last_daily = $database->getLastDailyForUser($database->getUserIdByDiscordId($msg->author->id));
+
+        if (time() - $last_daily < 86400) {
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.cooldown_msg'), '<t:' . ($last_daily + 86400) . ':R>'));
             return;
         }
-        if ($user->id === $msg->author->id) {
-            $msg->reply($language->getTranslator()->trans('commands.pay.selfsend'));
-            return;
-        }
-        if (!isset($args[1]) && !is_numeric($args[1])) {
-            $msg->reply($language->getTranslator()->trans('commands.pay.no_numeric_arg'));
-            return;
-        }
-        if (!$database->pay($database->getUserIdByDiscordId($msg->author->id), $database->getUserIdByDiscordId($user->id), $args[1])) {
-            $msg->reply($language->getTranslator()->trans('commands.pay.fail_msg'));
-            return;
+        
+        if (!is_numeric($user_money)) {
+            if (!$database->addUser([
+                "discord_id" => $msg->member->id
+            ])) {
+                $msg->reply($language->getTranslator()->trans('database.user.couldnt_added'));
+                return;
+            } else {
+                $user_money = 0;
+            }
         }
         setlocale(LC_MONETARY, 'en_US');
-        $msg->reply(
-            sprintf(
-                $language->getTranslator()->trans('commands.pay.pay_msg'),
-                $msg->user->username, number_format($args[1], 2, ',', '.'), "<:hirocoin:1130392530677157898>",
-                $user->username, number_format($args[1], 2, ',', '.'), "<:hirocoin:1130392530677157898>" 
-            )
-        );
-        return;
+        $daily = $database->daily($database->getUserIdByDiscordId($msg->author->id));
+        if ($daily) {
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.daily.reward_msg'), number_format($daily, 2, ',', '.'), "<:hirocoin:1130392530677157898>"));
+        } else {
+            $msg->reply($language->getTranslator()->trans('commands.daily.fail_msg'));
+        }
+        $database = NULL;
     }
 }

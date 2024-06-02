@@ -51,7 +51,8 @@ class Join extends Command
         $channel = $msg->member->getVoiceChannel();
 
         if (!$channel) {
-            $msg->channel->sendMessage($language->getTranslator()->trans('commands.join.no_channel'));
+            $msg->reply($language->getTranslator()->trans('commands.join.no_channel'));
+            return;
         }
 
         $this->discord->joinVoiceChannel($channel, false, false, null, true)->done(function (VoiceClient $vc) use ($channel) {
@@ -61,11 +62,11 @@ class Join extends Command
             
             $voiceSettings[$channel->guild_id] = $settings;
             
-            $vc->on('exit', function() use ($voiceSettings) {
+            $vc->on('exit', function() use ($channel, $voiceSettings) {
                 unset($voiceSettings[$channel->guild_id]);
             });
         }, function ($e) use ($msg, $language) {
-            $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.join.on_error'), $e->getMessage())); 
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.join.on_error'), $e->getMessage()));
         });
     }
 }

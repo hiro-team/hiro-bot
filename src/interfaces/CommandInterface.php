@@ -20,7 +20,7 @@
 
 namespace hiro\interfaces;
 
-use hiro\interfaces\HiroInterface;
+use hiro\parts\Respondable;
 
 /**
  * CommandInterface
@@ -33,15 +33,15 @@ interface CommandInterface
 	 * @return void
 	 */
 	public function configure(): void;
-
+	
 	/**
 	 * handle
 	 *
-	 * @param [type] $msg
-	 * @param [type] $args
+	 * @param Respondable $msg
+	 * @param array $args
 	 * @return void
 	 */
-	public function handle($msg, $args): void;
+	public function handle(Respondable $msg, array $args): void;
 
 	/**
 	 * __get

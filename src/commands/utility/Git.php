@@ -56,7 +56,7 @@ class Git extends Command
         $embed->setURL("https://github.com/hiro-team/hiro-bot.git");
         $embed->setDescription($language->getTranslator()->trans('commands.git.description'));
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
     
 }

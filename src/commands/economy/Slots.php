@@ -23,6 +23,8 @@ namespace hiro\commands;
 use hiro\database\Database;
 use Discord\Parts\Channel\Message;
 use Discord\Builders\MessageBuilder;
+use Discord\Helpers\Collection;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Slots
@@ -39,7 +41,14 @@ class Slots extends Command
         $this->command = "slots";
         $this->description = "An economy game.";
         $this->aliases = ["slot"];
-        $this->category = "utility";
+        $this->category = "economy";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::INTEGER)
+                ->setName('amount')
+                ->setDescription('Amount of money to pay for slots.')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -62,11 +71,16 @@ class Slots extends Command
             $msg->channel->sendMessage($language->getTranslator()->trans('database.notconnect'));
             return;
         }
-        if (!isset($args[0])) {
+        if($args instanceof Collection && $args->get('name', 'amount') !== null) {
+            $payamount = $args->get('name', 'amount')->value;
+        } else {
+            $payamount = $args[0] ?? null;
+        }
+        $payamount ??= null;
+        if (!isset($payamount)) {
             $msg->reply($language->getTranslator()->trans('commands.slots.no_amount'));
             return;
         }
-        $payamount = $args[0];
         if (!is_numeric($payamount)) {
             $msg->reply($language->getTranslator()->trans('commands.slots.no_numeric_arg'));
             return;

@@ -20,8 +20,10 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use hiro\security\AuthorCommand;
 use hiro\database\Database;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Botban
@@ -39,6 +41,13 @@ class Botban extends AuthorCommand
 		$this->description = "Ban/unban a player from bot. **ONLY FOR AUTHOR**";
 		$this->aliases = [];
 		$this->category = "author";
+		$this->options = [
+			(new Option($this->discord))
+				->setType(Option::USER)
+				->setName('user')
+				->setDescription('User to ban/unban')
+				->setRequired(true)
+		];
 	}
 
 	/**
@@ -50,29 +59,35 @@ class Botban extends AuthorCommand
 	 */
 	public function handle($msg, $args): void
 	{
-		$user = $msg->mentions->first();
+		$user = null;
+		if ($args instanceof Collection && $args->get('name', 'user') !== null) {
+			$user = $msg->mentions->first() ?? $this->discord->members->get('id', $args->get('name', 'user')->value);
+		} else if (is_array($args)) {
+			$user = $msg->mentions->first();
+		}
+
 		if (!$user) {
-			$msg->channel->sendMessage("You should mention a user to ban.");
+			$msg->reply("You should mention a user to ban.");
 			return;
 		}
 
 		if ($user->id == $msg->author->id) {
-			$msg->channel->sendMessage("You can't ban yourself.");
+			$msg->reply("You can't ban yourself.");
 			return;
 		}
 
 		$db = new Database();
 		if (!$db->isConnected) {
-			$msg->channel->sendMessage("Couldn't connect to database.");
+			$msg->reply("Couldn't connect to database.");
 			return;
 		}
 
 		if (!$db->isUserBannedFromBot($user->id)) {
 			$db->banUserFromBot($user->id);
-			$msg->channel->sendMessage("User has been banned.");
+			$msg->reply("{$user->username} has been banned.");
 		} else {
 			$db->unbanUserFromBot($user->id);
-			$msg->channel->sendMessage("User's ban has been removed.");
+			$msg->reply("{$user->username}'s ban has been removed.");
 		}
 	}
 }

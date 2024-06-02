@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 class Kick extends Command
 {
@@ -36,6 +38,13 @@ class Kick extends Command
         $this->description = "Kicks mentioned user.";
         $this->aliases = [];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to kick')
+                ->setRequired(true)
+        ];
     }
     
     /**
@@ -50,7 +59,12 @@ class Kick extends Command
         global $language;
         if(@$msg->member->getPermissions()['kick_members'])
         {
-            $user = @$msg->mentions->first();
+            if($args instanceof Collection && $args->get('name', 'user') !== null) {
+                $user = $this->discord->users->get('id', $args->get('name', 'user')->value);
+            } else if(is_array($args)) {
+                $user = $msg->mentions->first() ?? null;
+            }
+            $user ??= null;
             if($user)
             {
                 $kicker = $msg->author;
@@ -60,7 +74,7 @@ class Kick extends Command
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('global.user_not_found'));
                     $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    $msg->reply($embed);
                     return;
                 }
                 $roles_men = $this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles);
@@ -83,7 +97,7 @@ class Kick extends Command
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('commands.kick.selfkick'));
                     $embed->setTimestamp();
-                    $msg->channel->sendEmbed($embed);
+                    $msg->reply($embed);
                     return;
                 }else {
                     if( ($roles_self < $roles_men) && !($msg->channel->guild->owner_id == $msg->member->id) )
@@ -92,7 +106,7 @@ class Kick extends Command
                         $embed->setColor('#ff0000');
                         $embed->setDescription($language->getTranslator()->trans('commands.kick.role_pos_low'));
                         $embed->setTimestamp();
-                        $msg->channel->sendEmbed($embed);
+                        $msg->reply($embed);
                     } else {
                         $msg->channel->guild->members->delete($msg->channel->guild->members[$user->id])
                             ->then(function() use ( $msg, $user, $kicker, $language ) {
@@ -106,7 +120,7 @@ class Kick extends Command
                                     )
                                 );
                                 $embed->setTimestamp();
-                                $msg->channel->sendEmbed($embed);
+                                $msg->reply($embed);
                             }, function (\Throwable $reason) use ( $msg, $language ) {
                                 $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.kick.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
                             });
@@ -117,14 +131,14 @@ class Kick extends Command
                 $embed->setColor('#ff0000');
                 $embed->setDescription($language->getTranslator()->trans('commands.kick.no_user'));
                 $embed->setTimestamp();
-                $msg->channel->sendEmbed($embed);
+                $msg->reply($embed);
             }
         }else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
             $embed->setDescription($language->getTranslator()->trans('commands.kick.no_perm'));
             $embed->setTimestamp();
-            $msg->channel->sendEmbed($embed);
+            $msg->reply($embed);
         }
     }
 

@@ -62,6 +62,6 @@ class Queue extends MusicCommand
             $embed->addFieldValues($song->title, sprintf($language->getTranslator()->trans('commands.queue.field'), $song->author_id, $song->url));
         }
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

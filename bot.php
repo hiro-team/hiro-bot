@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /**
  * Copyright 2021-2024 bariscodefx
@@ -28,9 +28,9 @@ use hiro\parts\PresenceManager;
 use Discord\WebSockets\Intents;
 use hiro\Version;
 
-if ( !isset( $_ENV['TOKEN'] ) ) {
-	$dotenv = Dotenv\Dotenv::createImmutable("./");
-	$dotenv->load();
+if (!isset($_ENV['TOKEN'])) {
+    $dotenv = Dotenv\Dotenv::createImmutable("./");
+    $dotenv->load();
 }
 
 if ( Version::TYPE == 'development' )
@@ -40,6 +40,7 @@ if ( Version::TYPE == 'development' )
     error_reporting(0);
 }
 
+global $shard_id, $shard_count;
 $ArgumentParser = new ArgumentParser($argv);
 $shard_id = $ArgumentParser->getShardId();
 $shard_count = $ArgumentParser->getShardCount();
@@ -78,11 +79,9 @@ $bot->on('ready', function($discord) {
     ->startThread();
 
     /** fix discord guild count */
-    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager, $discord)
-    {
+    $discord->getLoop()->addPeriodicTimer($presenceManager->looptime, function() use ($presenceManager) {
         $presenceManager->setPresences(getPresenceState());
     });
-
 });
 
 $bot->run();

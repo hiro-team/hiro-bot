@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Howgay
@@ -38,6 +40,13 @@ class Howgay extends Command
         $this->description = "How much u are gay?";
         $this->aliases = ["gay"];
         $this->category = "reactions";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to check')
+                ->setRequired(false)
+        ];
     }
 
     /**
@@ -50,13 +59,18 @@ class Howgay extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        $user = $msg->mentions->first();
+        if ($args instanceof Collection && $args->get('name', 'user') !== null) {
+            $user = $this->discord->users->get('id', $args->get('name', 'user')->value);
+        } else if (is_array($args)) {
+            $user = $msg->mentions->first();
+        }
+        $user ??= null;
         if (!$user) $user = $msg->author;
         $random = rand(0, 100);
         $embed = new Embed($this->discord);
         $embed->setColor("#EB00EA");
-        $embed->setDescription(sprintf("%s :gay_pride_flag:", sprintf($language->getTranslator()->trans('commands.howgay.description'), $user, $random . "%")));
+        $embed->setDescription(sprintf("%s :gay_pride_flag:", sprintf($language->getTranslator()->trans('commands.howgay.description'), $user->username, $random . "%")));
         $embed->setTimestamp();
-        $msg->channel->sendEmbed($embed);
+        $msg->reply($embed);
     }
 }

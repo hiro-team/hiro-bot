@@ -61,6 +61,6 @@ class Ping extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        $msg->channel->sendMessage(sprintf($language->getTranslator()->trans('commands.ping.reply'), $this->lastPing ?? "..."));
+        $msg->reply(sprintf($language->getTranslator()->trans('commands.ping.reply'), $this->lastPing ?? "..."));
     }
 }
