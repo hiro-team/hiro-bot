@@ -32,6 +32,7 @@ use Discord\Parts\Channel\Message;
 use Discord\Parts\Interactions\Interaction;
 use Discord\Builders\CommandBuilder;
 use Discord\Parts\Interactions\Command\Option;
+use Discord\Repository\Interaction\GlobalCommandRepository;
 
 /**
  * CommandLoader
@@ -90,6 +91,9 @@ class CommandLoader
         $this->print_color("Loading commands...", "yellow");
         $this->loadDir($this->dir);
         $this->print_color("All commands has been loaded.", "green");
+
+        $this->print_color("Trying to register commands.", "green");
+        $this->registerCommands();
 
         $this->print_color("Bot is ready for use!", "green");
     }
@@ -251,28 +255,53 @@ class CommandLoader
             $closure,
             $options
         );
-    
-        $this->client->application->commands->freshen()->then(function (\Discord\Repository\Interaction\GlobalCommandRepository $commands) use ($cmd, $command): void
-        {
-            if(!$commands->get('name', $command)) {
-                $builder = CommandBuilder::new();
-
-                $builder->setName($command)
-                    ->setDescription($cmd->description);
-                
-                $builder->options = $cmd->options;
-                
-                $this->client->application->commands->save(
-                    $this->client->application->commands->create(
-                        $builder->toArray()
-                    )
-                );
-            }
-        });
         
-        $this->client->listenCommand($command, function(Interaction $interaction) use ($closure, $command) {
+        $this->client->listenCommand($command, function(Interaction $interaction) use ($closure) {
             $respondable = new Respondable($interaction);
             $closure($respondable, $interaction->data->options);
+        });
+    }
+
+    /**
+     * registerCommands
+     *
+     * @return void
+     */
+    public function registerCommands(): void
+    {
+        $this->client->application->commands->freshen()->then(function(GlobalCommandRepository $commands): void {
+            $allCommands = [];
+            $allowedCategories = ["music", "reactions", "utility"];
+
+            foreach($this->categories as $cat) {
+                foreach($cat as $command) {
+                    $allCommands[] = $command;
+                }
+            }
+            foreach($allCommands as $cmd) {
+                if(in_array($cmd->category, $allowedCategories) && !$commands->get('name', $cmd->command)) {
+                    $builder = CommandBuilder::new();
+        
+                    $builder->setName($cmd->command)
+                        ->setDescription($cmd->description);
+                    
+                    $builder->options = $cmd->options;
+                    
+                    $this->client->application->commands->save(
+                        $this->client->application->commands->create(
+                            $builder->toArray()
+                        )
+                    );
+                    $this->print_color("Command registered: {$cmd->command}", "green");
+                }
+            }
+            foreach($commands as $command) {
+                $cmd = $this->getCmd($command->name);
+                if(!$cmd || ($cmd && !in_array($cmd->category, $allowedCategories))) {
+                    $this->client->application->commands->delete($command->id)->done();
+                    $this->print_color("Command deleted: {$command->name}", "red");
+                }
+            }
         });
     }
 
