@@ -36,7 +36,7 @@ class Botinfo extends Command
     public function configure(): void
     {
         $this->command = "botinfo";
-        $this->description = "Bans mentioned user.";
+        $this->description = "Shows bot's information.";
         $this->aliases = [];
         $this->category = "utility";
     }
