@@ -20,6 +20,7 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Option;
 
@@ -69,7 +70,12 @@ class Kiss extends Command
         ];
         $random = $gifs[rand(0, sizeof($gifs) - 1)];
         $self = $msg->author;
-        $user = $msg->mentions->first();
+        if($args instanceof Collection && $args->get('name', 'user') !== null) {
+            $user = $this->discord->users->get('id', $args->get('name', 'user')->value);
+        } else if (is_array($args)) {
+            $user = $msg->mentions->first();
+        }
+        $user ??= null;
         if (empty($user)) {
             $embed = new Embed($this->discord);
             $embed->setColor("#ff0000");

@@ -59,14 +59,15 @@ class Exec extends AuthorCommand
      */
     public function handle($msg, $args): void
     {
-        if($args instanceof Collection) {
+        $ex = null;
+        if ($args instanceof Collection && $args->get('name', 'command') !== null) {
             $ex = $args->get('name', 'command')->value;
-        } else if(is_array($args)) {
+        } else if (is_array($args)) {
             $ex = implode(' ', $args);
         }
-        
+
         if (!$ex) $ex = " ";
-        
+
         $process = new Process($ex);
         $process->start();
 

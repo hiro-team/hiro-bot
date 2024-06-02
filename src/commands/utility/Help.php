@@ -20,8 +20,10 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
 use Discord\Parts\Embed\Field;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Help
@@ -40,6 +42,13 @@ class Help extends Command
         $this->description = "Displays commands.";
         $this->aliases = ["?"];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('command')
+                ->setDescription('Specific command for help')
+                ->setRequired(false)
+        ];
     }
 
     /**
@@ -52,8 +61,13 @@ class Help extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        if (isset($args[0])) {
-            $command = $args[0];
+        if($args instanceof Collection && $args->get('name', 'command') !== null) {
+            $command = $args->get('name', 'command')->value;
+        } else {
+            $command = $args[0] ?? null;
+        }
+        $command ??= null;
+        if ($command) {
             if ($cmd = $this->findCommand($command)) {
                 $description = $cmd->description ?? $language->getTranslator()->trans('commands.help.specific_command.no_description');
                 $cooldown = $cmd->cooldown ? $cmd->cooldown / 1000 . $language->getTranslator()->trans('commands.help.specific_command.seconds') : $language->getTranslator()->trans('commands.help.specific_command.no_cooldown');

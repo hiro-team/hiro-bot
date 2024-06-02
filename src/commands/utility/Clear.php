@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 /**
  * Clear
@@ -38,6 +40,13 @@ class Clear extends Command
         $this->description = "Clears messages";
         $this->aliases = ["purge"];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::INTEGER)
+                ->setName('amount')
+                ->setDescription('Amount of messages to clear')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -59,7 +68,12 @@ class Clear extends Command
             $msg->reply($embed);
             return;
         }
-        $limit = $args[0];
+        if($args instanceof Collection && $args->get('name', 'amount') !== null) {
+            $limit = $args->get('name', 'amount')->value;
+        } else if (is_array($args)) {
+            $limit = $args[0] ?? null;
+        }
+        $limit ??= null;
         if (!isset($limit)) {
             $embed = new Embed($this->discord);
             $embed->setTitle($language->getTranslator()->trans('commands.clear.error'));
@@ -85,7 +99,7 @@ class Clear extends Command
             $msg->reply($embed);
             return;
         }
-        $msg->channel->limitDelete($limit)->then(function() use ($msg, $limit, $language) {
+        $msg->channel->limitDelete($limit)->then(function () use ($msg, $limit, $language) {
             $embed = new Embed($this->discord);
             $embed->setTitle("Clear Command");
             $embed->setDescription(sprintf($language->getTranslator()->trans('commands.clear.deleted'), $limit));
@@ -93,7 +107,9 @@ class Clear extends Command
             $embed->setTimestamp();
             $msg->reply($embed)->then(function ($msg) {
                 $this->discord->getLoop()->addTimer(3.0, function () use ($msg) {
-                    $msg->delete();
+                    if($msg) {
+                        $msg->delete();
+                    }
                 });
             });
         }, function (\Throwable $reason) use ($msg, $language) {

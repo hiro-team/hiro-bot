@@ -19,7 +19,10 @@
  */
 
 namespace hiro\commands;
+
+use Discord\Helpers\Collection;
 use hiro\database\Database;
+use Discord\Parts\Interactions\Command\Option;
 
 class Language extends Command
 {
@@ -35,6 +38,13 @@ class Language extends Command
         $this->description = "Select your language.";
         $this->aliases = ["language"];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('language')
+                ->setDescription('Language to select.')
+                ->setRequired(true)
+        ];
     }
     
     /**
@@ -60,7 +70,16 @@ class Language extends Command
             "kr_KR" => "Korean",
             "ja_JP" => "Japanese",
         ];
-        $selected = $args[0] ?? null;
+
+        if($args instanceof Collection && $args->get('name', 'language') !== null)
+        {
+            $selected = $args->get('name', 'language')->value;
+        } else {
+            $selected = $args[0] ?? null;
+        }
+
+        $selected ??= null;
+
         if(!$selected)
         {
             $lang_msg = "Available languages; ";

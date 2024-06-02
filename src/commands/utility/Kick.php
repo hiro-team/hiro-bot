@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 class Kick extends Command
 {
@@ -36,6 +38,13 @@ class Kick extends Command
         $this->description = "Kicks mentioned user.";
         $this->aliases = [];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to kick')
+                ->setRequired(true)
+        ];
     }
     
     /**
@@ -50,7 +59,12 @@ class Kick extends Command
         global $language;
         if(@$msg->member->getPermissions()['kick_members'])
         {
-            $user = @$msg->mentions->first();
+            if($args instanceof Collection && $args->get('name', 'user') !== null) {
+                $user = $this->discord->users->get('id', $args->get('name', 'user')->value);
+            } else if(is_array($args)) {
+                $user = $msg->mentions->first() ?? null;
+            }
+            $user ??= null;
             if($user)
             {
                 $kicker = $msg->author;

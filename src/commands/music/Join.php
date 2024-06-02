@@ -52,6 +52,7 @@ class Join extends Command
 
         if (!$channel) {
             $msg->reply($language->getTranslator()->trans('commands.join.no_channel'));
+            return;
         }
 
         $this->discord->joinVoiceChannel($channel, false, false, null, true)->done(function (VoiceClient $vc) use ($channel) {

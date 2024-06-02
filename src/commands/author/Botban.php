@@ -42,12 +42,12 @@ class Botban extends AuthorCommand
 		$this->aliases = [];
 		$this->category = "author";
 		$this->options = [
-            (new Option($this->discord))
-                ->setType(Option::USER)
-                ->setName('user')
+			(new Option($this->discord))
+				->setType(Option::USER)
+				->setName('user')
 				->setDescription('User to ban/unban')
-                ->setRequired(true)
-        ];
+				->setRequired(true)
+		];
 	}
 
 	/**
@@ -59,9 +59,10 @@ class Botban extends AuthorCommand
 	 */
 	public function handle($msg, $args): void
 	{
-		if($args instanceof Collection){
-			$user = $msg->mentions->first() ?? $msg->guild->members->get('id', $args->get('name', 'user')->value);
-		} else if(is_array($args)) {
+		$user = null;
+		if ($args instanceof Collection && $args->get('name', 'user') !== null) {
+			$user = $msg->mentions->first() ?? $this->discord->members->get('id', $args->get('name', 'user')->value);
+		} else if (is_array($args)) {
 			$user = $msg->mentions->first();
 		}
 

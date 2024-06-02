@@ -20,6 +20,7 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
@@ -69,7 +70,12 @@ class Nekos extends Command
     {
         global $language;
         $type_array = [];
-        $type = $args[0] ?? "waifu";
+        if($args instanceof Collection && $args->get('name', 'category') !== null) {
+            $type = $args->get('name', 'category')->value;
+        } else if (is_array($args)) {
+            $type = $args[0] ?? null;
+        }
+        $type ??= "waifu";
 
         $this->browser->get("https://nekos.best/api/v2/endpoints")->then(function (ResponseInterface $response) use ($msg, $args, $type, $type_array, $language) {
             $result = json_decode((string)$response->getBody(), true);

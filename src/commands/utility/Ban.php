@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 
 class Ban extends Command
 {
@@ -36,8 +38,15 @@ class Ban extends Command
         $this->description = "Bans mentioned user.";
         $this->aliases = [];
         $this->category = "utility";
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::USER)
+                ->setName('user')
+                ->setDescription('User to ban')
+                ->setRequired(true)
+        ];
     }
-    
+
     /**
      * handle
      *
@@ -48,14 +57,16 @@ class Ban extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        if(@$msg->member->getPermissions()['ban_members'])
-        {
-            $user = @$msg->mentions->first();
-            if($user)
-            {
+        if (@$msg->member->getPermissions()['ban_members']) {
+            if ($args instanceof Collection && $args->get('name', 'user') !== null) {
+                $user = $msg->guild->members->get($args->get('name', 'user')->value);
+            } else if (is_array($args)) {
+                $user = $msg->mentions->first() ?? null;
+            }
+            $user ??= null;
+            if ($user) {
                 $banner = $msg->author;
-                if(!isset($msg->channel->guild->members[$user->id])) 
-                {
+                if (!isset($msg->guild->members[$user->id])) {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('global.user_not_found'));
@@ -63,57 +74,53 @@ class Ban extends Command
                     $msg->reply($embed);
                     return;
                 }
-                $roles_men = $this->rolePositionsMap($msg->channel->guild->members[$user->id]->roles);
+                $roles_men = $this->rolePositionsMap($msg->guild->members[$user->id]->roles);
                 $roles_self = $this->rolePositionsMap($msg->member->roles);
-                if( $roles_men )
-                {
+                if ($roles_men) {
                     $roles_men = max($roles_men);
                 } else {
                     $roles_men = 0;
                 }
-                if( $roles_self )
-                {
+                if ($roles_self) {
                     $roles_self = max($roles_self);
                 } else {
                     $roles_men = 0;
                 }
-                if($banner->id == $user->id)
-                {
+                if ($banner->id == $user->id) {
                     $embed = new Embed($this->discord);
                     $embed->setColor('#ff0000');
                     $embed->setDescription($language->getTranslator()->trans('commands.ban.selfban'));
                     $embed->setTimestamp();
                     $msg->reply($embed);
                     return;
-                }else {
-                    if( ($roles_self < $roles_men) && !($msg->channel->guild->owner_id == $msg->member->id) )
-                    {
+                } else {
+                    if (($roles_self < $roles_men) && !($msg->guild->owner_id == $msg->member->id)) {
                         $embed = new Embed($this->discord);
                         $embed->setColor('#ff0000');
                         $embed->setDescription($language->getTranslator()->trans('commands.ban.role_pos_low'));
                         $embed->setTimestamp();
                         $msg->reply($embed);
-                    }else {
-                        $msg->channel->guild->members[$user->id]->ban(null, null)
-                            ->then(function() use ( $msg, $user, $banner, $language ) {
+                    } else {
+                        $msg->guild->members[$user->id]->ban(null, null)
+                            ->then(function () use ($msg, $user, $banner, $language) {
                                 $embed = new Embed($this->discord);
                                 $embed->setColor('#ff0000');
                                 $embed->setDescription(sprintf($language->getTranslator()->trans('commands.ban.banned'), $user, $banner));
                                 $embed->setTimestamp();
                                 $msg->reply($embed);
-                            }, function (\Throwable $reason) use ( $msg, $language ) {
+                            }, function (\Throwable $reason) use ($msg, $language) {
                                 $msg->reply($reason->getCode() === 50013 ? $language->getTranslator()->trans('commands.ban.no_bot_perm') : $language->getTranslator()->trans('global.unknown_error'));
-                            }); 
+                            });
                     }
                 }
-            }else {
+            } else {
                 $embed = new Embed($this->discord);
                 $embed->setColor('#ff0000');
                 $embed->setDescription($language->getTranslator()->trans('commands.ban.no_user'));
                 $embed->setTimestamp();
                 $msg->reply($embed);
             }
-        }else {
+        } else {
             $embed = new Embed($this->discord);
             $embed->setColor('#ff0000');
             $embed->setDescription($language->getTranslator()->trans('commands.ban.no_perm'));
@@ -134,8 +141,7 @@ class Ban extends Command
     {
         $rolesArray = $rolesCollision->toArray();
         $new = [];
-        foreach($rolesArray as $role)
-        {
+        foreach ($rolesArray as $role) {
             $new[] = $role->position;
         }
         return $new;

@@ -20,6 +20,7 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
 use Psr\Http\Message\ResponseInterface;
 use React\Http\Browser;
@@ -68,29 +69,30 @@ class WaifuNSFW extends Command
     public function handle($msg, $args): void
     {
         global $language;
+
         if (!$msg->channel->nsfw && $msg->guild) {
             $msg->reply($language->getTranslator()->trans('commands.waifunsfw.no_nsfw_channel'));
             return;
         }
+
         $type_array = [
             "waifu",
             "neko",
             "trap",
             "blowjob"
         ];
-
-        if (!isset($args[0]))
-        {
-            $type = "waifu";
+        
+        if($args instanceof Collection && $args->get('name', 'category') !== null) {
+            $type = $args->get('name', 'category')->value;
+        } else if (is_array($args)) {
+            $type = $args[0] ?? null;
         }
 
-        if(isset($args[0]))
-        {
-            if (!in_array($args[0], $type_array)) {
-                $msg->reply(sprintf($language->getTranslator()->trans('commands.waifunsfw.not_available_category'), $args[0]) . " \n" . sprintf($language->getTranslator()->trans('commands.waifunsfw.available_categories'), implode(", ", $type_array)));
-                return;
-            }
-            $type = $args[0];
+        $type ??= "waifu";
+
+        if (!in_array($type, $type_array)) {
+            $msg->reply(sprintf($language->getTranslator()->trans('commands.waifunsfw.not_available_category'), $type) . " \n" . sprintf($language->getTranslator()->trans('commands.waifunsfw.available_categories'), implode(", ", $type_array)));
+            return;
         }
 
         $this->browser->get("https://api.waifu.pics/nsfw/$type")->then(

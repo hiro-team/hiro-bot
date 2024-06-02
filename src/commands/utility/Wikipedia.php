@@ -20,7 +20,9 @@
 
 namespace hiro\commands;
 
+use Discord\Helpers\Collection;
 use Discord\Parts\Embed\Embed;
+use Discord\Parts\Interactions\Command\Option;
 use hiro\commands\Command;
 use hiro\Version;
 use Psr\Http\Message\ResponseInterface;
@@ -51,6 +53,13 @@ class Wikipedia extends Command
         $this->aliases = ["wiki", "w"];
         $this->category = "utility";
         $this->browser = new Browser(null, $this->discord->getLoop());
+        $this->options = [
+            (new Option($this->discord))
+                ->setType(Option::STRING)
+                ->setName('query')
+                ->setDescription('The search query for the Wikipedia page.')
+                ->setRequired(true)
+        ];
     }
 
     /**
@@ -63,14 +72,19 @@ class Wikipedia extends Command
     public function handle($msg, $args): void
     {
         global $language;
-        // Make sure the user provided a search query
+
+        if($args instanceof Collection && $args->get('name', 'query') !== null) {
+            $query = $args->get('name', 'query')->value;
+        } else {
+            $query = implode(" ", $args);
+        }
+        
+        $query ??= null;
+
         if (empty($args)) {
             $msg->channel->sendMessage($language->getTranslator->trans('commands.wikipedia.no_query'));
             return;
         }
-
-        // Get the search query
-        $query = implode(" ", $args);
 
         $this->browser->get("https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srprop=snippet&srsearch=$query")->then(
             function( ResponseInterface $response ) use ( $msg, $language ) {
