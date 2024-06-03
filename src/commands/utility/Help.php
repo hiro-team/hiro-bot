@@ -91,6 +91,7 @@ EOF
         }
         $prefix = $this->discord->getCommandClientOptions()['prefix'];
         $emotes = [
+            "economy" => ":money_with_wings:",
             "reactions" => ":wink:",
             "rpg" => ":crossed_swords:",
             "music" => ":notes:",
