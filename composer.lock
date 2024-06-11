@@ -3438,12 +3438,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "c5ee33df86c06b3278c670f64273b1ba768a0744"
+                "reference": "daaadc3bae458908aa477b90a8932e7da9253f22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c5ee33df86c06b3278c670f64273b1ba768a0744",
-                "reference": "c5ee33df86c06b3278c670f64273b1ba768a0744",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/daaadc3bae458908aa477b90a8932e7da9253f22",
+                "reference": "daaadc3bae458908aa477b90a8932e7da9253f22",
                 "shasum": ""
             },
             "require": {
@@ -3489,7 +3489,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/master"
             },
-            "time": "2024-04-19T12:04:10+00:00"
+            "time": "2024-06-03T06:24:19+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -3940,16 +3940,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.1.3",
+            "version": "11.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d475be032238173ca3b0a516f5cc291d174708ae"
+                "reference": "705eba0190afe04bc057f565ad843267717cf109"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d475be032238173ca3b0a516f5cc291d174708ae",
-                "reference": "d475be032238173ca3b0a516f5cc291d174708ae",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/705eba0190afe04bc057f565ad843267717cf109",
+                "reference": "705eba0190afe04bc057f565ad843267717cf109",
                 "shasum": ""
             },
             "require": {
@@ -3988,7 +3988,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "11.1-dev"
+                    "dev-main": "11.2-dev"
                 }
             },
             "autoload": {
@@ -4020,7 +4020,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.1.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.2.0"
             },
             "funding": [
                 {
@@ -4036,7 +4036,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-24T06:34:25+00:00"
+            "time": "2024-06-07T04:48:50+00:00"
         },
         {
             "name": "psr/container",
@@ -4151,12 +4151,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/cli-parser.git",
-                "reference": "47c93ee55891788203dcb8efefa5abe46472266b"
+                "reference": "6900ec4367a8cdb9dd5be66239e7e2d014cf2b40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/cli-parser/zipball/47c93ee55891788203dcb8efefa5abe46472266b",
-                "reference": "47c93ee55891788203dcb8efefa5abe46472266b",
+                "url": "https://api.github.com/repos/sebastianbergmann/cli-parser/zipball/6900ec4367a8cdb9dd5be66239e7e2d014cf2b40",
+                "reference": "6900ec4367a8cdb9dd5be66239e7e2d014cf2b40",
                 "shasum": ""
             },
             "require": {
@@ -4201,7 +4201,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-04T08:53:05+00:00"
+            "time": "2024-05-20T06:31:55+00:00"
         },
         {
             "name": "sebastian/code-unit",
@@ -4209,12 +4209,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit.git",
-                "reference": "2a4919d2c7eb2e17379ea1e878fc8c176042ecf4"
+                "reference": "9668a3e4c161eb6e0c2860c192f3f4bad197e067"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/2a4919d2c7eb2e17379ea1e878fc8c176042ecf4",
-                "reference": "2a4919d2c7eb2e17379ea1e878fc8c176042ecf4",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/9668a3e4c161eb6e0c2860c192f3f4bad197e067",
+                "reference": "9668a3e4c161eb6e0c2860c192f3f4bad197e067",
                 "shasum": ""
             },
             "require": {
@@ -4259,7 +4259,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-03T07:55:50+00:00"
+            "time": "2024-05-20T07:08:36+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
