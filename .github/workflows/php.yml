@@ -1,4 +1,4 @@
-name: Phar Build
+name: PHP
 
 on:
   push:
@@ -34,10 +34,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: PHP Syntax Checker (Lint)
-      uses: StephaneBour/actions-php-lint@8.2
-      with:
-        dir: './src'
+    - name: Check PHP syntax errors
+      uses: overtrue/phplint@9.4.1
 
     - name: Run test suite
       run: composer run-script test
