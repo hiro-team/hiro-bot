@@ -20,7 +20,6 @@
 
 namespace hiro\commands;
 
-use Discord\Parts\Embed\Embed;
 use hiro\database\Database;
 
 /**

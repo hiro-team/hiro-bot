@@ -40,12 +40,12 @@ class Money extends Command
         $this->aliases = ["cash"];
         $this->category = "economy";
     }
-
+    
     /**
      * handle
      *
-     * @param [type] $msg
-     * @param [type] $args
+     * @param  mixed $msg
+     * @param  mixed $args
      * @return void
      */
     public function handle($msg, $args): void

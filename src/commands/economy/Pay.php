@@ -21,7 +21,6 @@
 namespace hiro\commands;
 
 use Discord\Helpers\Collection;
-use Discord\Parts\Embed\Embed;
 use Discord\Parts\Interactions\Command\Option;
 use hiro\database\Database;
 
