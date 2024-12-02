@@ -30,7 +30,7 @@
         "team-reflex/discord-php": "dev-master",
         "vlucas/phpdotenv": "^5.3",
         "wujunze/php-cli-color": "dev-master",
-        "symfony/translation": "^6.3.3",
+        "symfony/translation": "^7.2.0",
         "symfony/yaml": "^7.0.0",
         "bariscodefx/php-hashmap": "dev-master"
     },
